@@ -30,8 +30,8 @@ sys.path.append(os.path.abspath('../packages/modeling'))
 # -- Project information -----------------------------------------------------
 
 project = 'EazyML'
-copyright = '2024, EazyML'
-author = 'EazyML'
+copyright = '2024, eazyml'
+author = 'eazyml'
 
 # The full version, including alpha/beta/rc tags
 version  = '0.1'
@@ -103,7 +103,7 @@ intersphinx_disabled_domains = ["std"]
 templates_path = ['_templates']
 
 # -- Options for EPUB output
-epub_show_urls = "footnote"
+# epub_show_urls = "footnote"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -119,9 +119,9 @@ html_theme = 'sphinx_rtd_theme'
 
 # html_context = {
 #     "display_github": True,  # Enable "Edit on GitHub"
-#     "github_user": "uipsadmin",  # GitHub username
-#     "github_repo": "eazyml-docs",       # Repository name
-#     "github_version": "master",             # Branch name
+#     "github_user": "shubham-eazyml",  # GitHub username
+#     "github_repo": "eazyml_docs",       # Repository name
+#     "github_version": "main",             # Branch name
 #     "conf_py_path": "/docs/",             # Path to the docs folder in your repository
 # }
 
