@@ -47,17 +47,33 @@ autodoc_mock_imports = [
     'flask', 'pandas', 'numpy', 'matplotlib',
     'eazyml_augi.transparency_api',
     'eazyml_augi.utils',
+    'eazyml_augi.utility',
+    'eazyml_augi.globals',
+    'eazyml_augi.license',
+    'eazyml_augi.license.license',
     'eazyml_xai_image.transparency_api',
     'eazyml_xai_image.transparency_app',
     'eazyml_xai_image.xai',
+    'eazyml_xai_image.globals',
     'eazyml_xai_image.helper',
+    'eazyml_xai_image.license',
+    'eazyml_xai_image.license.license',
     'eazyml_xai.transparency_api', 'eazyml_xai.xai',
-    'eazyml_cf.cfr_helper',
+    'eazyml_xai.globals',
+    'eazyml_xai.license',
+    'eazyml_xai.license.license',
+    'eazyml_cf.src.cfr_helper',
+    'eazyml_cf.license',
+    'eazyml_cf.license.license',
     'eazyml_dq.src.utils', 'eazyml_dq.src', 
-    'eazyml_dq.src.main', 
+    'eazyml_dq.src.main',  'eazyml_dq.globals',
+    'eazyml_dq.license',
+    'eazyml_dq.license.license',
     'eazyml.src.test_model', 'eazyml.src.utils.utility_libs',
     'eazyml.src', 'eazyml.src.build_model',
     'eazyml.src.utils',
+    'eazyml.globals', 'eazyml.license',
+    'eazyml.license.license'
 ]
 sys.modules.update((mod_name, MagicMock()) for mod_name in autodoc_mock_imports)
 
@@ -89,7 +105,8 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
-    # "myst_parser"
+    # "myst_parser",
+    "sphinx_tabs.tabs"
 ]
 
 intersphinx_mapping = {
