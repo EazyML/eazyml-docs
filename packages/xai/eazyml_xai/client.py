@@ -7,7 +7,6 @@ import traceback
 import pandas as pd
 
 from .license.license import (
-        validate_license,
         init_eazyml
 )
 
@@ -43,7 +42,6 @@ def ez_init(license_key: str):
         }
 
 
-@validate_license
 def ez_explain(mode, outcome, train_file_path, test_file_path, model,
                data_type_dict, selected_features_list, options={}):
     """

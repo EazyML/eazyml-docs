@@ -11,7 +11,6 @@ from .globals import (
 
 from .utility import utils
 from .license import (
-        validate_license,
         init_eazyml
 )
 
@@ -48,7 +47,6 @@ def ez_init(license_key: str):
         }
 
 
-@validate_license
 def ez_augi(mode, outcome, train_file_path, data_type_dict,
             selected_features_list, options={}):
     """
@@ -265,7 +263,6 @@ def ez_augi(mode, outcome, train_file_path, data_type_dict,
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
 
-@validate_license
 def ez_validate(mode, outcome, augi_insights, train_file_path, test_file_path,
                 data_type_dict, options={}):
     """

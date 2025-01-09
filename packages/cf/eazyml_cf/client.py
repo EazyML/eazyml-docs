@@ -14,7 +14,6 @@ from .src.cfr_helper import (
 )
 
 from .license.license import (
-        validate_license,
         init_eazyml,
 )
 
@@ -51,7 +50,6 @@ def ez_init(license_key: str):
 
 
 
-@validate_license
 def ez_cf_inference(train_file, test_file, outcome, config, 
                             selected_columns, model_info, test_record_idx):
    """
@@ -119,7 +117,6 @@ def ez_cf_inference(train_file, test_file, outcome, config,
                             selected_columns, model_info, test_record_idx)
 
 
-@validate_license
 def sk_feature_selection(train_file, outcome, config):
    """
    This function performs feature selection from a training dataset by excluding specific columns and the target outcome column.

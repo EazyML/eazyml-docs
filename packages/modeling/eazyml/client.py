@@ -36,7 +36,6 @@ warnings.filterwarnings("ignore")
 convert_json = partial(json.dumps, indent=4, sort_keys=True, default=str)
 
 from .license.license import (
-        validate_license,
         init_eazyml
 )
 
@@ -72,7 +71,6 @@ def ez_init(license_key: str):
         }
 
 
-@validate_license
 def ez_init_model(df, options):
     """
     Initialize and build a predictive model based on the provided dataset and options.
@@ -442,7 +440,6 @@ def ez_init_model(df, options):
         return convert_json({"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}), 500
 
 
-@validate_license
 def ez_predict(test_data, options):
     """
     Perform prediction on the given test data based

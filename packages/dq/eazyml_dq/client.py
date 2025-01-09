@@ -54,7 +54,6 @@ convert_json = partial(json.dumps, indent=4, sort_keys=True, default=str)
 
 
 from .license.license import (
-        validate_license,
         init_eazyml
 )
 
@@ -90,7 +89,6 @@ def ez_init(license_key: str):
         }
 
 
-@validate_license
 def ez_data_quality(filename, outcome, options):
     """
     Performs a series of data quality checks on the given dataset and
