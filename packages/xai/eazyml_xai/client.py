@@ -1,12 +1,49 @@
 import re
 import os
 import numpy as np
-from . import transparency_api as tr_api
+from .globals import transparency_api as tr_api
 from .xai import exai
 import traceback
 import pandas as pd
 
+from .license.license import (
+        validate_license,
+        init_eazyml
+)
 
+def ez_init(license_key: str):
+    """
+    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+
+    Parameters :
+        - **license_key (str)**:
+            The license key to be set as an environment variable for EazyML.
+
+    Examples
+    --------
+    >>> init_ez("your_license_key_here")
+    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+
+    Notes
+    -----
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    """
+    if license_key :
+        os.environ["EAZYML_LICENSE_KEY"] = license_key
+        # update api and user info in hidden files
+        approved, msg = init_eazyml(license_key = os.environ["EAZYML_LICENSE_KEY"])
+        return {
+                "success": approved,
+                "message": msg
+            }
+    else :
+        return {
+            "success": False,
+            "message": "No license key provided"
+        }
+
+
+@validate_license
 def ez_explain(mode, outcome, train_file_path, test_file_path, model,
                data_type_dict, selected_features_list, options={}):
     """
@@ -18,7 +55,8 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
         - **record_number** (`int`): The record from the test file whose prediction needs explanation.
         - **mode** (`str`): Prediction mode: `"classification"` or `"regression"`.
         - **outcome** (`str`): The column in the dataset that you want to predict.
-        - **model_name** (`str`): The trained model used for prediction.
+        - **model** (`class`): The trained model used for prediction.
+        - **preprocessor** (`class`): The trained preprocessor used for processing.
         - **data_type_dict** (`dict`): Dictionary which contain type of each feature.
         - **selected_features_list** (`list`): List of derived features on which model is trained.
 
@@ -66,7 +104,8 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
                 model=my_model,
                 data_type_dict=data_type_dict,
                 selected_feature_list=list_of_derived_features,
-                options={"data_source": "parquet", "record_number": [1, 2, 3]}
+                options={"data_source": "parquet", "record_number": [1, 2, 3],
+                         "preprocessor": my_preprocessor}
             )
     """
     try:
@@ -219,19 +258,30 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
                             }
         else:
             record_number = [1]
-
-        train_data, test_data, global_info_dict, cat_list =\
-            exai.preprocessing_steps(
-            train_data, test_data, data_type_dict, outcome)
-        for col in selected_features_list:
-            if col not in train_data.columns.tolist():
+        if "preprocessor" in options and options["preprocessor"]:
+            try:
+                train_data, test_data, rule_lime_dict, cat_list =\
+                    exai.preprocessor_steps(
+                    options['preprocessor'], train_data, test_data,
+                    data_type_dict, outcome)
+            except Exception as e:
                 return {
                         "success": False,
-                        "message": "Please provide valid column name in selected_features_list"
-                        }
+                        "message": "Please provide a valid trained preprocessor."
+                       }
+        else:
+            train_data, test_data, global_info_dict, cat_list =\
+                exai.preprocessing_steps(
+                train_data, test_data, data_type_dict, outcome)
+            for col in selected_features_list:
+                if col not in train_data.columns.tolist():
+                    return {
+                            "success": False,
+                            "message": "Please provide valid column name in selected_features_list"
+                            }
 
-        train_data, test_data, rule_lime_dict = exai.processing_steps(
-            train_data, test_data, global_info_dict, selected_features_list)
+            train_data, test_data, rule_lime_dict = exai.processing_steps(
+                train_data, test_data, global_info_dict, selected_features_list)
         body = dict(
                 train_data = train_data,
                 test_data = test_data,

@@ -1,5 +1,22 @@
 Data Quality
+======================
+
+Installation
 ------------
+
+To install ``Data Quality`` package:
+
+.. tabs::
+
+   .. tab:: ``pip``
+
+      .. code-block:: console
+
+         $ pip install eazyml-dq
+
+
+Available APIs
+--------------
 
 .. automodule:: eazyml_dq.client
    :members:

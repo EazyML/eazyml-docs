@@ -14,7 +14,7 @@ and integration capabilities with existing workflows.
 
 
 .. toctree::
-   :caption: packages
+   :caption: PACKAGES
    :maxdepth: 2
    :hidden:
 
@@ -23,7 +23,7 @@ and integration capabilities with existing workflows.
    Image Explainable AI <packages/eazyml_xai_image.rst>
    Counterfactual <packages/eazyml_cf.rst>
    Data Quality <packages/eazyml_dq.rst>
-   Modeling <packages/model.rst>
+   Modeling <packages/eazyml_model.rst>
 
 
 .. toctree::
@@ -32,3 +32,4 @@ and integration capabilities with existing workflows.
    :hidden:
    
    EazyML Examples <notebooks/eazyml_notebook.rst>
+

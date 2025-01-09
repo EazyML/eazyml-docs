@@ -7,11 +7,14 @@ import traceback
 import pandas as pd
 from functools import partial
 
+from .globals import (
+    global_var as g,
+    transparency as tr,
+    transparency_api as tr_api
+)
+
 from .src.utils import (
-            globals as gbl,
             utility,
-            transparency as tr,
-            transparency_api as tr_api,
             api_utils
 )
 from .src.build_model import (
@@ -25,7 +28,6 @@ from .src.utils.utility_libs import (
                     display_json,
                     display_md
 )
-g = gbl.config_global_var()
 
 # Suppress all warnings
 import warnings
@@ -33,6 +35,44 @@ warnings.filterwarnings("ignore")
 
 convert_json = partial(json.dumps, indent=4, sort_keys=True, default=str)
 
+from .license.license import (
+        validate_license,
+        init_eazyml
+)
+
+def ez_init(license_key: str):
+    """
+    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+
+    Parameters :
+        - **license_key (str)**:
+            The license key to be set as an environment variable for EazyML.
+
+    Examples
+    --------
+    >>> init_ez("your_license_key_here")
+    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+
+    Notes
+    -----
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    """
+    if license_key :
+        os.environ["EAZYML_LICENSE_KEY"] = license_key
+        # update api and user info in hidden files
+        approved, msg = init_eazyml(license_key = os.environ["EAZYML_LICENSE_KEY"])
+        return {
+                "success": approved,
+                "message": msg
+            }
+    else :
+        return {
+            "success": False,
+            "message": "No license key provided"
+        }
+
+
+@validate_license
 def ez_init_model(df, options):
     """
     Initialize and build a predictive model based on the provided dataset and options.
@@ -397,11 +437,12 @@ def ez_init_model(df, options):
         #         #    extra_info["model_data"] = dbutils.get_model_data(mid)
         #     return {"success": True, "message": tr_api.MODEL_BUILDING_REGISTERED, "model_id": mid}, 200
     except Exception as e:
-        print(traceback.print_exc())
+        # print(traceback.print_exc())
         #api_logging.dbglog(("Exception in ez_model", e))
         return convert_json({"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}), 500
 
 
+@validate_license
 def ez_predict(test_data, options):
     """
     Perform prediction on the given test data based
@@ -478,18 +519,23 @@ def ez_predict(test_data, options):
         return {"success": False, "message": res['left']['body']}, 422
 
 
+@validate_license
 def ez_display_json(resp):
     """
     Function to display formatted json
     """
     return display_json(resp)
 
+
+@validate_license
 def ez_display_df(resp):
     """
     Function to display formatted dataframe
     """
     return display_df(resp)
 
+
+@validate_license
 def ez_display_md(resp):
     """
     Function to display formatted markdown

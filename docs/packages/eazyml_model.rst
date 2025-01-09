@@ -1,10 +1,10 @@
-Augmented Intelligence
+EazyML Modeling
 ======================
 
 Installation
 ------------
 
-To install ``Augmented Intelligence`` package:
+To install ``EazyML Modeling`` package:
 
 .. tabs::
 
@@ -12,12 +12,12 @@ To install ``Augmented Intelligence`` package:
 
       .. code-block:: console
 
-         $ pip install eazyml-augi
+         $ pip install eazyml
+
 
 Available APIs
---------------
+---------------
 
-.. automodule:: eazyml_augi.client
+.. automodule:: eazyml.client
    :members:
    :undoc-members:
-

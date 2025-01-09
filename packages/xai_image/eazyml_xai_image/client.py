@@ -11,13 +11,14 @@ as data becomes available, rather than using a fixed, pre-existing dataset.
 This method is well-suited for dynamic environments, enabling real-time updates
 and adaptability to new patterns or changes in data streams.
 """
-import os, sys
-from .transparency_api import (
+import os
+from .globals.transparency_api import (
     INVALID_KEY, ALL_STR_PARAM,
     EXPLANATION_SUCCESS, INTERNAL_SERVER_ERROR,
     
 )
-from .transparency_app import (
+
+from .globals.transparency_app import (
     EZ_IMAGE_EXPLAIN_OPTIONS_KEYS_LIST,
     EZ_IMAGE_SUPPORTED_TYPES, EZ_IMAGE_PRED_INPUT_FORMATS,
     EZ_IMAGE_DATA_PATH_FORMAT, EZ_IMAGE_XAI_STRATEGY,
@@ -28,14 +29,57 @@ from .transparency_app import (
     EZ_IMAGE_OL_STRATEGY, EZ_IMAGE_TR_STRATEGY
 )
 
-from .xai import exai_main_image
+from .src import exai
+from .src import exai_main_image
 import traceback
 
-from .helper import ez_modify_options_seg_model, is_list, is_string
-from .helper import return_response, check_radio_parameter
-from .helper import check_path_parameter, check_if_positive_integer
-from .helper import check_list_of_path_parameter
+from .src.helper import ez_modify_options_seg_model
+from .src.helper import (
+            return_response, check_radio_parameter,
+            is_list, is_string,
+            check_path_parameter, check_if_positive_integer,
+            check_list_of_path_parameter
+    )
 
+
+from .license.license import (
+        validate_license,
+        init_eazyml
+)
+
+def ez_init(license_key: str):
+    """
+    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+
+    Parameters :
+        - **license_key (str)**:
+            The license key to be set as an environment variable for EazyML.
+
+    Examples
+    --------
+    >>> init_ez("your_license_key_here")
+    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+
+    Notes
+    -----
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    """
+    if license_key :
+        os.environ["EAZYML_LICENSE_KEY"] = license_key
+        # update api and user info in hidden files
+        approved, msg = init_eazyml(license_key = os.environ["EAZYML_LICENSE_KEY"])
+        return {
+                "success": approved,
+                "message": msg
+            }
+    else :
+        return {
+            "success": False,
+            "message": "No license key provided"
+        }
+
+
+@validate_license
 def ez_xai_image_explain(filename,
                          model_path,
                          predicted_filename,
@@ -247,6 +291,7 @@ def ez_xai_image_explain(filename,
         }
 
 
+@validate_license
 def ez_image_active_learning(filenames,
                              model_path,
                              predicted_filenames,
@@ -452,6 +497,7 @@ def ez_image_active_learning(filenames,
         }
 
 
+@validate_license
 def ez_image_online_learning(new_training_data_path,
                              model_path,
                              options=None):
@@ -715,6 +761,7 @@ def ez_image_online_learning(new_training_data_path,
         }
     
 
+@validate_license
 def ez_image_model_evaluate(validation_data_path,
                              model_path,
                              options=None):

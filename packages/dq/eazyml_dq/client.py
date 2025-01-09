@@ -30,11 +30,13 @@ The `ez_data_quality` function processes a dataset to assess its quality based o
    - It returns a structured response in JSON format indicating whether the data quality checks were successful or if there were any issues.
    - If an error occurs during processing, it returns an exception.
 """
+import os
 from flask import Response
+
+from .globals import transparency_api as tr_api
 
 from .src.utils import (
                     quality_alert_helper,
-                    transparency_api as tr_api,
                     utility
 )
 
@@ -50,6 +52,45 @@ import json
 from functools import partial
 convert_json = partial(json.dumps, indent=4, sort_keys=True, default=str)
 
+
+from .license.license import (
+        validate_license,
+        init_eazyml
+)
+
+def ez_init(license_key: str):
+    """
+    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+
+    Parameters :
+        - **license_key (str)**:
+            The license key to be set as an environment variable for EazyML.
+
+    Examples
+    --------
+    >>> init_ez("your_license_key_here")
+    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+
+    Notes
+    -----
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    """
+    if license_key :
+        os.environ["EAZYML_LICENSE_KEY"] = license_key
+        # update api and user info in hidden files
+        approved, msg = init_eazyml(license_key = os.environ["EAZYML_LICENSE_KEY"])
+        return {
+                "success": approved,
+                "message": msg
+            }
+    else :
+        return {
+            "success": False,
+            "message": "No license key provided"
+        }
+
+
+@validate_license
 def ez_data_quality(filename, outcome, options):
     """
     Performs a series of data quality checks on the given dataset and

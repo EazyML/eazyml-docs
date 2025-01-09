@@ -5,13 +5,53 @@ outcomes from unfavorable to favorable. This approach overcomes the limitations
 of manual "what-if" analysis, enabling models to provide actionable, prescriptive
 insights alongside their predictions.
 """
-from .cfr_helper import (
+import os
+
+from .src.cfr_helper import (
             cf_inference,
             scikit_feature_selection,
             scikit_model_building
 )
 
+from .license.license import (
+        validate_license,
+        init_eazyml,
+)
 
+def ez_init(license_key: str):
+    """
+    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+
+    Parameters :
+        - **license_key (str)**:
+            The license key to be set as an environment variable for EazyML.
+
+    Examples
+    --------
+    >>> init_ez("your_license_key_here")
+    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+
+    Notes
+    -----
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    """
+    if license_key :
+        os.environ["EAZYML_LICENSE_KEY"] = license_key
+        # update api and user info in hidden files
+        approved, msg = init_eazyml(license_key = os.environ["EAZYML_LICENSE_KEY"])
+        return {
+                "success": approved,
+                "message": msg
+            }
+    else :
+        return {
+            "success": False,
+            "message": "No license key provided"
+        }
+
+
+
+@validate_license
 def ez_cf_inference(train_file, test_file, outcome, config, 
                             selected_columns, model_info, test_record_idx):
    """
@@ -79,6 +119,7 @@ def ez_cf_inference(train_file, test_file, outcome, config,
                             selected_columns, model_info, test_record_idx)
 
 
+@validate_license
 def sk_feature_selection(train_file, outcome, config):
    """
    This function performs feature selection from a training dataset by excluding specific columns and the target outcome column.
@@ -119,7 +160,7 @@ def sk_feature_selection(train_file, outcome, config):
    """
    return scikit_feature_selection(train_file, outcome, config)
 
-
+@validate_license
 def sk_model_building(train_file, test_file, outcome, selected_columns, config):
    """
    This function builds a machine learning model using a specified training dataset.
