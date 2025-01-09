@@ -157,7 +157,6 @@ def sk_feature_selection(train_file, outcome, config):
    """
    return scikit_feature_selection(train_file, outcome, config)
 
-@validate_license
 def sk_model_building(train_file, test_file, outcome, selected_columns, config):
    """
    This function builds a machine learning model using a specified training dataset.
