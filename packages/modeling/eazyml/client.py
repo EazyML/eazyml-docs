@@ -516,7 +516,6 @@ def ez_predict(test_data, options):
         return {"success": False, "message": res['left']['body']}, 422
 
 
-@validate_license
 def ez_display_json(resp):
     """
     Function to display formatted json
@@ -524,7 +523,6 @@ def ez_display_json(resp):
     return display_json(resp)
 
 
-@validate_license
 def ez_display_df(resp):
     """
     Function to display formatted dataframe
@@ -532,7 +530,6 @@ def ez_display_df(resp):
     return display_df(resp)
 
 
-@validate_license
 def ez_display_md(resp):
     """
     Function to display formatted markdown
