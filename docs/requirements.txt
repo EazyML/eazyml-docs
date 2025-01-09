@@ -2,3 +2,4 @@
 sphinx==7.1.2
 sphinx_rtd_theme==3.0.2
 sphinx-notfound-page==1.0.4
+sphinx-tabs
