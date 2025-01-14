@@ -14619,9 +14619,45 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">eazyml_augi</span> <span class="kn">import</span> <span class="n">ez_augi</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">eazyml_augi</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ez_augi</span><span class="p">,</span>
+    <span class="n">ez_init</span><span class="p">,</span>
+    <span class="n">ez_validate</span>
+<span class="p">)</span>
+<span class="kn">import</span> <span class="nn">gdown</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="n">load_dotenv</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="Initalize-eazyml">Initalize eazyml<a class="anchor-link" href="#Initalize-eazyml">&#182;</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ez_init</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;EAZYML_LICENSE_KEY&#39;</span><span class="p">))</span>
 </pre></div>
 
      </div>
@@ -14645,11 +14681,13 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Names of the files that will be used by EazyML APIs</span>
-<span class="n">eazyml_train_file</span> <span class="o">=</span> <span class="s1">&#39;IRIS_Train.csv&#39;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;1-RO9K9-YYGK7Wp__ioth0xPD8XqtgvKT&#39;</span><span class="p">)</span>
+<span class="c1"># Names of the files that will be used by EazyML APIs</span>
+<span class="n">eazyml_train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;IRIS_Train.csv&#39;</span><span class="p">)</span>
+<span class="n">eazyml_test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;IRIS_Test.csv&#39;</span><span class="p">)</span>
 
 <span class="c1"># The column name for outcome of interest</span>
 <span class="n">outcome</span> <span class="o">=</span> <span class="s2">&quot;species&quot;</span>
@@ -14667,7 +14705,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="2.-Helper-Function:-Display-DataFrame">2. Helper Function: Display DataFrame<a class="anchor-link" href="#2.-Helper-Function:-Display-DataFrame">&#182;</a></h2>
+<h2 id="2.-Define-Mode,-Data-Type-and-List-of-Selected-Features">2. Define Mode, Data Type and List of Selected Features<a class="anchor-link" href="#2.-Define-Mode,-Data-Type-and-List-of-Selected-Features">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -14676,10 +14714,46 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">display_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">insight_col</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;classification&#39;</span>
+
+<span class="n">variable_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span>
+<span class="n">type_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;numeric&#39;</span><span class="p">,</span> <span class="s1">&#39;numeric&#39;</span><span class="p">,</span> <span class="s1">&#39;numeric&#39;</span><span class="p">,</span> <span class="s1">&#39;numeric&#39;</span><span class="p">,</span> <span class="s1">&#39;categorical&#39;</span><span class="p">]</span>
+<span class="n">type_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Variable Name&#39;</span><span class="p">:</span> <span class="n">variable_list</span><span class="p">,</span> <span class="s1">&#39;Data Type&#39;</span><span class="p">:</span> <span class="n">type_list</span><span class="p">})</span>
+
+<span class="n">selected_features_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="3.-Helper-Functions:-To-Create-Dummy-Features-and-Display-DataFrame">3. Helper Functions: To Create Dummy Features and Display DataFrame<a class="anchor-link" href="#3.-Helper-Functions:-To-Create-Dummy-Features-and-Display-DataFrame">&#182;</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">create_dummy_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">dummy_na</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">prefix_sep</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">display_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">insight_col</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">df_new</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">insight_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">df_new</span><span class="p">[</span><span class="n">insight_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">insight_col</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
@@ -14700,7 +14774,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="3.-EazyML-Augmented-Intelligence:-Auto-derive-Insights">3. EazyML Augmented Intelligence: Auto-derive Insights<a class="anchor-link" href="#3.-EazyML-Augmented-Intelligence:-Auto-derive-Insights">&#182;</a></h2>
+<h2 id="4.-EazyML-Augmented-Intelligence">4. EazyML Augmented Intelligence<a class="anchor-link" href="#4.-EazyML-Augmented-Intelligence">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -14711,7 +14785,18 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="3.1-Build-Augmented-Intelligence-Model">3.1 Build Augmented Intelligence Model<a class="anchor-link" href="#3.1-Build-Augmented-Intelligence-Model">&#182;</a></h3>
+<h3 id="4.1-Auto-derive-Insights">4.1 Auto-derive Insights<a class="anchor-link" href="#4.1-Auto-derive-Insights">&#182;</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="4.1.1-Build-Augmented-Intelligence-Model">4.1.1 Build Augmented Intelligence Model<a class="anchor-link" href="#4.1.1-Build-Augmented-Intelligence-Model">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -14720,11 +14805,13 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;classification&#39;</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">ez_augi</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Dictionary of Data Types</span>
+<span class="n">data_type_dict</span> <span class="o">=</span> <span class="n">type_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Variable Name&#39;</span><span class="p">)[</span><span class="s1">&#39;Data Type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">ez_augi</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">data_type_dict</span><span class="p">,</span> <span class="n">selected_features_list</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
 </pre></div>
 
      </div>
@@ -14739,7 +14826,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="3.2-Convert-Response-to-DataFrame">3.2 Convert Response to DataFrame<a class="anchor-link" href="#3.2-Convert-Response-to-DataFrame">&#182;</a></h3>
+<h4 id="4.1.2-Convert-Response-to-DataFrame">4.1.2 Convert Response to DataFrame<a class="anchor-link" href="#4.1.2-Convert-Response-to-DataFrame">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -14748,7 +14835,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">insights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;insights&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;insights&#39;</span><span class="p">][</span><span class="s1">&#39;columns&#39;</span><span class="p">])</span>
@@ -14766,7 +14853,18 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="3.3-Display-Augmented-Insights">3.3 Display Augmented Insights<a class="anchor-link" href="#3.3-Display-Augmented-Insights">&#182;</a></h3>
+<h4 id="4.1.3-Display-Augmented-Insights">4.1.3 Display Augmented Insights<a class="anchor-link" href="#4.1.3-Display-Augmented-Insights">&#182;</a></h4>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h5 id="4.1.3.1-For-Class-Iris-virginica">4.1.3.1 For Class Iris-virginica<a class="anchor-link" href="#4.1.3.1-For-Class-Iris-virginica">&#182;</a></h5>
 </div>
 </div>
 </div>
@@ -14778,7 +14876,202 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display_df</span><span class="p">(</span><span class="n">insights_df</span><span class="p">,</span> <span class="s2">&quot;Insights&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">insights_df1</span> <span class="o">=</span> <span class="n">insights_df</span><span class="p">[</span><span class="n">insights_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Iris-virginica&#39;</span><span class="p">]</span>
+<span class="n">display_df</span><span class="p">(</span><span class="n">insights_df1</span><span class="p">,</span> <span class="s2">&quot;Augmented Intelligence Insights&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h5 id="4.1.3.2-For-Class-Iris-versicolor">4.1.3.2 For Class Iris-versicolor<a class="anchor-link" href="#4.1.3.2-For-Class-Iris-versicolor">&#182;</a></h5>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">insights_df0</span> <span class="o">=</span> <span class="n">insights_df</span><span class="p">[</span><span class="n">insights_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Iris-versicolor&#39;</span><span class="p">]</span>
+<span class="n">display_df</span><span class="p">(</span><span class="n">insights_df0</span><span class="p">,</span> <span class="s2">&quot;Augmented Intelligence Insights&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="4.2-Validation-of-Insights">4.2 Validation of Insights<a class="anchor-link" href="#4.2-Validation-of-Insights">&#182;</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="4.2.1-Validating-Insights">4.2.1 Validating Insights<a class="anchor-link" href="#4.2.1-Validating-Insights">&#182;</a></h4>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">record_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;record_number&#39;</span><span class="p">:</span> <span class="n">record_number</span><span class="p">}</span>
+<span class="n">val_response</span> <span class="o">=</span> <span class="n">ez_validate</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;insights&#39;</span><span class="p">],</span> <span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">data_type_dict</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="4.2.2-Convert-Response-to-DataFrame">4.2.2 Convert Response to DataFrame<a class="anchor-link" href="#4.2.2-Convert-Response-to-DataFrame">&#182;</a></h4>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">validate_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">&#39;validations&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">val_response</span><span class="p">[</span><span class="s1">&#39;validations&#39;</span><span class="p">][</span><span class="s1">&#39;columns&#39;</span><span class="p">])</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="4.2.3-Display-Validation-Metrics">4.2.3 Display Validation Metrics<a class="anchor-link" href="#4.2.3-Display-Validation-Metrics">&#182;</a></h4>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h5 id="4.2.3.1-For-Class-Iris-virginica">4.2.3.1 For Class Iris-virginica<a class="anchor-link" href="#4.2.3.1-For-Class-Iris-virginica">&#182;</a></h5>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">validate_df1</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="n">validate_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Iris-virginica&#39;</span><span class="p">]</span>
+<span class="n">display_df</span><span class="p">(</span><span class="n">validate_df1</span><span class="p">,</span> <span class="s2">&quot;Augmented Intelligence Insights&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h5 id="4.2.3.2-For-Class-Iris-versicolor">4.2.3.2 For Class Iris-versicolor<a class="anchor-link" href="#4.2.3.2-For-Class-Iris-versicolor">&#182;</a></h5>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">validate_df0</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="n">validate_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Iris-versicolor&#39;</span><span class="p">]</span>
+<span class="n">display_df</span><span class="p">(</span><span class="n">validate_df0</span><span class="p">,</span> <span class="s2">&quot;Augmented Intelligence Insights&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="4.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">4.2.4 Display Filtered Data for Specific Record Numbers<a class="anchor-link" href="#4.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">&#182;</a></h4>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">record_number</span><span class="p">)):</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">&#39;validation_filter&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;Augmented Intelligence Insights&#39;</span><span class="p">])</span>
+    <span class="n">filter_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">&#39;validation_filter&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;filtered_data&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">val_response</span><span class="p">[</span>
+                             <span class="s1">&#39;validation_filter&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;filtered_data&#39;</span><span class="p">][</span><span class="s1">&#39;columns&#39;</span><span class="p">])</span> 
+    <span class="n">display_df</span><span class="p">(</span><span class="n">filter_df</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
      </div>
