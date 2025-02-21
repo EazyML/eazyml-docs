@@ -19,7 +19,7 @@ and integration capabilities with existing workflows.
    :hidden:
 
    Explainable AI <packages/eazyml_xai.rst>
-   Augmented Intelligence <packages/eazyml_augi.rst>
+   Augmented Intelligence <packages/eazyml_insight.rst>
    Image Explainable AI <packages/eazyml_xai_image.rst>
    Counterfactual <packages/eazyml_cf.rst>
    Data Quality <packages/eazyml_dq.rst>

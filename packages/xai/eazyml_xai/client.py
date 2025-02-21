@@ -7,10 +7,14 @@ import traceback
 import pandas as pd
 
 from .license.license import (
+        validate_license,
         init_eazyml
 )
 
-def ez_init(license_key: str):
+from .globals import logger as log
+log.initlog()
+
+def ez_init(license_key=None):
     """
     Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
 
@@ -27,36 +31,36 @@ def ez_init(license_key: str):
     -----
     Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
     """
-    if license_key :
-        os.environ["EAZYML_LICENSE_KEY"] = license_key
-        # update api and user info in hidden files
-        approved, msg = init_eazyml(license_key = os.environ["EAZYML_LICENSE_KEY"])
-        return {
-                "success": approved,
-                "message": msg
-            }
-    else :
-        return {
-            "success": False,
-            "message": "No license key provided"
+    # update api and user info in hidden files
+    approved, msg = init_eazyml(license_key = license_key)
+    return {
+            "success": approved,
+            "message": msg
         }
 
 
-def ez_explain(mode, outcome, train_file_path, test_file_path, model,
-               data_type_dict, selected_features_list, options={}):
+@validate_license
+def ez_explain(train_data, outcome, test_data, model_info,
+               options={}):
     """
     This API generates explanations for a model's prediction, based on provided train and test data files.
 
     Parameters :
-        - **train_file_path** (`str`): Path to the training file used to build the model.
-        - **test_file_path** (`str`): Path to the test file containing the data for predictions.
-        - **record_number** (`int`): The record from the test file whose prediction needs explanation.
-        - **mode** (`str`): Prediction mode: `"classification"` or `"regression"`.
+        - **train_data** (`str`): Path to the training file used to build the model.
         - **outcome** (`str`): The column in the dataset that you want to predict.
-        - **model** (`class`): The trained model used for prediction.
-        - **preprocessor** (`class`): The trained preprocessor used for processing.
-        - **data_type_dict** (`dict`): Dictionary which contain type of each feature.
-        - **selected_features_list** (`list`): List of derived features on which model is trained.
+        - **test_data** (`str`): Path to the test file for predictions.
+        - **model_info** (dict):
+          A dictionary containing the trained model and associated model information (e.g., the model object 
+          and any necessary pre-processing steps).
+        - **options** (dict):
+          A dictionary of configuration settings for counterfactual inference, which may include:
+          
+          .. code-block:: python
+
+             options = {
+                 "record_number": ["list of test data indices for which we want explaination"], if not provided it will compute explaination for all test data. 
+                 "scaler": preprocessing that we need to apply on test data.
+             }
 
     Returns :
         - **Dictionary with Fields**:
@@ -95,15 +99,12 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
         .. code-block:: python
 
             ez_explain(
-                mode='classification',
+                train_data='train.csv',
                 outcome='target',
-                train_file_path='train.csv',
-                test_file_path='test.csv',
-                model=my_model,
-                data_type_dict=data_type_dict,
-                selected_feature_list=list_of_derived_features,
-                options={"data_source": "parquet", "record_number": [1, 2, 3],
-                         "preprocessor": my_preprocessor}
+                test_data='test.csv',
+                model_info=my_model,
+                options={"record_number": [1, 2, 3],
+                         "scaler": my_preprocessor}
             )
     """
     try:
@@ -111,16 +112,94 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
         if ("data_source" in options and options[
             "data_source"] == "parquet"):
             data_source = "parquet"
-        if not os.path.exists(train_file_path):
-            return {
+
+
+        if isinstance(train_data, str):
+            if not os.path.exists(train_data):
+                return {
                     "success": False,
                     "message": "train_file_path does not exist."
-                    }
-        if not os.path.exists(test_file_path):
+                }
+            train_data, _ = exai.get_df(train_data, data_source=data_source)
+        elif isinstance(train_data, pd.DataFrame):
+            train_data = train_data
+        else:
             return {
+                "success": False,
+                "message": 'train_data should be of either string or DataFrame'
+            }
+
+
+        mode, data_type_dict, selected_features_list = exai.get_mode_data_type_selected_features(train_data, outcome)
+        type_df = pd.DataFrame(data_type_dict.items(), columns=["Variable Name", "Data Type"])
+
+        if type(model_info) == bytes:
+            try:
+                dic = exai.decrypt_dict(model_info)
+                selected_features_list = dic["model_data"]["features_selected"]
+                selected_features_list.append(outcome)
+
+                if "model_name" in options:
+                    model_name = options["model_name"]
+                    list_model = [d["Model"] for d in dic["model_data"]["Consolidated Metrics"]]
+
+
+                    if model_name in list_model:
+                        model = dic["model_data"]["Consolidated Metrics"]["Models"]["Model" == model_name]["Models"]["model"]
+                    else:
+                        return {
+                            "success": False,
+                            "message": "Please provide a valid model name from encrypted bytes"
+                        }
+
+
+                else: model = dic["model_data"]["Consolidated Metrics"][0]["Models"]["model"]
+            except Exception as e:
+                return {
                     "success": False,
-                    "message": "test_file_path does not exist."
-                    }
+                    "message": "Please provide a valid encrypted model"
+                }
+        elif type(model_info) == dict:
+            try:
+                dic = model_info
+                selected_features_list = dic["model_data"]["features_selected"]
+                selected_features_list.append(outcome)
+
+                if "model_name" in options:
+                    model_name = options["model_name"]
+                    list_model = [d["Model"] for d in dic["model_data"]["Consolidated Metrics"]]
+
+                    if model_name in list_model:
+                        model = dic["model_data"]["Consolidated Metrics"]["Models"]["Model" == model_name]["Models"]["model"]
+
+                    else:
+                        return {
+                            "success": False,
+                            "message": "Please provide a valid model name from encrypted bytes"
+                        }
+
+                else: model = dic["model_data"]["Consolidated Metrics"][0]["Models"]["model"]
+
+
+            except Exception as e:
+                return {
+                    "success": False,
+                    "message": "Please provide a valid model dict"
+                }
+
+        else:
+            model = model_info
+            if "selected_features" in options:
+                 selected_features_list = options["selected_features"]
+            else:
+                selected_features_list = selected_features_list
+
+
+
+            # model, scaler = exai.get_model_info(train_data, outcome, model_info, type_df, selected_features_list)
+
+
+
 
         if not isinstance(data_type_dict, dict):
             return {
@@ -140,8 +219,22 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
                         "success": False,
                         "message": "Please provide valid type in data_type.('numeric'/'categorical')"
                         }
-        train_data, _ = exai.get_df(train_file_path, data_source=data_source) 
-        test_data, _ = exai.get_df(test_file_path, data_source=data_source)
+
+        if isinstance(test_data, str):
+            if not os.path.exists(test_data):
+                return {
+                    "success": False,
+                    "message": "test_file_path does not exist."
+                }
+            test_data, _ = exai.get_df(test_data, data_source=data_source)
+        elif isinstance(test_data, pd.DataFrame):
+            test_data = test_data
+        else:
+            return {
+                "success": False,
+                "message": 'test_data should be of either string or DataFrame'
+            }
+
 
         for col in data_type_dict.keys():
             if col not in train_data.columns:
@@ -191,8 +284,8 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
         if (
             not is_string(mode)
             or not is_string(outcome)
-            or not is_string(train_file_path)
-            or not is_string(test_file_path)
+            # or not is_string(train_file_path)
+            # or not is_string(test_file_path)
         ):
             return {
                         "success": False,
@@ -280,6 +373,13 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
 
             train_data, test_data, rule_lime_dict = exai.processing_steps(
                 train_data, test_data, global_info_dict, selected_features_list)
+
+
+
+
+
+
+
         body = dict(
                 train_data = train_data,
                 test_data = test_data,
@@ -292,6 +392,7 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
                 record_numbers = record_number
             )
         results = exai.get_explainable_ai(body)
+
         if results == 'model is not correct':
             return {
                         "success": False,
@@ -314,5 +415,5 @@ def ez_explain(mode, outcome, train_file_path, test_file_path, model,
                 }
 
     except Exception as e:
-        print (traceback.print_exc())
+        log.log_db(traceback.print_exc())
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}

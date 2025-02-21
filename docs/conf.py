@@ -17,7 +17,7 @@ from unittest.mock import MagicMock
 # Add the `docs` directory to sys.path so Sphinx knows where to find the configuration
 sys.path.append(os.path.abspath('docs'))
 
-sys.path.append(os.path.abspath('../packages/augi'))
+sys.path.append(os.path.abspath('../packages/insight'))
 sys.path.append(os.path.abspath('../packages/xai'))
 sys.path.append(os.path.abspath('../packages/xai_image'))
 sys.path.append(os.path.abspath('../packages/cf'))
@@ -45,12 +45,12 @@ os.environ["READTHEDOCS_VERSION_NAME"] = "0.1.0"
 # Mock missing modules or dependencies
 autodoc_mock_imports = [
     'flask', 'pandas', 'numpy', 'matplotlib',
-    'eazyml_augi.transparency_api',
-    'eazyml_augi.utils',
-    'eazyml_augi.utility',
-    'eazyml_augi.globals',
-    'eazyml_augi.license',
-    'eazyml_augi.license.license',
+    'eazyml_insight.transparency_api',
+    'eazyml_insight.utils',
+    'eazyml_insight.utility',
+    'eazyml_insight.globals',
+    'eazyml_insight.license',
+    'eazyml_insight.license.license',
     'eazyml_xai_image.globals.transparency_api',
     'eazyml_xai_image.globals.transparency_app',
     'eazyml_xai_image.src',
