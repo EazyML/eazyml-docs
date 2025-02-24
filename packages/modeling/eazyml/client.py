@@ -78,7 +78,6 @@ def ez_init(license_key=None):
         }
 
 
-@validate_license
 def ez_build_model(train_data, outcome, options={}):
     """
     Initialize and build a predictive model based on the provided dataset and options.
@@ -490,7 +489,6 @@ def ez_build_model(train_data, outcome, options={}):
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
 
-@validate_license
 def ez_predict(test_data, model_info, options={}):
     """
     Perform prediction on the given test data based
