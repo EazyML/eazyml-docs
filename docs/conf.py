@@ -49,10 +49,10 @@ autodoc_mock_imports = [
     # 'eazyml_insight.src',
     # 'eazyml_insight.utils',
     # 'eazyml_insight.utility',
-    # 'eazyml_insight.globals',
+    'eazyml_insight.globals',
     # 'eazyml_insight.license',
     # 'eazyml_insight.license.license',
-    # 'eazyml_xai_image.globals.transparency_api',
+    'eazyml_xai_image.globals.transparency_api',
     # 'eazyml_xai_image.globals.transparency_app',
     # 'eazyml_xai_image.src',
     'eazyml_xai_image.globals',
@@ -66,7 +66,7 @@ autodoc_mock_imports = [
     'eazyml_xai.license.license',
     # 'eazyml_cf',
     # 'eazyml_cf.client',
-    # 'eazyml_cf.src',
+    'eazyml_cf.src',
     # 'eazyml_cf.src.cfr_helper',
     # 'eazyml_cf.license',
     # 'eazyml_cf.license.license',
@@ -81,7 +81,8 @@ autodoc_mock_imports = [
     # 'eazyml.src.test_model', 'eazyml.src.utils.utility_libs',
     # 'eazyml.src', 'eazyml.src.build_model',
     # 'eazyml.src.utils',
-    # 'eazyml.globals', 'eazyml.license',
+    'eazyml.globals', 
+    # 'eazyml.license',
     # 'eazyml.license.license'
 ]
 
