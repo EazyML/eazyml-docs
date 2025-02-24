@@ -47,7 +47,6 @@ def ez_init(license_key=None):
         }
 
    
-@validate_license
 def ez_cf_inference(test_data, outcome, selected_features, 
                     model_info, options):
     """
@@ -120,6 +119,7 @@ def ez_cf_inference(test_data, outcome, selected_features,
         print(f"Custom Error encountered: {e}")
         return None     
 
+@validate_license
 def validate_input(test_record_df, outcome, selected_features, model_info, options):
     """
     Validates the input parameters before processing.

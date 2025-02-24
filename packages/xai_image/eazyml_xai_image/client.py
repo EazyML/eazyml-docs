@@ -75,7 +75,6 @@ def ez_init(license_key=None):
         }
 
 
-@validate_license
 def ez_xai_image_explain(filename,
                          model_path,
                          predicted_filename,
@@ -287,7 +286,6 @@ def ez_xai_image_explain(filename,
         }
 
 
-@validate_license
 def ez_image_active_learning(filenames,
                              model_path,
                              predicted_filenames,
@@ -493,7 +491,6 @@ def ez_image_active_learning(filenames,
         }
 
 
-@validate_license
 def ez_image_online_learning(new_training_data_path,
                              model_path,
                              options=None):
@@ -757,7 +754,6 @@ def ez_image_online_learning(new_training_data_path,
         }
     
 
-@validate_license
 def ez_image_model_evaluate(validation_data_path,
                              model_path,
                              options=None):

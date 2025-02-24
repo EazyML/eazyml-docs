@@ -95,7 +95,6 @@ def ez_init(license_key=None):
         }
 
 
-@validate_license
 def ez_data_quality(train_data, outcome, options = {}):
     """
     Performs a series of data quality checks on the given dataset and
