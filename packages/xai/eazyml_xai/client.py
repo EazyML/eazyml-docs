@@ -39,7 +39,6 @@ def ez_init(license_key=None):
         }
 
 
-@validate_license
 def ez_explain(train_data, outcome, test_data, model_info,
                options={}):
     """

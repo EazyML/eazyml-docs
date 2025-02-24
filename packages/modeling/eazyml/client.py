@@ -90,7 +90,6 @@ def ez_build_model(train_data, outcome, options={}):
         - **options** (`dict`): A dictionary of options to configure the model initialization process. Supported keys include:
             - **model_type** (`str`): Type of model to build. Options are "predictive".
             - **spark_session** (`SparkSession`): Takes the values SparkSession/None. 
-
     Returns :
         - **Dictionary with Fields**:
             - `success` (`bool`): Indicates if the model has been successful trained.

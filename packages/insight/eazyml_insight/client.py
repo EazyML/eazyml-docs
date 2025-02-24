@@ -43,7 +43,6 @@ def ez_init(license_key=None):
         }
 
 
-@validate_license
 def ez_insight(train_data, outcome,
             options={}):
     """
@@ -262,7 +261,6 @@ def ez_insight(train_data, outcome,
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
 
-@validate_license
 def ez_validate(train_data, outcome, insights, test_data,
                 options={}):
     """
