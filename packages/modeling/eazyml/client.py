@@ -93,6 +93,7 @@ def ez_build_model(train_data, outcome, options={}):
         - **Dictionary with Fields**:
             - `success` (`bool`): Indicates if the model has been successful trained.
             - `message` (`str`): Describes the success or failure of the operation.
+                
                 **On Success** :
                 - `model_performance` (`DataFrame`): Provides the Model Performance for each model.
                 - `global_importance` (`DataFrame`): Provides the Importance features for the provided data.
