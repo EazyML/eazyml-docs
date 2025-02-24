@@ -171,10 +171,29 @@ def ez_data_quality(train_data, outcome, options = {}):
                     "success": true
                 },
                 "data_correlation_quality": {
-                    "data_correlation": "dict containing column wise correlationa"
-                    },
+                    "data_correlation": "dict containing column wise correlations",
                     "data_correlation_alert": "true",
                     "message": "Correlation has been calculated successfully between all features and all features with outcome",
+                    "success": true
+                },
+                "data_completeness_quality": {
+                    "completeness": "true",
+                    "decision_threshold": 0.6,
+                    "insight_information": "The uploaded dataset is complete at confidence level of 0.6",
+                    "top_insight": [".."],
+                    "top_score": [".."]
+                },
+                "data_correctness_quality": {
+                    "insights": [".."],
+                    "message": "Please infer the correctness through logical inspection of the insights",
+                    "quality_alert": "Please verify that the above rules are making sense or not. In case there are one or more rules which appear incorrect from an expert perspective, please double check your files for the variables, their correct values, in the offending rules"
+                },
+                "drift_quality": {
+                    "data_drift_analysis": {"dict containing ks and psi data drift analysis"
+                    },
+                    "model_drift_analysis": {"dict containing distributional and interval model drift analysis"
+                    },
+                    "message": "Drift has been calculated successfully",
                     "success": true
                 },
                 "data_bad_quality_alerts": {
@@ -182,6 +201,10 @@ def ez_data_quality(train_data, outcome, options = {}):
                     "data_balance_alert": "true/false",
                     "data_emptiness_alert": "true/false",
                     "data_outliers_alert": "true/false",
+                    "data_drift_alert": "true/false",
+                    "model_drift_alert": "true/false",
+                    "data_correctness_alert": "Please infer the correctness through logical inspection of the insights",
+                    "data_completeness_alert": "true/false",
                     "data_correlation_alert": "true/false"
                 }
             }
@@ -215,7 +238,7 @@ def ez_data_quality(train_data, outcome, options = {}):
                     "outcome_correlation": "yes",
                     "data_drift": "yes",
                     "model_drift": "yes",
-                    "prediction_filename": test_data,
+                    "prediction_data": test_data,
                     "data_completeness": "yes",
                     "data_correctness": "yes"
                 }

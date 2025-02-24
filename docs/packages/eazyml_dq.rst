@@ -12,7 +12,7 @@ To install ``Data Quality`` package:
 
       .. code-block:: console
 
-         $ pip install eazyml-dq
+         $ pip install eazyml-data-quality
 
 
 Available APIs

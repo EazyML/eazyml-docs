@@ -12,13 +12,7 @@ To install ``Counterfactual`` package:
 
       .. code-block:: console
 
-         $ pip install eazyml-cf
-
-   .. tab:: ``conda``
-
-      .. code-block:: console
-
-         $ conda install eazyml-cf
+         $ pip install eazyml-counterfactual
 
 Available APIs
 --------------

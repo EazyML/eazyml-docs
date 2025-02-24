@@ -12,7 +12,7 @@ To install ``EazyML Modeling`` package:
 
       .. code-block:: console
 
-         $ pip install eazyml
+         $ pip install eazyml-automl
 
 
 Available APIs
