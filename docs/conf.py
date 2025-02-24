@@ -79,7 +79,7 @@ autodoc_mock_imports = [
     'eazyml_dq.src', 
     'eazyml_dq.src.main', 
     'eazyml_dq.globals',
-    # 'eazyml_dq.license',
+    'eazyml_dq.license',
     # 'eazyml_dq.license.license',
     # 'eazyml',
     # 'eazyml.client',
@@ -89,7 +89,7 @@ autodoc_mock_imports = [
     'eazyml.src.build_model',
     'eazyml.src.utils',
     'eazyml.globals', 
-    # 'eazyml.license',
+    'eazyml.license',
     # 'eazyml.license.license'
 ]
 
