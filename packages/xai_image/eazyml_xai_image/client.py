@@ -29,7 +29,6 @@ from .globals.transparency_app import (
     EZ_IMAGE_OL_STRATEGY, EZ_IMAGE_TR_STRATEGY
 )
 
-from .src import exai
 from .src import exai_main_image
 import traceback
 

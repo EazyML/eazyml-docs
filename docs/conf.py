@@ -62,6 +62,7 @@ autodoc_mock_imports = [
     'eazyml_xai.globals',
     'eazyml_xai.license',
     'eazyml_xai.license.license',
+    'eazyml_xai.eazyml',
     'eazyml_cf.src',
     'eazyml_cf.src.utils',
     'eazyml_cf.src.ez_counterfactual_inference',
