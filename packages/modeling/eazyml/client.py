@@ -89,6 +89,7 @@ def ez_build_model(train_data, outcome, options={}):
         - **options** (`dict`): A dictionary of options to configure the model initialization process. Supported keys include:
             - **model_type** (`str`): Type of model to build. Options are "predictive".
             - **spark_session** (`SparkSession`): Takes the values SparkSession/None. 
+    
     Returns :
         - **Dictionary with Fields**:
             - `success` (`bool`): Indicates if the model has been successful trained.
@@ -98,6 +99,7 @@ def ez_build_model(train_data, outcome, options={}):
                 - `model_performance` (`DataFrame`): Provides the Model Performance for each model.
                 - `global_importance` (`DataFrame`): Provides the Importance features for the provided data.
                 - `model_info` (`Bytes`): Provides Encripted Model information for ez_predict to get prediction for test data.
+    
     Note :
         - Please save the response obtained and provide the model_info to the ez_predict module for predictions.
         - If you are working on a spark_session then please save the necessary spark_models individually from the model_info and provide them in the ez_predict parameter spark_model in the options along with the session and model_info.
