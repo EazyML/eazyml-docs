@@ -80,7 +80,7 @@ autodoc_mock_imports = [
     'eazyml_dq.src.main', 
     'eazyml_dq.globals',
     'eazyml_dq.license',
-    # 'eazyml_dq.license.license',
+    'eazyml_dq.license.license',
     # 'eazyml',
     # 'eazyml.client',
     'eazyml.src.test_model',
@@ -90,7 +90,7 @@ autodoc_mock_imports = [
     'eazyml.src.utils',
     'eazyml.globals', 
     'eazyml.license',
-    # 'eazyml.license.license'
+    'eazyml.license.license'
 ]
 
 sys.modules.update((mod_name, MagicMock()) for mod_name in autodoc_mock_imports)
