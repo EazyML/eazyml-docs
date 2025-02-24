@@ -44,8 +44,8 @@ os.environ["READTHEDOCS_VERSION_NAME"] = "0.1.0"
 
 # Mock missing modules or dependencies
 autodoc_mock_imports = [
-    # 'flask', 'pandas', 'numpy', 'matplotlib', 'pyspark',
-    # 'pyspark.sql', 'pyspark.sql.functions',
+    'flask', 'pandas', 'numpy', 'matplotlib', 'pyspark',
+    'pyspark.sql', 'pyspark.sql.functions',
     # 'eazyml_insight.src',
     # 'eazyml_insight.utils',
     # 'eazyml_insight.utility',
@@ -55,7 +55,7 @@ autodoc_mock_imports = [
     # 'eazyml_xai_image.globals.transparency_api',
     # 'eazyml_xai_image.globals.transparency_app',
     # 'eazyml_xai_image.src',
-    # 'eazyml_xai_image.globals',
+    'eazyml_xai_image.globals',
     # 'eazyml_xai_image.src.helper',
     # 'eazyml_xai_image.license',
     # 'eazyml_xai_image.license.license',
