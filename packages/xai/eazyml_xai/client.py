@@ -422,25 +422,54 @@ def ez_explain(train_data, outcome, test_data, model_info,
 
 
 def ez_create_dummy_features(df, cols):
-    df = df.fillna("Null")
+    """
+    Convert categorical variables into dummy/one-hot encoded variables.
 
-    return pd.get_dummies(df, columns=cols, dummy_na=False, prefix=cols, prefix_sep="_")
+    This function takes a DataFrame and a list of column names, and returns
+    a new DataFrame where the specified columns are transformed into one-hot
+    encoded (dummy) variables.
+
+    Parameters :
+        - **df** (`pd.DataFrame`): pandas dataframe for which dummy features are to be created
+        - **cols** ('list'): List of categorical columns to be encoded
+    Returns:
+        - **pd.DataFrame**: A DataFrame with the specified columns replaced by their corresponding one-hot encoded dummy variables.
+
+    """
+    df = df.fillna("Null")
+    return pd.get_dummies(
+        df, columns=cols, dummy_na=False, prefix=cols, prefix_sep="_")
+
 
 def ez_get_data_type(df, outcome):
+    """
+    Identifies if the columns are categorical or numeric and produces a DataFrame containing data types
+
+    Parameters :
+        - **df** (`pd.DataFrame`): pandas dataframe for which data types are to be identified.
+        - **outcome** ('str'): Outcome variable name from the df
+    Returns:
+        - **pd.DataFrame**: A DataFrame with Variable Name and corresponding Data Type
+    """
     df = df.fillna("Null")
-    mode, data_type_dict, selected_features = exai.get_mode_data_type_selected_features(df, outcome)
-
-    type_df = pd.DataFrame(data_type_dict.items(), columns=["Variable Name", "Data Type"])
-
+    mode, data_type_dict, selected_features =\
+        exai.get_mode_data_type_selected_features(df, outcome)
+    type_df = pd.DataFrame(data_type_dict.items(), columns=[
+        "Variable Name", "Data Type"])
     return type_df
 
+
 def ez_create_selected_features(df, outcome):
+    """
+    Creates a list of selected features based on input dataset and outcome variables to be used to train model.
+
+    Parameters :
+        - **df** (`pd.DataFrame`): pandas dataframe for which selected features are to be identified.
+        - **outcome** ('str'): Outcome variable name from the df
+    Returns:
+        - **list**: List of selected features.
+    """
     df = df.fillna("Null")
-
-    mode, data_type_dict, selected_features = exai.get_mode_data_type_selected_features(df, outcome)
-
+    mode, data_type_dict, selected_features =\
+        exai.get_mode_data_type_selected_features(df, outcome)
     return  selected_features
-
-
-
-
