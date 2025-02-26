@@ -87,8 +87,7 @@ def ez_build_model(train_data, outcome, options={}):
     Initialize and build a predictive model based on the provided dataset and options.
 
     Parameters :
-        - **train_data** (`DataFrame`): A pandas DataFrame containing the dataset for model initialization. Also supports the file path
-                                        of the dataframe.
+        - **train_data** (`DataFrame`): A pandas DataFrame containing the dataset for model initialization. Also supports the file path of the dataframe.
         - **outcome** (`str`): Target variable for the model.
         - **options** (`dict`): A dictionary of options to configure the model initialization process. Supported keys include:
             - **model_type** (`str`): Type of model to build. Options are "predictive".
@@ -98,7 +97,8 @@ def ez_build_model(train_data, outcome, options={}):
         - **Dictionary with Fields**:
             - `success` (`bool`): Indicates if the model has been successful trained.
             - `message` (`str`): Describes the success or failure of the operation.
-            Additionally, If successful:
+            
+                **On Success** :
                 - `model_performance` (`DataFrame`): Provides the Model Performance for each model.
                 - `global_importance` (`DataFrame`): Provides the Importance features for the provided data.
                 - `model_info` (`Bytes`): Provides Encripted Model information for ez_predict to get prediction for test data.
