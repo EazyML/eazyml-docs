@@ -51,7 +51,6 @@ def ez_init(access_key=None,
         }
 
    
-@validate_license
 def ez_cf_inference(test_data, outcome, selected_features, 
                     model_info, options):
     """
