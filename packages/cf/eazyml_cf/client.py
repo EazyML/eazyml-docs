@@ -22,31 +22,36 @@ from .src.utils import CustomError
 from .globals import logger as log
 log.initlog()
 
-def ez_init(license_key=None):
+def ez_init(access_key=None,
+                usage_share_consent=True,
+                usage_delete=False):
     """
-    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
 
     Parameters :
-        - **license_key (str)**:
-            The license key to be set as an environment variable for EazyML.
+        - **access_key (str)**:
+            The access key to be set as an environment variable for EazyML.
 
     Examples
     --------
-    >>> init_ez("your_license_key_here")
-    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+    >>> init_ez("your_access_key_here")
+    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(license_key = license_key)
+    approved, msg = init_eazyml(access_key = access_key,
+                                usage_share_consent=usage_share_consent,
+                                usage_delete=usage_delete)
     return {
             "success": approved,
             "message": msg
         }
 
    
+@validate_license
 def ez_cf_inference(test_data, outcome, selected_features, 
                     model_info, options):
     """
@@ -119,3 +124,77 @@ def ez_cf_inference(test_data, outcome, selected_features,
         print(f"Custom Error encountered: {e}")
         return None     
 
+def validate_input(test_record_df, outcome, selected_features, model_info, options):
+    """
+    Validates the input parameters before processing.
+
+    Parameters:
+        test_record_df (pd.DataFrame): A single-row DataFrame containing the test record.
+        outcome (str): The target variable name.
+        selected_features (list): List of selected feature names.
+        model_info (dict): Dictionary containing model-related metadata.
+        options (dict): Dictionary containing optional parameters for processing.
+
+    Raises:
+        CustomError: If any validation fails.
+    """
+
+    # Validate test_record_df
+    if not isinstance(test_record_df, pd.DataFrame):
+        raise CustomError("test_record_df must be a pandas DataFrame.")
+    if test_record_df.shape[0] != 1:
+        raise CustomError("test_record_df must contain exactly one row.")
+
+    # Validate outcome
+    if not isinstance(outcome, str):
+        raise CustomError("outcome must be a string.")
+
+    # Validate selected_features
+    if not isinstance(selected_features, list):
+        raise CustomError("selected_features must be a list of strings.")
+    if not all(isinstance(feature, str) for feature in selected_features):
+        raise CustomError("All elements in selected_features must be strings.")
+    if not set(selected_features).issubset(test_record_df.columns):
+        raise CustomError("Some elements in selected_features are not present in test_record_df.")
+
+    # Validate model_info
+    if not isinstance(model_info, dict):
+        raise CustomError("model_info must be a dictionary.")
+
+    # Validate options
+    if not isinstance(options, dict):
+        raise CustomError("options must be a dictionary.")
+
+    # Define expected options and validation rules
+    validations = {
+        "variants": lambda x: isinstance(x, list) and all(isinstance(v, str) for v in x),
+        "outcome_ordinality": lambda x: isinstance(x, str),
+        "qualifier": lambda x: isinstance(x, str),
+        "lower_quantile": lambda x: isinstance(x, float) and 0 <= x <= 1,
+        "upper_quantile": lambda x: isinstance(x, float) and 0 <= x <= 1,
+        "vicinity_region_percentage": lambda x: isinstance(x, int) and 0 <= x <= 100,
+        "N": lambda x: isinstance(x, int) and x > 0,
+        "tolerable_error_threshold": lambda x: isinstance(x, float) and 0 <= x <= 1,
+        "variant_type": lambda x: isinstance(x, str) and x in {"static", "dynamic"},
+        "continuous_percent": lambda x: isinstance(x, int) and 0 <= x <= 100,
+        "categorical_percent": lambda x: isinstance(x, int) and 0 <= x <= 100,
+        "global_range_for_continuous": lambda x: isinstance(x, bool),
+        "best_among_local_optimums": lambda x: isinstance(x, bool),
+        "no_of_random_initial_seed": lambda x: isinstance(x, int) and x > 0
+    }
+
+    # Ensure required options exist
+    missing_keys = [key for key in ["variants", "outcome_ordinality"] if key not in options]
+    if missing_keys:
+        raise CustomError(f"Missing required options: {', '.join(missing_keys)}")
+
+    # Validate all provided options
+    for key, check in validations.items():
+        if key in options and not check(options[key]):
+            raise CustomError(f"Invalid format for '{key}': {options[key]}")
+
+    # Check if variants are a subset of selected_features
+    if not set(options["variants"]).issubset(set(selected_features)):
+        raise CustomError("Some elements in 'variants' are not present in 'selected_features'.")
+
+    return True  # If all validations pass

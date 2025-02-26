@@ -53,31 +53,36 @@ log.initlog()
 log_inst = log.instance()
 log_inst.getLogger("pyj4").setLevel(log_inst.CRITICAL)
 
-def ez_init(license_key=None):
+def ez_init(access_key=None,
+                usage_share_consent=True,
+                usage_delete=False):
     """
-    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
 
     Parameters :
-        - **license_key (str)**:
-            The license key to be set as an environment variable for EazyML.
+        - **access_key (str)**:
+            The access key to be set as an environment variable for EazyML.
 
     Examples
     --------
-    >>> init_ez("your_license_key_here")
-    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+    >>> init_ez("your_access_key_here")
+    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(license_key = license_key)
+    approved, msg = init_eazyml(access_key = access_key,
+                                usage_share_consent=usage_share_consent,
+                                usage_delete=usage_delete)
     return {
             "success": approved,
             "message": msg
         }
 
 
+@validate_license
 def ez_build_model(train_data, outcome, options={}):
     """
     Initialize and build a predictive model based on the provided dataset and options.
@@ -89,17 +94,15 @@ def ez_build_model(train_data, outcome, options={}):
         - **options** (`dict`): A dictionary of options to configure the model initialization process. Supported keys include:
             - **model_type** (`str`): Type of model to build. Options are "predictive".
             - **spark_session** (`SparkSession`): Takes the values SparkSession/None. 
-    
+
     Returns :
         - **Dictionary with Fields**:
             - `success` (`bool`): Indicates if the model has been successful trained.
             - `message` (`str`): Describes the success or failure of the operation.
-                
-                **On Success** :
+            Additionally, If successful:
                 - `model_performance` (`DataFrame`): Provides the Model Performance for each model.
                 - `global_importance` (`DataFrame`): Provides the Importance features for the provided data.
                 - `model_info` (`Bytes`): Provides Encripted Model information for ez_predict to get prediction for test data.
-    
     Note :
         - Please save the response obtained and provide the model_info to the ez_predict module for predictions.
         - If you are working on a spark_session then please save the necessary spark_models individually from the model_info and provide them in the ez_predict parameter spark_model in the options along with the session and model_info.
@@ -268,7 +271,8 @@ def ez_build_model(train_data, outcome, options={}):
        
         pdata_cat_cols_unique_list = dict()
         if spark:
-            
+            if outcome not in train_data.columns:
+                return {"success": False, "message": tr_api.VALID_BUILD_OUTCOME.replace("this", "outcome")}
             data_correctness = spark_utils.check_numerical_columns(train_data, outcome)
             if not data_correctness:
                 return {"success": False, "message": tr_api.VALID_SPARKDATAOBJECT}
@@ -295,7 +299,8 @@ def ez_build_model(train_data, outcome, options={}):
                 unique_values = train_data.select(column).distinct().rdd.flatMap(lambda x: x).collect()
                 pdata_cat_cols_unique_list[column] = unique_values
         else:
-            
+            if outcome not in list(train_data.columns):
+                return {"success": False, "message": tr_api.VALID_BUILD_OUTCOME.replace("this", "outcome")}
             if train_data.isnull().values.any():
                 return {"success": False, "message": tr_api.VALID_DATANULLOBJECT.replace("this", "train_data")}
             # Called in inform statistics
@@ -492,6 +497,7 @@ def ez_build_model(train_data, outcome, options={}):
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
 
+@validate_license
 def ez_predict(test_data, model_info, options={}):
     """
     Perform prediction on the given test data based

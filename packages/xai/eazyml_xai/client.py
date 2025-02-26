@@ -14,31 +14,36 @@ from .license.license import (
 from .globals import logger as log
 log.initlog()
 
-def ez_init(license_key=None):
+def ez_init(access_key=None,
+                usage_share_consent=True,
+                usage_delete=False):
     """
-    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
 
     Parameters :
-        - **license_key (str)**:
-            The license key to be set as an environment variable for EazyML.
+        - **access_key (str)**:
+            The access key to be set as an environment variable for EazyML.
 
     Examples
     --------
-    >>> init_ez("your_license_key_here")
-    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+    >>> init_ez("your_access_key_here")
+    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(license_key = license_key)
+    approved, msg = init_eazyml(access_key = access_key,
+                                usage_share_consent=usage_share_consent,
+                                usage_delete=usage_delete)
     return {
             "success": approved,
             "message": msg
         }
 
 
+@validate_license
 def ez_explain(train_data, outcome, test_data, model_info,
                options={}):
     """
@@ -120,18 +125,21 @@ def ez_explain(train_data, outcome, test_data, model_info,
                     "message": "train_file_path does not exist."
                 }
             train_data, _ = exai.get_df(train_data, data_source=data_source)
+            # print(train_data.columns)
         elif isinstance(train_data, pd.DataFrame):
-            train_data = train_data
+            train_data = train_data.replace(r'^\s*$', np.nan, regex=True)
+            # print(train_data.columns)
+
         else:
             return {
                 "success": False,
                 "message": 'train_data should be of either string or DataFrame'
             }
 
+        train_data = train_data.fillna("Null")
 
         mode, data_type_dict, selected_features_list = exai.get_mode_data_type_selected_features(train_data, outcome)
         type_df = pd.DataFrame(data_type_dict.items(), columns=["Variable Name", "Data Type"])
-
         if type(model_info) == bytes:
             try:
                 dic = exai.decrypt_dict(model_info)
@@ -233,6 +241,7 @@ def ez_explain(train_data, outcome, test_data, model_info,
                 "success": False,
                 "message": 'test_data should be of either string or DataFrame'
             }
+        test_data = test_data.fillna("Null")
 
 
         for col in data_type_dict.keys():
@@ -374,11 +383,6 @@ def ez_explain(train_data, outcome, test_data, model_info,
                 train_data, test_data, global_info_dict, selected_features_list)
 
 
-
-
-
-
-
         body = dict(
                 train_data = train_data,
                 test_data = test_data,
@@ -416,3 +420,28 @@ def ez_explain(train_data, outcome, test_data, model_info,
     except Exception as e:
         log.log_db(traceback.print_exc())
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
+
+
+def ez_create_dummy_features(df, cols):
+    df = df.fillna("Null")
+
+    return pd.get_dummies(df, columns=cols, dummy_na=False, prefix=cols, prefix_sep="_")
+
+def ez_get_data_type(df, outcome):
+    df = df.fillna("Null")
+    mode, data_type_dict, selected_features = exai.get_mode_data_type_selected_features(df, outcome)
+
+    type_df = pd.DataFrame(data_type_dict.items(), columns=["Variable Name", "Data Type"])
+
+    return type_df
+
+def ez_create_selected_features(df, outcome):
+    df = df.fillna("Null")
+
+    mode, data_type_dict, selected_features = exai.get_mode_data_type_selected_features(df, outcome)
+
+    return  selected_features
+
+
+
+

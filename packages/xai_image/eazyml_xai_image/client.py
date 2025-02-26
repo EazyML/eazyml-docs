@@ -29,6 +29,7 @@ from .globals.transparency_app import (
     EZ_IMAGE_OL_STRATEGY, EZ_IMAGE_TR_STRATEGY
 )
 
+from .src import exai
 from .src import exai_main_image
 import traceback
 
@@ -49,31 +50,36 @@ from .license.license import (
 from .globals import logger as log
 log.initlog()
 
-def ez_init(license_key=None):
+def ez_init(access_key=None,
+                usage_share_consent=True,
+                usage_delete=False):
     """
-    Initialize the EazyML library with a license key by setting the `EAZYML_LICENSE_KEY` environment variable.
+    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
 
     Parameters :
-        - **license_key (str)**:
-            The license key to be set as an environment variable for EazyML.
+        - **access_key (str)**:
+            The access key to be set as an environment variable for EazyML.
 
     Examples
     --------
-    >>> init_ez("your_license_key_here")
-    This sets the `EAZYML_LICENSE_KEY` environment variable to the provided license key.
+    >>> init_ez("your_access_key_here")
+    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid license key.
+    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(license_key = license_key)
+    approved, msg = init_eazyml(access_key = access_key,
+                                usage_share_consent=usage_share_consent,
+                                usage_delete=usage_delete)
     return {
             "success": approved,
             "message": msg
         }
 
 
+@validate_license
 def ez_xai_image_explain(filename,
                          model_path,
                          predicted_filename,
@@ -285,6 +291,7 @@ def ez_xai_image_explain(filename,
         }
 
 
+@validate_license
 def ez_image_active_learning(filenames,
                              model_path,
                              predicted_filenames,
@@ -490,6 +497,7 @@ def ez_image_active_learning(filenames,
         }
 
 
+@validate_license
 def ez_image_online_learning(new_training_data_path,
                              model_path,
                              options=None):
@@ -753,6 +761,7 @@ def ez_image_online_learning(new_training_data_path,
         }
     
 
+@validate_license
 def ez_image_model_evaluate(validation_data_path,
                              model_path,
                              options=None):
