@@ -95,7 +95,7 @@ def ez_cf_inference(test_data, outcome, selected_features,
        - **DataFrame** (DataFrame): A detailed breakdown of the feature values and changes made during the inference process, 
            showing how the selected features were adjusted to arrive at the optimal outcome.
 
-    Example 1 (Eazyml modeling):
+    Example 1 (EazyML modeling):
         .. code-block:: python
 
             ez_cf_inference(
