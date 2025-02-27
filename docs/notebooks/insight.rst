@@ -6,9 +6,9 @@ fundamentals of augmented intelligence for classification, regression and more.
 
 The following notebooks are available:
 
-1. `IRIS Insight <../_static/examples/insight/iris/AUGI_on_IRIS.html>`_
-2. `Fintech classification <../_static/examples/insight/fintech/AUGI_on_Fintech_Classification.html>`_
-3. `Fintech regression <../_static/examples/insight/fintech/AUGI_on_Fintech_Regression.html>`_
+1. `IRIS Insight <../_static/examples/insight/iris/Insight_on_IRIS.html>`_
+2. `Fintech classification <../_static/examples/insight/fintech/Insight_on_Fintech_Classification.html>`_
+3. `Fintech regression <../_static/examples/insight/fintech/Insight_on_Fintech_Regression.html>`_
 
 Try on Colab :
 
