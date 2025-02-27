@@ -17,7 +17,7 @@ from .license.license import (
         init_eazyml,
 )
 
-from .src.utils import CustomError
+from .src.utils import CustomError, BaseEstimator
 
 from .globals import logger as log
 log.initlog()
@@ -69,9 +69,8 @@ def ez_cf_inference(test_data, outcome, selected_features,
        - **selected_features** (list of str):
           A list of features used by the actual model for making predictions.
        
-       - **model_info** (dict):
-          A dictionary containing the trained model and associated model information (e.g., the model object 
-          and any necessary pre-processing steps).
+       - **model_info** (bytes / model object):
+          A bytes or model object containing the model information.
        
        - **options** (dict):
           A dictionary of configuration settings for counterfactual inference, which may include:
@@ -102,7 +101,7 @@ def ez_cf_inference(test_data, outcome, selected_features,
              test_record_df = test_data, 
              outcome = 'outcome_column_name',
              selected_features = ['feature1', 'feature2', 'feature3'],
-             model_info = {'model_info': 'model_info'},
+             model_info = b"acacxaca",
              options = {
                  "variant_type": "static",
                  "variants": ["feature1", "feature2"],
@@ -131,7 +130,7 @@ def validate_input(test_record_df, outcome, selected_features, model_info, optio
         test_record_df (pd.DataFrame): A single-row DataFrame containing the test record.
         outcome (str): The target variable name.
         selected_features (list): List of selected feature names.
-        model_info (dict): Dictionary containing model-related metadata.
+        model_info (bytes/object): String containing model-related metadata or model object.
         options (dict): Dictionary containing optional parameters for processing.
 
     Raises:
@@ -157,8 +156,8 @@ def validate_input(test_record_df, outcome, selected_features, model_info, optio
         raise CustomError("Some elements in selected_features are not present in test_record_df.")
 
     # Validate model_info
-    if not isinstance(model_info, dict):
-        raise CustomError("model_info must be a dictionary.")
+    if not isinstance(model_info, (bytes, BaseEstimator)):
+        raise CustomError("model_info must be bytes, or scikit-learn model object.")
 
     # Validate options
     if not isinstance(options, dict):
