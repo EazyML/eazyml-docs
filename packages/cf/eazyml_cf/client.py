@@ -81,6 +81,7 @@ def ez_cf_inference(test_data, outcome, selected_features,
                  "variant_type": "static",  # Defines the type of variant adjustments (e.g., 'static' for fixed constraints)
                  "variants": ["list of features that can change"],  # List of feature names that can be modified during inference
                  "outcome_ordinality": "desired_outcome",  # Specifies the target outcome direction (e.g., 'maximize', 'minimize', or a specific value like 1/0).
+                 "preprocessor": preprocessor,  # Preprocessor object for transforming input data (used in custom modeling)
              }
 
     Returns:
@@ -94,20 +95,37 @@ def ez_cf_inference(test_data, outcome, selected_features,
        - **DataFrame** (DataFrame): A detailed breakdown of the feature values and changes made during the inference process, 
            showing how the selected features were adjusted to arrive at the optimal outcome.
 
-    Example:
-       .. code-block:: python
+    Example 1 (Eazyml modeling):
+        .. code-block:: python
 
-          ez_cf_inference(
-             test_record_df = test_data, 
-             outcome = 'outcome_column_name',
-             selected_features = ['feature1', 'feature2', 'feature3'],
-             model_info = b"acacxaca",
-             options = {
-                 "variant_type": "static",
-                 "variants": ["feature1", "feature2"],
-                 "outcome_ordinality": "desired_favorable_outcome"
-             }
-          )
+            ez_cf_inference(
+                test_record_df = test_data, 
+                outcome = 'outcome_column_name',
+                selected_features = ['feature1', 'feature2', 'feature3'],
+                model_info = b"acacxaca",
+                options = {
+                    "variant_type": "static",
+                    "variants": ["feature1", "feature2"],
+                    "outcome_ordinality": "desired_favorable_outcome"
+                }
+            )
+
+    Example 2 (Custom modeling):
+        .. code-block:: python
+
+            ez_cf_inference(
+                test_record_df = test_data, 
+                outcome = 'outcome_column_name',
+                selected_features = ['feature1', 'feature2', 'feature3'],
+                model_info = model_object,
+                options = {
+                    "variant_type": "static",
+                    "variants": ["feature1", "feature2"],
+                    "outcome_ordinality": "desired_favorable_outcome",
+                    "preprocessor": preprocessor_object
+                }
+            )
+
     """
 
     try:
