@@ -359,6 +359,13 @@ def ez_data_quality(train_data, outcome, options = {}):
             "success": False,
             "message": 'train_data should be of either string or DataFrame'
         }
+    cat_list, _ = utility.identify_column_types(train_data)
+    columns = train_data.columns.to_list()
+    for c in columns:
+        if c in cat_list:
+            train_data[c] = train_data[c].fillna("Null")
+        else:
+            train_data[c] = train_data[c].fillna(0)
 
     df = train_data
     try:
@@ -413,7 +420,7 @@ def ez_data_quality(train_data, outcome, options = {}):
             final_resp["data_balance_quality"] = json.loads(json_resp)
         # print('data_balance_quality', final_resp["data_balance_quality"])
         if "outcome_correlation" in ez_config and ez_config["outcome_correlation"] == "yes":
-            json_resp, status_code = ez_correlation_local(df, outcome)
+            json_resp, status_code = ez_correlation_local(df.copy(), outcome)
             if status_code != 200:
                 return Response(
                     response=json_resp,
@@ -422,13 +429,11 @@ def ez_data_quality(train_data, outcome, options = {}):
                 )
             final_resp["data_correlation_quality"] = json.loads(json_resp)
 
-
-
         res_augi = ez_insight(train_data, outcome, options={})
-
-        insights_df = pd.DataFrame(res_augi['insights']['data'], columns=res_augi['insights']['columns'])
-        # insights_df1 = insights_df[insights_df[outcome] == '1']
-        # insights_df0 = insights_df[insights_df[outcome] == '0']
+        if res_augi["success"] == True:
+            insights_df = pd.DataFrame(res_augi['insights']['data'], columns=res_augi['insights']['columns'])
+        else:
+            return res_augi
 
         if "data_completeness" in ez_config and  ez_config["data_completeness"] == "yes":
             final_resp["data_completeness_quality"] = data_completeness_local(insights_df)

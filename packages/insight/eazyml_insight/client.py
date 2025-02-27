@@ -139,11 +139,21 @@ def ez_insight(train_data, outcome,
                 "success": False,
                 "message": 'train_data should be of either string or DataFrame'
                 }
+        #Check for valid keys in the options dict
+        is_list = lambda x: type(x) == list
+        is_string = lambda x: isinstance(x, str)
+        if not is_string(outcome):
+            return {
+                        "success": False,
+                        "message": tr_api.ALL_STR_PARAM
+                    }
+        if outcome not in train_data.columns:
+            return {
+                "success": False,
+                "message": "Outcome is not present in training data columns"}
 
-        mode, data_type_dict, selected_features_list = utils.get_mode_data_type_selected_features(train_data, outcome)
-
-
-
+        mode, data_type_dict, selected_features_list =\
+            utils.get_mode_data_type_selected_features(train_data, outcome)
 
         if not isinstance(data_type_dict, dict):
             return {
@@ -177,10 +187,6 @@ def ez_insight(train_data, outcome,
                     "success": False,
                     "message": "Please provide data type for all columns (on which model is trained) in data_type."
                     }
-        if outcome not in train_data.columns:
-            return {
-                "success": False,
-                "message": "Outcome is not present in training data columns"}
         if mode not in ['classification', 'regression']:
             return {
                 "success": False,
@@ -204,13 +210,7 @@ def ez_insight(train_data, outcome,
                     "message": tr_api.VALID_DATATYPE_DICT.replace(
                         "this", "options"),
                     }
-        #Check for valid keys in the options dict
-        is_list = lambda x: type(x) == list
-        is_string = lambda x: isinstance(x, str)
-        if (
-            not isinstance(mode, str)
-            or not isinstance(outcome, str)
-        ):
+        if not is_string(mode):
             return {
                         "success": False,
                         "message": tr_api.ALL_STR_PARAM
@@ -377,9 +377,35 @@ def ez_validate(train_data, outcome, insights, test_data,
                 "success": False,
                 "message": 'train_data should be of either string or DataFrame'
             }
-        mode, data_type_dict, _ = utils.get_mode_data_type_selected_features(train_data, outcome)
+        if isinstance(test_data, str):
+            if not os.path.exists(test_data):
+                return {
+                    "success": False,
+                    "message": "test_file_path does not exist."
+                }
+            test_data, _ = utils.get_df(test_data, data_source=data_source)
+        elif isinstance(test_data, pd.DataFrame):
+            test_data = test_data
+        else:
+            return {
+                "success": False,
+                "message": 'test_data should be of either string or DataFrame'
+            }
+        is_list = lambda x: type(x) == list
+        is_string = lambda x: isinstance(x, str)
+        if not is_string(outcome):
+            return {
+                        "success": False,
+                        "message": tr_api.ALL_STR_PARAM
+                    }
+        if outcome not in train_data.columns or\
+            outcome not in test_data.columns:
+            return {
+                "success": False,
+                "message": "Outcome is not present in either training or test data columns"}
 
-
+        mode, data_type_dict, _ =\
+            utils.get_mode_data_type_selected_features(train_data, outcome)
 
         if not isinstance(insights, dict):
             return {
@@ -420,21 +446,6 @@ def ez_validate(train_data, outcome, insights, test_data,
             "data_source"] == "parquet"):
             data_source = "parquet"
 
-        if isinstance(test_data, str):
-            if not os.path.exists(test_data):
-                return {
-                    "success": False,
-                    "message": "test_file_path does not exist."
-                }
-            test_data, _ = utils.get_df(test_data, data_source=data_source)
-        elif isinstance(test_data, pd.DataFrame):
-            test_data = test_data
-        else:
-            return {
-                "success": False,
-                "message": 'test_data should be of either string or DataFrame'
-            }
-
 
         for col in data_type_dict.keys():
             if col not in train_data.columns or col not in test_data.columns:
@@ -447,11 +458,6 @@ def ez_validate(train_data, outcome, insights, test_data,
                     "success": False,
                     "message": "Please provide data type for all columns (on which insights are fetched) in data_type."
                     }
-        if outcome not in train_data.columns or\
-            outcome not in test_data.columns:
-            return {
-                "success": False,
-                "message": "Outcome is not present in either training or test data columns"}
         if mode not in ['classification', 'regression']:
             return {
                 "success": False,
@@ -480,12 +486,7 @@ def ez_validate(train_data, outcome, insights, test_data,
         #Check for valid keys in the options dict
         is_list = lambda x: type(x) == list
         is_string = lambda x: isinstance(x, str)
-        if (
-            not is_string(mode)
-            or not is_string(outcome)
-            # or not is_string(test_data)
-            # or not is_string(train_data)
-        ):
+        if not is_string(mode):
             return {
                         "success": False,
                         "message": tr_api.ALL_STR_PARAM
