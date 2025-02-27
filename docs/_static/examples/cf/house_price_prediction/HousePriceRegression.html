@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Demo - Fintech dataset</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>HousePriceRegression</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7566,12 +7566,21 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'../'</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">eazyml</span> <span class="k">as</span> <span class="nn">ez</span>
 <span class="kn">from</span> <span class="nn">eazyml_counterfactual</span> <span class="kn">import</span> <span class="p">(</span>
         <span class="n">ez_cf_inference</span><span class="p">,</span>
         <span class="n">ez_init</span>        
 <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">OneHotEncoder</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">r2_score</span>
+
 <span class="kn">import</span> <span class="nn">gdown</span>
 
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
@@ -7636,7 +7645,7 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'16iV_6udLl0c0_cJ7THmG4xY2mGkata1K'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'1p7Udh2MjKyJPxI47FS89VowAz9ZEq_hG'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7661,17 +7670,15 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Defining file paths for training and test datasets and specifying the target variable</span>
-<span class="n">train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Fintech_train_data.xlsx"</span><span class="p">)</span>
-<span class="n">test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Fintech_test_data.xlsx"</span><span class="p">)</span>
-<span class="n">outcome</span> <span class="o">=</span> <span class="s2">"Default"</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"House Price Prediction - Train Data.xlsx"</span><span class="p">)</span>
+<span class="n">test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"House Price Prediction - Test Data.xlsx"</span><span class="p">)</span>
+<span class="n">outcome</span> <span class="o">=</span> <span class="s2">"House_Price"</span>
 
-<span class="c1"># Loading the training dataset and the test dataset</span>
 <span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">train_file</span><span class="p">)</span>
 <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">test_file</span><span class="p">)</span>
 
-<span class="c1"># Display the first few rows of the training DataFrame for inspection</span>
-<span class="n">ez</span><span class="o">.</span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="n">ez</span><span class="o">.</span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">test_file</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">test_file</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7695,7 +7702,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Building-model-using-EazyML-modeling-api">Building model using EazyML modeling api<a class="anchor-link" href="#Building-model-using-EazyML-modeling-api">¶</a></h3>
+<h3 id="class-for-Preprocessing-and-data-transformation">class for Preprocessing and data transformation<a class="anchor-link" href="#class-for-Preprocessing-and-data-transformation">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7707,98 +7714,72 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'LeadId'</span><span class="p">,</span> <span class="s1">'Naics Code Desc'</span><span class="p">])</span>
-<span class="c1"># Predictive Model building</span>
-<span class="n">model_options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"model_type"</span><span class="p">:</span> <span class="s2">"predictive"</span><span class="p">,</span>
-<span class="p">}</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">UnifiedRegressorPreprocessor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numerical_imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">'mean'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="s1">'first'</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># To track whether preprocessing objects are fitted</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">ez_build_model</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">model_options</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="feature-importance">feature importance<a class="anchor-link" href="#feature-importance">¶</a></h3>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez</span><span class="o">.</span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">'global_importance'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="model-importance">model importance<a class="anchor-link" href="#model-importance">¶</a></h3>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez</span><span class="o">.</span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">'model_performance'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Predict-using-EazyML-build-model">Predict using EazyML build model<a class="anchor-link" href="#Predict-using-EazyML-build-model">¶</a></h3>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">model_info</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">"model_info"</span><span class="p">]</span>
-<span class="n">test_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">test_file</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">'Sheet1'</span><span class="p">)</span>
-<span class="n">predicted_resp</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">ez_predict</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">model_info</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">"confidence_score"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"class_probability"</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Split columns into numerical and categorical</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
 
-<span class="k">if</span> <span class="n">predicted_resp</span><span class="p">[</span><span class="s1">'success'</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"Prediction successful"</span><span class="p">)</span>
-    <span class="n">predicted_df</span> <span class="o">=</span> <span class="n">predicted_resp</span><span class="p">[</span><span class="s1">'pred_df'</span><span class="p">]</span>
-    <span class="n">ez</span><span class="o">.</span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">predicted_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"Prediction failed"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">predicted_resp</span><span class="p">[</span><span class="s1">'message'</span><span class="p">])</span>
+        <span class="c1"># Fit transformers for features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numerical_imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span><span class="p">])</span>
+
+        <span class="c1"># Fit transformer for the target variable (if provided)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape for scaler</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Preprocessor is not fitted yet. Call 'fit' first."</span><span class="p">)</span>
+
+        <span class="c1"># Apply transformations to numerical features</span>
+        <span class="n">X_numerical</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">])</span>
+        <span class="n">X_numerical</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_numerical</span><span class="p">)</span>
+
+        <span class="c1"># Apply transformations to categorical features</span>
+        <span class="n">X_categorical</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span><span class="p">])</span>
+
+        <span class="c1"># Get new column names for categorical features</span>
+        <span class="n">categorical_feature_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span><span class="p">)</span>
+
+        <span class="c1"># Combine transformed numerical and categorical data</span>
+        <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_numerical</span><span class="p">,</span> <span class="n">X_categorical</span><span class="p">))</span>
+
+        <span class="c1"># Create a DataFrame with appropriate column names</span>
+        <span class="n">all_feature_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">categorical_feature_names</span><span class="p">)</span>
+        <span class="n">X_transformed_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">all_feature_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="c1"># Transform the target variable (if provided)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape for scaler</span>
+            <span class="n">y_transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">X_transformed_df</span><span class="p">,</span> <span class="n">y_transformed</span>
+
+        <span class="k">return</span> <span class="n">X_transformed_df</span>
+
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">inverse_transform_outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Revert the scaling of the target variable to its original scale.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Preprocessor is not fitted yet. Call 'fit' first."</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape for scaler</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -7811,7 +7792,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Counterfactual-Inference">Counterfactual Inference<a class="anchor-link" href="#Counterfactual-Inference">¶</a></h3>
+<h3 id="apply-preprocession-step-and-build-linear-regression-model-and-evaluate">apply preprocession step and build linear regression model and evaluate<a class="anchor-link" href="#apply-preprocession-step-and-build-linear-regression-model-and-evaluate">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7823,26 +7804,92 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">selected_features</span> <span class="o">=</span><span class="p">[</span><span class="s1">'Years In Business'</span><span class="p">,</span> <span class="s1">'Deposit Sum 30 MA'</span><span class="p">,</span> <span class="s1">'Total Postings'</span><span class="p">,</span> <span class="s1">'Deposit Count 90'</span><span class="p">,</span> <span class="s1">'Deposit Count 60'</span><span class="p">,</span> <span class="s1">'Sentiment Score'</span><span class="p">,</span> <span class="s1">'Deposit Sum 90 MA'</span><span class="p">,</span> <span class="s1">'Content Score'</span><span class="p">,</span> 
-                    <span class="s1">'Deposit Sum 60 MA'</span><span class="p">,</span> <span class="s1">'Deposit Count'</span><span class="p">,</span> <span class="s1">'Website Present'</span><span class="p">,</span> <span class="s1">'Owner Credit Score'</span><span class="p">,</span> <span class="s1">'Footprint'</span><span class="p">,</span> <span class="s1">'Deposit Sum'</span><span class="p">,</span> <span class="s1">'Nsf Count'</span><span class="p">,</span> <span class="s1">'Deposit Count 30'</span><span class="p">,</span> <span class="s1">'Facebook'</span><span class="p">,</span> <span class="s1">'Yelp'</span><span class="p">,</span> 
-                    <span class="s1">'Groupon'</span><span class="p">,</span> <span class="s1">'Average Daily Balance'</span><span class="p">]</span>
-<span class="n">invariants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Nsf Count'</span><span class="p">,</span> <span class="s1">'Years In Business'</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Assuming train_df and test_df are your original datasets</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">outcome</span><span class="p">])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">outcome</span><span class="p">])</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span>
+
+<span class="c1"># Fit the preprocessor on training data</span>
+<span class="n">preprocessor</span> <span class="o">=</span> <span class="n">UnifiedRegressorPreprocessor</span><span class="p">()</span>
+<span class="n">preprocessor</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Transform the train and test datasets</span>
+<span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train_transformed</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">X_test_transformed</span><span class="p">,</span> <span class="n">y_test_transformed</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+
+<span class="c1"># Train the Linear Regression model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train_transformed</span><span class="p">)</span>
+
+<span class="c1"># Make predictions on the test set</span>
+<span class="n">y_pred_transformed</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_transformed</span><span class="p">)</span>
+
+<span class="c1"># Revert predictions to the original scale</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">inverse_transform_outcome</span><span class="p">(</span><span class="n">y_pred_transformed</span><span class="p">)</span>
+
+<span class="c1"># Combine predictions with the original test DataFrame</span>
+<span class="n">test_results_df</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">test_results_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Predicted </span><span class="si">{</span><span class="n">outcome</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+
+<span class="c1"># Display the test DataFrame with predictions</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Test DataFrame with Predictions:"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">test_results_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Evaluate the model</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>  <span class="c1"># Calculate RMSE</span>
+<span class="n">mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Model Performance:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Root Mean Squared Error (RMSE): </span><span class="si">{</span><span class="n">rmse</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mean Absolute Error (MAE): </span><span class="si">{</span><span class="n">mae</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"R-squared (R2 Score): </span><span class="si">{</span><span class="n">r2</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Call-counterfactual-inference-api-and-define-model_info,-selected_features-and-options">Call counterfactual inference api and define model_info, selected_features and options<a class="anchor-link" href="#Call-counterfactual-inference-api-and-define-model_info,-selected_features-and-options">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">selected_features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Square_Footage'</span><span class="p">,</span> <span class="s1">'Num_Bedrooms'</span><span class="p">,</span> <span class="s1">'Num_Bathrooms'</span><span class="p">,</span> <span class="s1">'Year_Built'</span><span class="p">,</span> <span class="s1">'Lot_Size'</span><span class="p">,</span> <span class="s1">'Garage_Size'</span><span class="p">,</span> <span class="s1">'Neighborhood_Quality'</span><span class="p">]</span>
+<span class="n">invariants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Year_Built'</span><span class="p">]</span>
 <span class="n">variants</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span> <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">selected_features</span> <span class="k">if</span> <span class="n">feature</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">invariants</span><span class="p">]</span>
 
-<span class="n">test_results_df</span> <span class="o">=</span> <span class="n">predicted_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="c1"># Defining configurable parameters for counterfactual inference</span>
-<span class="n">options</span> <span class="o">=</span> <span class="p">{</span>    
+<span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"variants"</span><span class="p">:</span> <span class="n">variants</span><span class="p">,</span>
-    <span class="s2">"outcome_ordinality"</span><span class="p">:</span> <span class="s2">"0"</span><span class="p">,</span>
-    <span class="s2">"train_data"</span><span class="p">:</span> <span class="n">train_file</span>
+    <span class="s2">"outcome_ordinality"</span><span class="p">:</span> <span class="s2">"maximize"</span><span class="p">,</span>
+    <span class="s2">"train_data"</span><span class="p">:</span> <span class="n">train_file</span><span class="p">,</span>
+    <span class="s2">"preprocessor"</span><span class="p">:</span> <span class="n">preprocessor</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Specify the index of the test record for which counterfactual inference will be performed</span>
-<span class="n">test_index_no</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">test_index_no</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">test_data</span> <span class="o">=</span> <span class="n">test_results_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">test_index_no</span><span class="p">]]</span>
 
 <span class="c1"># Performing counterfactual inference </span>
-<span class="n">result</span><span class="p">,</span> <span class="n">optimal_transition_df</span> <span class="o">=</span> <span class="n">ez_cf_inference</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">selected_features</span><span class="p">,</span> <span class="n">model_info</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">optimal_transition_df</span> <span class="o">=</span> <span class="n">ez_cf_inference</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">selected_features</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7862,7 +7909,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7876,21 +7923,16 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-<span class="ansi-red-intense-fg ansi-bold">The Kernel crashed while executing code in the current cell or a previous cell. 
-</span>
-<span class="ansi-red-intense-fg ansi-bold">Please review the code in the cell(s) to identify a possible cause of the failure. 
-</span>
-<span class="ansi-red-intense-fg ansi-bold">Click &lt;a href='https://aka.ms/vscodeJupyterKernelCrash'&gt;here&lt;/a&gt; for more info. 
-</span>
-<span class="ansi-red-intense-fg ansi-bold">View Jupyter &lt;a href='command:jupyter.viewOutput'&gt;log&lt;/a&gt; for further details.</span></pre>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span> 
+</pre></div>
 </div>
 </div>
 </div>

@@ -11,12 +11,12 @@ sample apps, and resources for testing out EazyML apis.
 .. toctree::
    :maxdepth: 2
    
-   Augmented Intelligence <insight.rst>
+   Modeling <modeling.rst>
    Explainable AI <xai.rst>
-   Image Explainable AI <image_xai.rst>
+   Augmented Intelligence <insight.rst>
    Counterfactual <counterfactual.rst>
    Data Quality <dq.rst>
-   Modeling <modeling.rst>
+   Image Explainable AI <image_xai.rst>
 
 
 
