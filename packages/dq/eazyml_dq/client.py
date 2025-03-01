@@ -131,7 +131,6 @@ def ez_data_quality(train_data, outcome, options = {}):
             - **dat_correctness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data correctness check.
 
     Returns:
-        
         - **dict**: A dictionary containing the results of the explanations with the following fields:
             
             - **success** (`bool`): Indicates whether the operation was successful.
@@ -158,7 +157,6 @@ def ez_data_quality(train_data, outcome, options = {}):
                 - **model_drift_alert** (`bool`): Flags model drift alerts based on interval and distributional model drift.
 
     Example:
-        
         .. code-block:: python
             
             from eazyml_data_quality import ez_data_quality
