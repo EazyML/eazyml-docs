@@ -54,69 +54,92 @@ log_inst = log.instance()
 log_inst.getLogger("pyj4").setLevel(log_inst.CRITICAL)
 
 def ez_init(access_key=None,
-                usage_share_consent=True,
+                usage_share_consent=None,
                 usage_delete=False):
     """
-    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
+    Parameters:
+        - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
+        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
 
-    Parameters :
-        - **access_key (str)**:
-            The access key to be set as an environment variable for EazyML.
+    Example:
+        .. code-block:: python
 
-    Examples
-    --------
-    >>> init_ez("your_access_key_here")
-    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
+            from eazyml import ez_init
+
+            # Initialize the EazyML library with the access key.
+            # This sets the `EAZYML_ACCESS_KEY` environment variable
+            access_key = "your_access_key_here"  # Replace with your actual access key
+            ez_init(access_key)
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
+
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(access_key = access_key,
+    init_resp = init_eazyml(access_key = access_key,
                                 usage_share_consent=usage_share_consent,
                                 usage_delete=usage_delete)
-    return {
-            "success": approved,
-            "message": msg
-        }
+    return init_resp
 
 
 def ez_build_model(train_data, outcome, options={}):
     """
     Initialize and build a predictive model based on the provided dataset and options.
 
-    Parameters :
-        - **train_data** (`DataFrame`): A pandas DataFrame containing the dataset for model initialization. Also supports the file path of the dataframe.
-        - **outcome** (`str`): Target variable for the model.
-        - **options** (`dict`): A dictionary of options to configure the model initialization process. Supported keys include:
-            - **model_type** (`str`): Type of model to build. Options are "predictive".
-            - **spark_session** (`SparkSession`): Takes the values SparkSession/None. 
+    Parameters:
+        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the dataset for model initialization. Alternatively, you can provide the file path of the dataset (as a string).
+        - **outcome** (`str`): The target variable for the model.
+        - **options** (`dict`, optional): A dictionary of options to configure the model initialization process. If not provided, the function will use default settings. Supported keys include:
+            - **model_type** (`str`, optional): Specifies the type of model to build. The supported value is "predictive".
+            - **spark_session** (`SparkSession` or `None`, optional): If a Spark session is provided, distributed computation will be used. If `None`, standard computation is used.
 
-    Returns :
-        - **Dictionary with Fields**:
-            - `success` (`bool`): Indicates if the model has been successful trained.
-            - `message` (`str`): Describes the success or failure of the operation.
-            
-                **On Success** :
-                - `model_performance` (`DataFrame`): Provides the Model Performance for each model.
-                - `global_importance` (`DataFrame`): Provides the Importance features for the provided data.
-                - `model_info` (`Bytes`): Provides Encripted Model information for ez_predict to get prediction for test data.
-    Note :
-        - Please save the response obtained and provide the model_info to the ez_predict module for predictions.
-        - If you are working on a spark_session then please save the necessary spark_models individually from the model_info and provide them in the ez_predict parameter spark_model in the options along with the session and model_info.
-        - It is not possible to save the complete output for the spark models therefore save the models and delete the spark_module and save the rest of the response. For accessing each model built in model_info response["model_info"]["spark_module"]["Models"][index]["model"] for all index. Use the Pipeline module to save and load the model.
-          
+    Returns:
+        - **dict**: A dictionary containing the results of the model building process with the following fields:
+            - **success** (`bool`): Indicates whether the model was successfully trained.
+            - **message** (`str`): A message describing the success or failure of the operation.
+
+            **On Success**:
+            - **model_performance** (`DataFrame`): A DataFrame providing the performance metrics of the trained model(s).
+            - **global_importance** (`DataFrame`): A DataFrame containing the feature importance scores.
+            - **model_info** (`Bytes`): Encrypted model information that will be used by `ez_predict` for making predictions on test data.
+
+    Note:
+        - Please save the `response` obtained after building the model and provide the `model_info` to the `ez_predict` function for making predictions on test data.
+        - If you are using a `spark_session`, save the necessary Spark models separately from the `model_info` and pass them as `spark_model` in the `options` dictionary when calling `ez_predict`, along with the session and `model_info`.
+        - Since Spark models cannot be directly saved in the `model_info` output, you must manually save the individual models from `response["model_info"]["spark_module"]["Models"][index]["model"]` for each index. Use the `Pipeline` module to save and load the models as needed.
+
     Example:
         .. code-block:: python
 
-            ez_build_model(
-                train_data = pd.DataFrame({...})/str,
-                outcome
-                options = {
-                        "model_type": "predictive"
-                    }
-            )
+            import pandas as pd
+            import pickle
+            from eazyml import ez_build_model
+
+            # Load the training data (make sure the file path is correct).
+            train_file_path = "path_to_your_training_data.csv"  # Replace with the correct file path
+            train_data = pd.read_csv(train_file_path)
+
+            # Define the outcome (target variable) for the model
+            outcome = "target"  # Replace with your actual target variable name
+
+            # Set the options for building the model
+            build_options = {"model_type": "predictive"}
+
+            # Call the eazyml function to build the model
+            build_response = ez_build_model(train_data, outcome, options=build_options)
+
+            # build_response is a dictionary. Note: Do not print/view the response as it contains sensitive or encrypted model information in model_info.
+            build_response.keys()
+
+            # Expected output (this will vary depending on the data and model):            
+            # dict_keys(['success', 'message', 'model_performance', 'global_importance', 'model_info'])
+
+            # Save the response for later use (e.g., for predictions with ez_predict)
+            build_model_response_path = 'model_response.pkl'
+            pickle.dump(build_response, open(build_model_response_path, 'wb'))
+
     """
     try:
         log.log_db("Initialze ez_build_model")
@@ -138,6 +161,7 @@ def ez_build_model(train_data, outcome, options={}):
                 if spark:
                     try:
                         spark_version = spark.version
+                        return {"success": False, "message": "This version currently does not support the spark module for building models."}
                     except:
                         return {"success": False, "message": tr_api.SPARK_SESSION}
                     train_data = spark_utils.get_df_spark(train_file_path, spark)
@@ -158,6 +182,7 @@ def ez_build_model(train_data, outcome, options={}):
                     spark_version = spark.version
                 except:
                     return {"success": False, "message": tr_api.SPARK_SESSION}
+                return {"success": False, "message": "This version currently does not support the spark module for building models."}
         if not isinstance(options, dict):
             return {"success": False, "message": tr_api.VALID_DATATYPE_DICT.replace("this", "options")}
         
@@ -247,6 +272,7 @@ def ez_build_model(train_data, outcome, options={}):
         extra_info["misc_data"]["is_imputation_required"] = False
 
         if spark:
+            return {"success": False, "message": "This version currently does not support the spark module for building models."}
             extra_info["spark"] = spark
             dtypes_list = train_data.dtypes
             dtype_df = pd.DataFrame(dtypes_list, columns=[g.VARIABLE_NAME, g.DATA_TYPE])
@@ -498,24 +524,57 @@ def ez_build_model(train_data, outcome, options={}):
 
 def ez_predict(test_data, model_info, options={}):
     """
-    Perform prediction on the given test data based
-    on model options and validate the input dataset.
+    Perform predictions on the provided test data using the model parameters generated by ez_build_model.
 
-    Parameters :
-        - **test_data** (`DataFrame/str`): The test dataset to be evaluated. It must have consistent features with the trained model.
-        - **model_info** (`Bytes`): Contains encrypted or unencrypted details about the model and environment.
-        - **options** (`dict`): A dictionary of options to configure the model initialization process. Supported keys include:
-            - **model** (`str`): Specifies the model to be used for prediction. If not provided, the default model from `model_info` is used.
-            - **spark_session** (`SparkSession`): Takes the values SparkSession/None. 
-            - **spark_model** (`model/pipeline`): If the model is saved and spark_session is provided. Please load the Pipeline and pass it as spark_model.
+    Parameters:
+        - **test_data** (`DataFrame` or `str`): The dataset to be evaluated. It must have the same features as the dataset used for training.
+        - **model_info** (`Bytes`): Contains the encrypted or unencrypted details about the trained model and its environment.
+        - **options** (`dict`): A dictionary of configuration options for model initialization and prediction. Supported keys include:
+            - **model** (`str`, optional): Specifies the model to be used for prediction. If not provided, the default model from `model_info` is used.
+            - **confidence_score** (`bool`, optional): Default is `False`. If `True`, the function provides a confidence score for classification models.
+            - **spark_session** (`SparkSession` or `None`, optional): If provided, a Spark session will be used for distributed computation. If `None`, standard computation is used.
+            - **spark_model** (`model` or `pipeline`, optional): If the model is saved and `spark_session` is provided, the trained Spark model or pipeline should be loaded and passed here.
+
+    Returns:
+        - **dict**: A dictionary containing the result of the evaluation. The dictionary contains the following keys:
+            - **"success"** (`bool`): Indicates whether the operation was successful.
+            - **"message"** (`str`): A message containing either an error or informational details.
+            - If successful, the dictionary also contains:
+                - **"pred_df"** (`DataFrame`): A DataFrame containing the predictions for the test dataset.
+
+
+
+    Example:
+        .. code-block:: python
+
+            import pandas as pd
+            import pickle
+            from eazyml import ez_predict
+
+            # Load test data.
+            test_file_path = "path_to_your_test_data.csv"
+            test_data = pd.read_csv(test_file_path)
+
+            # Load output from ez_build_model. This should be the pickle file where model information is stored.
+            build_model_response_path = 'model_response.pkl'
+            build_model_response = pickle.load(open(build_model_response_path, 'rb'))
+            model_info = build_model_response["model_info"]
+
+            # Choose the model to use for prediction from the available performance options in the response.
+            pred_options = {"model": "Random Forest with Information Gain"}
+
+            # Call the eazyml function to predict
+            pred_response = ez_predict(test_data, model_info, options=pred_options)
+
+            # Check the keys of the prediction response. It will be a dictionary.
+            pred_response.keys()
+
+            # Example Output Keys(this will vary depending on your model and data):
+            # dict_keys(['success', 'message', 'pred_df'])
             
-    Returns :
-        - **Dictionary with Fields**:
-            - "success" (`bool`) : Indicates if the operation was successful.
-            - "message" (`str`) : Contains an error or informational message.
-            - Additionally, If successful:
-                - "pred_df" (`DataFrame`) : Contains DataFrame for the prediction.
     """
+    
+    
     try:
         log.log_db(f"Initialze ez_predict")
 
@@ -567,6 +626,7 @@ def ez_predict(test_data, model_info, options={}):
             spark = None
 
         if spark: 
+            return {"success": False, "message": "This version currently does not support the spark module for building models."}
             if isinstance(model_info,bytes):
                 try:
                     model_info = api_utils.decrypt_dict(model_info)

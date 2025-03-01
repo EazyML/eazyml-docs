@@ -15,100 +15,90 @@ from .globals import logger as log
 log.initlog()
 
 def ez_init(access_key=None,
-                usage_share_consent=True,
+                usage_share_consent=None,
                 usage_delete=False):
     """
-    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
+    Parameters:
+        - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
+        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
 
-    Parameters :
-        - **access_key (str)**:
-            The access key to be set as an environment variable for EazyML.
+    Example:
+        .. code-block:: python
 
-    Examples
-    --------
-    >>> init_ez("your_access_key_here")
-    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
+            from eazyml import ez_init
+
+            # Initialize the EazyML library with the access key.
+            # This sets the `EAZYML_ACCESS_KEY` environment variable
+            access_key = "your_access_key_here"  # Replace with your actual access key
+            ez_init(access_key)
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
+
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(access_key = access_key,
+    init_resp = init_eazyml(access_key = access_key,
                                 usage_share_consent=usage_share_consent,
                                 usage_delete=usage_delete)
-    return {
-            "success": approved,
-            "message": msg
-        }
+    return init_resp
 
 
 def ez_explain(train_data, outcome, test_data, model_info,
                options={}):
     """
-    This API generates explanations for a model's prediction, based on provided train and test data files.
+    This API generates explanations for a model's prediction, based on provided train and test data.
 
-    Parameters :
-        - **train_data** (`str`): Path to the training file used to build the model.
-        - **outcome** (`str`): The column in the dataset that you want to predict.
-        - **test_data** (`str`): Path to the test file for predictions.
-        - **model_info** (dict):
-          A dictionary containing the trained model and associated model information (e.g., the model object 
-          and any necessary pre-processing steps).
-        - **options** (dict):
-          A dictionary of configuration settings for counterfactual inference, which may include:
-          
-          .. code-block:: python
+    Parameters:
+        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
+        - **outcome** (`str`): The target variable for the explanations.
+        - **test_data** (`DataFrame` or `str`): A pandas DataFrame containing the test dataset. Alternatively, you can provide the file path of test dataset (as a string).
+        - **model_info** (`Bytes` or `object`): Contains the encrypted or unencrypted details about the trained model and its environment. Alternatively, you can provide the model trained on training dataset (as a object).
+        - **options** (`dict`, optional): A dictionary of options to configure the explanation process. If not provided, the function will use default settings. Supported keys include:
+            - **record_number** (`list`, optional): List of test data indices for which you want explanations. If not provided, it will compute the explanation for the first test data point.
+            - **scaler** (`obj`, optional): Scaler that you used on the training dataset during preprocessing.
+            - **preprocessor** (`obj`, optional): Preprocessor that you used on the training dataset during preprocessing.
 
-             options = {
-                 "record_number": ["list of test data indices for which we want explaination"], if not provided it will compute explaination for all test data. 
-                 "scaler": preprocessing that we need to apply on test data.
-             }
+    Returns:
+        - **dict**: A dictionary containing the results of the explanations with the following fields:
+            - **success** (`bool`): Indicates whether the operation was successful.
+            - **message** (`str`): A message describing the success or failure of the operation.
 
-    Returns :
-        - **Dictionary with Fields**:
-            - `success` (`bool`): Indicates if the explanation generation was successful.
-            - `message` (`str`): Describes the success or failure of the operation.
-            - `explanations` (`list, optional`): The generated explanations (if successful) contains the explanation string and a local importance dataframe.
+            **On Success**:
+            - **explanations** (`dict`): The generated explanations contain the explanation string and local importance.
 
-        **On Success**:  
-        A JSON response with
-        
-        .. code-block:: json
-
-            {
-                "success": true,
-                "message": "Explanation generated successfully",
-                "explanations": {
-                    "explanation_string": "...",
-                    "local_importance": { ".." : ".." }
-                }
-            }
-
-        **On Failure**:  
-        A JSON response with
-        
-        .. code-block:: json
-
-            {
-                "success": false,
-                "message": "Error message"
-            }
-
-        **Raises Exception**:
-            - Captures and logs unexpected errors, returning a failure message.
-    
     Example:
-        .. code-block:: python
+        .. code-block:: json
+            from eazyml_xai import ez_explain
 
-            ez_explain(
-                train_data='train.csv',
-                outcome='target',
-                test_data='test.csv',
-                model_info=my_model,
-                options={"record_number": [1, 2, 3],
-                         "scaler": my_preprocessor}
-            )
+            # Define train data path (make sure the file path is correct).
+            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your actual target variable name
+
+            # Define test data path (make sure the file path is correct).
+            test_file_path = "path_to_your_test_data.csv"  # Replace with the correct file path
+
+            # Your trained model object
+            model_info = '<trained model object>'
+
+            # Your trained scaler object
+            scaler = '<trained scaler object>'
+
+            # Set the options for xai
+            xai_options = {"record_number": [1, 2, 3], "scaler", scaler}
+
+            # Call the eazyml function to fetch the explanations
+            xai_response = ez_explain(train_file_path, outcome, test_file_path, model_info, options=xai_options)
+
+            # insight_response is a dictionary.
+            xai_response.keys()
+
+            # Expected output (this will vary depending on the data and model):            
+            # dict_keys(['success', 'message', 'explanations'])
+
     """
     try:
         data_source = "system"

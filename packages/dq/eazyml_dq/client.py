@@ -71,32 +71,34 @@ from .globals import logger as log
 log.initlog()
 
 def ez_init(access_key=None,
-                usage_share_consent=True,
+                usage_share_consent=None,
                 usage_delete=False):
     """
-    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
+    Parameters:
+        - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
+        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
 
-    Parameters :
-        - **access_key (str)**:
-            The access key to be set as an environment variable for EazyML.
+    Example:
+        .. code-block:: python
 
-    Examples
-    --------
-    >>> init_ez("your_access_key_here")
-    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
+            from eazyml import ez_init
+
+            # Initialize the EazyML library with the access key.
+            # This sets the `EAZYML_ACCESS_KEY` environment variable
+            access_key = "your_access_key_here"  # Replace with your actual access key
+            ez_init(access_key)
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
+
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(access_key = access_key,
+    init_resp = init_eazyml(access_key = access_key,
                                 usage_share_consent=usage_share_consent,
                                 usage_delete=usage_delete)
-    return {
-            "success": approved,
-            "message": msg
-        }
+    return init_resp
 
 
 def ez_data_quality(train_data, outcome, options = {}):
@@ -105,148 +107,82 @@ def ez_data_quality(train_data, outcome, options = {}):
     returns a JSON response indicating the results of these checks.
 
     Parameters:
-        - **train_data** (str):
-            The path to the file containing the dataset or a pandas Dataframe containing the train data.
-        - **outcome** (str):
-            The target variable (outcome) to assess data quality against.
-        - **options** (dict, optional):
-            A dictionary specifying additional configurations for data quality checks. 
+        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
+        - **outcome** (`str`): The target variable for the data quality.
+        - **options** (`dict`, optional): A dictionary of options to configure the data quality process. If not provided, the function will use default settings. Supported keys include:
+            - **data_shape** (`str`, optional): The default is `no`. If `yes`, the function will perform a data shape check.
+            - **data_balance** (`str`, optional): The default is `no`. If `yes`, the function will perform a data balance check.
+            - **data_emptiness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data emptiness check.
+            - **impute** (`str`, optional): The default is `no`. If `yes`, the function will perform imputation on training dataset.
+            - **data_outliers** (`str`, optional): The default is `no`. If `yes`, the function will perform a data outliers check.
+            - **remove_outliers** (`str`, optional): The default is `no`. If `yes`, the function will remove outliers from training dataset.
+            - **outcome_correlation** (`str`, optional): The default is `no`. If `yes`, the function will perform a data correlation check.
+            - **data_drift** (`str`, optional): The default is `no`. If `yes`, the function will perform a data drift check.
+            - **model_drift** (`str`, optional): The default is `no`. If `yes`, the function will perform a model drift check.
+            - **test_data** (`DataFrame` or `str`, optional): A pandas DataFrame containing the test dataset. Alternatively, you can provide the file path of test dataset (as a string).
+            - **data_completeness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data completeness check.
+            - **dat_correctness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data correctness check.
 
-    Returns :
-         - **Dictionary with Fields**:
-            - **success** (bool): Indicates whether the operation was successful.
-            - **message** (str): Provides details about the outcome or an error message if the operation failed.
-            - **data_shape_quality** (dict, optional): Contains results of data shape quality checks.
-            - **data_emptiness_quality** (dict, optional): Includes results of data emptiness checks, such as the presence of missing or null values.
-            - **data_outliers_quality** (dict, optional): Provides insights into the presence of outliers.
-            - **data_balance_quality** (dict, optional): Contains information about the balance of data.
-            - **data_correlation_quality** (dict, optional): Includes results of correlation checks, identifying highly correlated features or potential redundancies.
-            - **data_completeness_quality** (dict, optional): Includes results of data completeness checks.
-            - **data_correctness_quality** (dict, optional): Includes results of data correctness checks.
-            - **drift_quality** (dict, optional): Includes results of data drift and model drift checks.
-            - **data_bad_quality_alerts** (dict, optional): Summarizes critical quality issues detected, with the following fields:
-                - **data_shape_alert** (bool): Indicates if there are structural issues with the data (e.g., mismatched dimensions, irregular shapes).
-                - **data_balance_alert** (bool): Flags issues with data balance (e.g., uneven class distributions).
-                - **data_emptiness_alert** (bool): Signals significant levels of missing or null data.
-                - **data_outliers_alert** (bool): Highlights the presence of extreme outliers that may affect data quality.
-                - **data_correlation_alert** (bool): Flags excessive correlation among features that could lead to redundancy or multicollinearity.
-                - **data_drift_alert** (bool): Flags data drift alerts based on ks data drift and psi data drift.
-                - **model_drift_alert** (bool): Flags model drift alerts based on interval and distributional model drift.
+    Returns:
+        - **dict**: A dictionary containing the results of the explanations with the following fields:
+            - **success** (`bool`): Indicates whether the operation was successful.
+            - **message** (`str`): A message describing the success or failure of the operation.
 
+            **On Success**:
+            - **data_shape_quality** (`dict`): Contains results of data shape quality checks.
+            - **data_emptiness_quality** (`dict`): Includes results of data emptiness checks, such as the presence of missing or null values.
+            - **data_outliers_quality** (`dict`): Provides insights into the presence of outliers.
+            - **data_balance_quality** (`dict`): Contains information about the balance of data.
+            - **data_correlation_quality** (`dict`): Includes results of correlation checks, identifying highly correlated features or potential redundancies.
+            - **data_completeness_quality** (`dict`): Includes results of data completeness checks.
+            - **data_correctness_quality** (`dict`): Includes results of data correctness checks.
+            - **drift_quality** (`dict`): Includes results of data drift and model drift checks.
+            - **data_bad_quality_alerts** (`dict`): Summarizes critical quality issues detected, with the following fields:
+                - **data_shape_alert** (`bool`): Indicates if there are structural issues with the data (e.g., mismatched dimensions, irregular shapes).
+                - **data_balance_alert** (`bool`): Flags issues with data balance (e.g., uneven class distributions).
+                - **data_emptiness_alert** (`bool`): Signals significant levels of missing or null data.
+                - **data_outliers_alert** (`bool`): Highlights the presence of extreme outliers that may affect data quality.
+                - **data_correlation_alert** (`bool`): Flags excessive correlation among features that could lead to redundancy or multicollinearity.
+                - **data_drift_alert** (`bool`): Flags data drift alerts based on ks data drift and psi data drift.
+                - **model_drift_alert** (`bool`): Flags model drift alerts based on interval and distributional model drift.
 
-
-
-        **On Success** :
-        A JSON response with
-
+    Example:
         .. code-block:: json
+            from eazyml_data_quality import ez_data_quality
 
-            {
-                "success": true,
-                "message": "Data quality checks according to given options have been calculated successfully",
-                "data_shape_quality": {
-                    "Dataset_dimension": [".."],
-                    "alert": [".."],
-                    "message": "No of columns in dataset is not adequate because the no of rows in the dataset is less than the no of columns",
-                    "success": true
-                },
-                "data_emptiness_quality": {
-                    "message": "There are no missing values present in the training data that was uploaded. Hence no records were imputed.",
-                    "success": true
-                },
-                "data_outliers_quality": {
-                    "message": "The following data points were removed as outliers.",
-                    "outliers": {
-                        "columns": [".."],
-                        "indices": [".."]
-                    },
-                    "success": true
-                },
-                "data_balance_quality": {
-                    "data_balance": {
-                        "data_balance_analysis": {
-                            "balance_score": [".."],
-                            "data_balance": true,
-                            "decision_threshold": [".."],
-                            "quality_message": "Uploaded data is balanced because the balance score is greater than given threshold"
-                        }
-                    },
-                    "message": "Data balance has been checked successfully",
-                    "success": true
-                },
-                "data_correlation_quality": {
-                    "data_correlation": "dict containing column wise correlations",
-                    "data_correlation_alert": "true",
-                    "message": "Correlation has been calculated successfully between all features and all features with outcome",
-                    "success": true
-                },
-                "data_completeness_quality": {
-                    "completeness": "true",
-                    "decision_threshold": 0.6,
-                    "insight_information": "The uploaded dataset is complete at confidence level of 0.6",
-                    "top_insight": [".."],
-                    "top_score": [".."]
-                },
-                "data_correctness_quality": {
-                    "insights": [".."],
-                    "message": "Please infer the correctness through logical inspection of the insights",
-                    "quality_alert": "Please verify that the above rules are making sense or not. In case there are one or more rules which appear incorrect from an expert perspective, please double check your files for the variables, their correct values, in the offending rules"
-                },
-                "drift_quality": {
-                    "data_drift_analysis": {"dict containing ks and psi data drift analysis"
-                    },
-                    "model_drift_analysis": {"dict containing distributional and interval model drift analysis"
-                    },
-                    "message": "Drift has been calculated successfully",
-                    "success": true
-                },
-                "data_bad_quality_alerts": {
-                    "data_shape_alert": "true/false",
-                    "data_balance_alert": "true/false",
-                    "data_emptiness_alert": "true/false",
-                    "data_outliers_alert": "true/false",
-                    "data_drift_alert": "true/false",
-                    "model_drift_alert": "true/false",
-                    "data_correctness_alert": "Please infer the correctness through logical inspection of the insights",
-                    "data_completeness_alert": "true/false",
-                    "data_correlation_alert": "true/false"
-                }
-            }
+            # Define train data path (make sure the file path is correct).
+            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
 
-        **On Failure**:
-        A JSON response with
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your actual target variable name
 
-        .. code-block:: json
+            # Define test data path (make sure the file path is correct).
+            test_file_path = "path_to_your_test_data.csv"  # Replace with the correct file path
 
-            {
-                "success": false,
-                "message": "Error message"
-            }
+            # Set the options for data quality
+            dqa_options = {
+                           "data_shape": "yes",
+                           "data_balance": "yes",
+                           "data_emptiness": "yes",
+                           "data_outliers": "yes",
+                           "remove_outliers": "yes",
+                           "outcome_correlation": "yes",
+                           "data_drift": "yes",
+                           "model_drift": "yes",
+                           "prediction_data": test_file_path,
+                           "data_completeness": "yes",
+                           "data_correctness": "yes"
+                          }
 
-        **Raises Exception**:
-            - Captures and logs unexpected errors, returning a failure message with an internal server error indication.
+            # Call the eazyml function to perform data quality
+            dqa_response = ez_data_quality(train_file_path, outcome, options=dqa_options)
 
+            # dqa_response is a dictionary.
+            dqa_response.keys()
 
-    Example :
-        .. code-block:: python
+            # Expected output (this will vary depending on the data):
+            # dict_keys(['success', 'message', 'data_shape_quality', 'data_emptiness_quality', 'data_outliers_quality', 'data_balance_quality', 'data_correlation_quality', 'data_completeness_quality', 'data_correctness_quality', 'drift_quality', 'data_bad_quality_alerts'])
 
-            ez_data_quality(
-                train_data = 'train/file/path.csv',
-                outcome = "outcome column"
-                options = {
-                    "data_shape": "yes",
-                    "data_balance": "yes",
-                    "data_emptiness": "yes",
-                    "data_outliers": "yes",
-                    "remove_outliers": "yes",
-                    "outcome_correlation": "yes",
-                    "data_drift": "yes",
-                    "model_drift": "yes",
-                    "prediction_data": test_data,
-                    "data_completeness": "yes",
-                    "data_correctness": "yes"
-                }
-            )
     """
     if not  outcome:
         return Response(response=convert_json(

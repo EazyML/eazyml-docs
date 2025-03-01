@@ -51,32 +51,34 @@ from .globals import logger as log
 log.initlog()
 
 def ez_init(access_key=None,
-                usage_share_consent=True,
+                usage_share_consent=None,
                 usage_delete=False):
     """
-    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
+    Parameters:
+        - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
+        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
 
-    Parameters :
-        - **access_key (str)**:
-            The access key to be set as an environment variable for EazyML.
+    Example:
+        .. code-block:: python
 
-    Examples
-    --------
-    >>> init_ez("your_access_key_here")
-    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
+            from eazyml import ez_init
+
+            # Initialize the EazyML library with the access key.
+            # This sets the `EAZYML_ACCESS_KEY` environment variable
+            access_key = "your_access_key_here"  # Replace with your actual access key
+            ez_init(access_key)
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
+
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(access_key = access_key,
+    init_resp = init_eazyml(access_key = access_key,
                                 usage_share_consent=usage_share_consent,
                                 usage_delete=usage_delete)
-    return {
-            "success": approved,
-            "message": msg
-        }
+    return init_resp
 
 
 def ez_xai_image_explain(filename,

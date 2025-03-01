@@ -19,107 +19,84 @@ from .globals import logger as log
 log.initlog()
 
 def ez_init(access_key=None,
-                usage_share_consent=True,
+                usage_share_consent=None,
                 usage_delete=False):
     """
-    Initialize the EazyML library with a access key by setting the `EAZYML_ACCESS_KEY` environment variable.
+    Parameters:
+        - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
+        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
 
-    Parameters :
-        - **access_key (str)**:
-            The access key to be set as an environment variable for EazyML.
+    Example:
+        .. code-block:: python
 
-    Examples
-    --------
-    >>> init_ez("your_access_key_here")
-    This sets the `EAZYML_ACCESS_KEY` environment variable to the provided access key.
+            from eazyml import ez_init
+
+            # Initialize the EazyML library with the access key.
+            # This sets the `EAZYML_ACCESS_KEY` environment variable
+            access_key = "your_access_key_here"  # Replace with your actual access key
+            ez_init(access_key)
 
     Notes
     -----
-    Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
+
     """
     # update api and user info in hidden files
-    approved, msg = init_eazyml(access_key = access_key,
+    init_resp = init_eazyml(access_key = access_key,
                                 usage_share_consent=usage_share_consent,
                                 usage_delete=usage_delete)
-    return {
-            "success": approved,
-            "message": msg
-        }
+    return init_resp
 
 
 def ez_insight(train_data, outcome,
             options={}):
     """
-    Fetch insights from the input training data based on the mode, outcome, and options. 
+    Fetch insights from the input training data based on the outcome, and options. 
     Supports classification and regression tasks.
 
-    Parameters :
-        - **train_data** (str/DataFrame):
-            Path to the training data file.
-        - **outcome** (str):
-            The target variable in the training data.
-        - **options** (dict, optional):
-            Additional options for augmented intelligence. Default is an empty dictionary. Supported keys include:
-                - "data_source" (str): Specifies the data source type (e.g., "parquet" or "system").
+    Parameters:
+        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
+        - **outcome** (`str`): The target variable for the insight.
+        - **options** (`dict`, optional): A dictionary of options to configure the insight process. If not provided, the function will use default settings. Supported keys include:
+            - **data_source** (`str`, optional): Specifies the data source type (e.g., "parquet" or "system").
 
-    Returns :
-        - **Dictionary with Fields** :
-            - **success** (bool): Indicates whether the operation was successful.
-            - **message** (str): Describes the outcome or error message.
-            - **insights** (dict, optional): Contains model performance data such as insights and insight-score if the operation was successful.
+    Returns:
+        - **dict**: A dictionary containing the results of the insight process with the following fields:
+            - **success** (`bool`): Indicates whether the operation was successful.
+            - **message** (`str`): A message describing the success or failure of the operation.
 
-        **On Success** :  
-        A JSON response with
-        
-        .. code-block:: json
+            **On Success**:
+            - **insights** (`dict`): Contains model performance data such as insights and insight-score if the operation was successful.
 
-            {
-                "success": true,
-                "message": "Insights fetched successfully",
-                "insights": {
-                    "data": [".."],
-                    "columns": [".."]
-                }
-            }
-
-        **On Failure**:  
-        A JSON response with
-        
-        .. code-block:: json
-
-            {
-                "success": false,
-                "message": "Error message"
-            }
-
-        **Raises Exception**:
-            - Captures and logs unexpected errors, returning a failure message with an internal server error indication.
-            
-
-    Validation :
-        - Ensures the `mode` is either 'classification' or 'regression'.
-        - Verifies that `outcome` exists as a column in the training data.
-        - Checks that `options` is a dictionary and contains valid keys.
-        - Validates data types for `mode`, `outcome`, and `train_file_path` (must all be strings).
-
-    Steps :
-        1. Loads the training data based on the specified `data_source`.
-        2. Validates input parameters for correctness.
-        3. Extracts user-specified features or defaults to all features in the data.
-        4. Calls `build_model_for_api` to build the model and obtain its performance metrics.
-        5. Processes performance metrics into a returnable dictionary format.
-
-    Notes :
-        - If model building fails, returns a failure message with the reason.
-        - Drops "Thresholds" column from the performance metrics before returning insights.
-    
+    Note:
+        - Please save the `response` obtained after getting the insights and provide the `insights` to the `ez_validate` function for getting validation metrics on test data.
+ 
     Example:
-        .. code-block:: python
+        .. code-block:: json
+            from eazyml_insight import ez_insight
 
-            ez_insight(
-                train_data='train.csv',
-                outcome='target'
-            )
+            # Define train data path (make sure the file path is correct).
+            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your actual target variable name
+
+            # Set the options for insight
+            insight_options = {"data_source": "parquet"}
+
+            # Call the eazyml function to fetch the insights
+            insight_response = ez_insight(train_file_path, outcome, options=insight_options)
+
+            # insight_response is a dictionary.
+            insight_response.keys()
+
+            # Expected output (this will vary depending on the data and model):            
+            # dict_keys(['success', 'message', 'insights'])
+
+            # Save the response for later use (e.g., for validation with ez_validate)
+            insights = insight_response['insights']
+
     """
     try:
         data_source = "system"
@@ -270,96 +247,52 @@ def ez_validate(train_data, outcome, insights, test_data,
     """
     Validate Augmented Intelligence insights on test data, based on mode, outcome, and options.
     Supports classification and regression tasks.
-
-    Parameters :
-        - **mode** (str):
-            The type of problem. Must be either 'classification' or 'regression'.
-        - **outcome** (str):
-            The target variable in both training and test data.
-        - **insights** (dict):
-            Augmented Intelligence insights provided by ez_insight.
-        - **train_file_path** (str):
-            Path to the train data file.
-        - **test_file_path** (str):
-            Path to the test data file.
-        - **data_type_dict** (dict):
-            Dictionary which contain type of each feature.
-        - **options** (dict, optional):
-            Additional options for augmented intelligence. Default is an empty dictionary. Supported keys include:
-                - "data_source" (str): Specifies the data source type (e.g., "parquet" or "system").
-                - "record_number" (list): The record from the insight list whose validation needs to be explained.
-
-    Returns :
-        - **Dictionary with Fields** :
-            - **success** (bool): Indicates whether the operation was successful.
-            - **message** (str): Describes the outcome or error message.
-            - **validations** (dict, optional): A Pandas Dataframe in JSON format. The JSON contains two keys:
-                - "data" (str): The data in list of list format.
-                - "columns" (str): The columns of the dataframe in list format.
-            - **validation_filter** (dict, optional): Filtered test data for given record numbers.
-
-        **On Success** :  
-        A JSON response with
-        
-        .. code-block:: json
-
-            {
-                "success": true,
-                "message": "Insights validated successfully",
-                "validations": {
-                    "data": [".."],
-                    "columns": [".."]
-                },
-                "validation_filter": {
-                    "record_number": "..",
-                    "filtered_data": {".."},
-                    "Augmented Intelligence Insights": "..",
-                    "Insight Scores": ".."
-                }
-            }
-
-        **On Failure**:  
-        A JSON response with
-        
-        .. code-block:: json
-
-            {
-                "success": false,
-                "message": "Error message"
-            }
-
-        **Raises Exception**:
-            - Captures and logs unexpected errors, returning a failure message with an internal server error indication.
-            
-
-    Validation :
-        - Ensures the `mode` is either 'classification' or 'regression'.
-        - Verifies that `outcome` exists as a column in both training and test data.
-        - Checks that `options` is a dictionary and contains valid keys.
-        - Validates data types for `mode`, `outcome`, `train_file_path` and `test_file_path` (must all be strings).
-
-    Steps :
-        1. Load both training and test data based on the specified `data_source`.
-        2. Validates input parameters for correctness.
-        3. Extracts user-specified features or defaults to all features in the data.
-        4. Calls `build_model_for_api` to build the model and obtain its performance metrics.
-        5. Processes performance metrics into a returnable dictionary format.
-
-    Notes :
-        - If model building fails, returns a failure message with the reason.
     
-    Example:
-        .. code-block:: python
+    Parameters:
+        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
+        - **outcome** (`str`): The target variable for the insight.
+        - **insights** (`dict`): Augmented Intelligence insights provided by ez_insight.
+        - **test_data** (`DataFrame` or `str`): A pandas DataFrame containing the test dataset. Alternatively, you can provide the file path of test dataset (as a string).
+        - **options** (`dict`, optional): A dictionary of options to configure the validate process. If not provided, the function will use default settings. Supported keys include:
+            - **record_number** (`list`, optional): The record from the insight list whose validation needs to be explained.
 
-            ez_validate(
-                mode='classification',
-                outcome='target',
-                insights=insights,
-                train_file_path='train.csv',
-                test_file_path='test.csv',
-                data_type_dict=data_type_dict,
-                options={"data_source": "parquet", "record_number": [1, 2, 3]}
-            )
+    Returns:
+        - **dict**: A dictionary containing the results of the validate process with the following fields:
+            - **success** (`bool`): Indicates whether the operation was successful.
+            - **message** (`str`): A message describing the success or failure of the operation.
+
+            **On Success**:
+            - **validations** (`dict`): Contains model performance data such as accuracy, coverage, population if the operation was successful.
+            - **validation_filter** (`dict`): Filtered test data for given record numbers.
+ 
+    Example:
+        .. code-block:: json
+            from eazyml_insight import ez_validate
+
+            # Define train data path (make sure the file path is correct).
+            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+
+            # Define test data path (make sure the file path is correct).
+            test_file_path = "path_to_your_test_data.csv"  # Replace with the correct file path
+            
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your actual target variable name
+
+            # Define the insights (response from ez_insight)
+            insights = insight_response['insights']
+
+            # Set the options for validation
+            validate_options = {"record_number": [1, 2, 3]}
+
+            # Call the eazyml function to get the validation metrics
+            validate_response = ez_validate(train_file_path, outcome, insights, test_file_path, options=validate_options)
+
+            # validate_response is a dictionary.
+            validate_response.keys()
+
+            # Expected output (this will vary depending on the data and model):            
+            # dict_keys(['success', 'message', 'validations', 'validation_filter'])
+
     """
     try:
         data_source = "system"
