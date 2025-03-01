@@ -148,6 +148,7 @@ def ez_build_model(train_data, outcome, options={}):
             pickle.dump(build_response, open(build_model_response_path, 'wb'))
 
     """
+    
     try:
         log.log_db("Initialze ez_build_model")
         #Check for valid keys in the options dict
@@ -580,7 +581,6 @@ def ez_predict(test_data, model_info, options={}):
             # dict_keys(['success', 'message', 'pred_df'])
             
     """
-    
     
     try:
         log.log_db(f"Initialze ez_predict")

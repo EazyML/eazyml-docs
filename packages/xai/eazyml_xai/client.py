@@ -56,28 +56,28 @@ def ez_explain(train_data, outcome, test_data, model_info,
     """
     This API generates explanations for a model's prediction, based on provided train and test data.
 
-    Parameters:
+    Args:
         - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
         - **outcome** (`str`): The target variable for the explanations.
         - **test_data** (`DataFrame` or `str`): A pandas DataFrame containing the test dataset. Alternatively, you can provide the file path of test dataset (as a string).
         - **model_info** (`Bytes` or `object`): Contains the encrypted or unencrypted details about the trained model and its environment. Alternatively, you can provide the model trained on training dataset (as a object).
         - **options** (`dict`, optional): A dictionary of options to configure the explanation process. If not provided, the function will use default settings. Supported keys include:
+            
             - **record_number** (`list`, optional): List of test data indices for which you want explanations. If not provided, it will compute the explanation for the first test data point.
             - **scaler** (`obj`, optional): Scaler that you used on the training dataset during preprocessing.
             - **preprocessor** (`obj`, optional): Preprocessor that you used on the training dataset during preprocessing.
 
     Returns:
-        - **dict**: A dictionary containing the results of the explanations with the following fields:
+        A dictionary containing the results of the explanations with the following fields:
             
             - **success** (`bool`): Indicates whether the operation was successful.
             - **message** (`str`): A message describing the success or failure of the operation.
 
             **On Success**:
-            - **explanations** (`dict`): The generated explanations contain the explanation string and local importance.
+                - **explanations** (`dict`): The generated explanations contain the explanation string and local importance.
 
     Example:
-        
-        .. code-block:: json
+        .. code-block:: python
             
             from eazyml_xai import ez_explain
 
@@ -421,19 +421,17 @@ def ez_explain(train_data, outcome, test_data, model_info,
 
 
 def ez_create_dummy_features(df, cols):
-    """
-    Convert categorical variables into dummy/one-hot encoded variables.
+    """Convert categorical variables into dummy/one-hot encoded variables.
+    
+    This function takes a DataFrame and a list of column names, and returns a new DataFrame where 
+    the specified columns are transformed into one-hot encoded (dummy) variables.
 
-    This function takes a DataFrame and a list of column names, and returns
-    a new DataFrame where the specified columns are transformed into one-hot
-    encoded (dummy) variables.
-
-    Parameters :
+    Args:
         - **df** (`pd.DataFrame`): pandas dataframe for which dummy features are to be created
         - **cols** ('list'): List of categorical columns to be encoded
+    
     Returns:
-        - **pd.DataFrame**: A DataFrame with the specified columns replaced by their corresponding one-hot encoded dummy variables.
-
+        A DataFrame with the specified columns replaced by their corresponding one-hot encoded dummy variables.
     """
     df = df.fillna("Null")
     return pd.get_dummies(
@@ -444,11 +442,12 @@ def ez_get_data_type(df, outcome):
     """
     Identifies if the columns are categorical or numeric and produces a DataFrame containing data types
 
-    Parameters :
+    Args:
         - **df** (`pd.DataFrame`): pandas dataframe for which data types are to be identified.
         - **outcome** ('str'): Outcome variable name from the df
+    
     Returns:
-        - **pd.DataFrame**: A DataFrame with Variable Name and corresponding Data Type
+        A DataFrame with Variable Name and corresponding Data Type
     """
     df = df.fillna("Null")
     mode, data_type_dict, selected_features =\
@@ -462,11 +461,12 @@ def ez_create_selected_features(df, outcome):
     """
     Creates a list of selected features based on input dataset and outcome variables to be used to train model.
 
-    Parameters :
+    Args:
         - **df** (`pd.DataFrame`): pandas dataframe for which selected features are to be identified.
         - **outcome** ('str'): Outcome variable name from the df
+    
     Returns:
-        - **list**: List of selected features.
+        List of selected features.
     """
     df = df.fillna("Null")
     mode, data_type_dict, selected_features =\
