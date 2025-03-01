@@ -53,7 +53,6 @@ log.initlog()
 log_inst = log.instance()
 log_inst.getLogger("pyj4").setLevel(log_inst.CRITICAL)
 
-
 def ez_init(access_key: str=None,
                 usage_share_consent: bool=None,
                 usage_delete: bool=False):
@@ -99,7 +98,6 @@ def ez_build_model(train_data, outcome, options={}):
         - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the dataset for model initialization. Alternatively, you can provide the file path of the dataset (as a string).
         - **outcome** (`str`): The target variable for the model.
         - **options** (`dict`, optional): A dictionary of options to configure the model initialization process. If not provided, the function will use default settings. Supported keys include:
-            
             - **model_type** (`str`, optional): Specifies the type of model to build. The supported value is "predictive".
             - **spark_session** (`SparkSession` or `None`, optional): If a Spark session is provided, distributed computation will be used. If `None`, standard computation is used.
 
@@ -110,9 +108,9 @@ def ez_build_model(train_data, outcome, options={}):
             - **message** (`str`): A message describing the success or failure of the operation.
 
             **On Success**:
-                - **model_performance** (`DataFrame`): A DataFrame providing the performance metrics of the trained model(s).
-                - **global_importance** (`DataFrame`): A DataFrame containing the feature importance scores.
-                - **model_info** (`Bytes`): Encrypted model information that will be used by `ez_predict` for making predictions on test data.
+            - **model_performance** (`DataFrame`): A DataFrame providing the performance metrics of the trained model(s).
+            - **global_importance** (`DataFrame`): A DataFrame containing the feature importance scores.
+            - **model_info** (`Bytes`): Encrypted model information that will be used by `ez_predict` for making predictions on test data.
 
     Note:
         - Please save the `response` obtained after building the model and provide the `model_info` to the `ez_predict` function for making predictions on test data.

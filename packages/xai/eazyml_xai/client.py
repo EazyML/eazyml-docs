@@ -68,6 +68,7 @@ def ez_explain(train_data, outcome, test_data, model_info,
 
     Returns:
         - **dict**: A dictionary containing the results of the explanations with the following fields:
+            
             - **success** (`bool`): Indicates whether the operation was successful.
             - **message** (`str`): A message describing the success or failure of the operation.
 
@@ -75,7 +76,9 @@ def ez_explain(train_data, outcome, test_data, model_info,
             - **explanations** (`dict`): The generated explanations contain the explanation string and local importance.
 
     Example:
+        
         .. code-block:: json
+            
             from eazyml_xai import ez_explain
 
             # Define train data path (make sure the file path is correct).
