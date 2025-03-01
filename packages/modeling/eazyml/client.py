@@ -53,13 +53,22 @@ log.initlog()
 log_inst = log.instance()
 log_inst.getLogger("pyj4").setLevel(log_inst.CRITICAL)
 
-def ez_init(access_key=None,
-                usage_share_consent=None,
-                usage_delete=False):
+
+def ez_init(access_key: str=None,
+                usage_share_consent: bool=None,
+                usage_delete: bool=False):
     """
-    Parameters:
+    Initialize EazyML package by passing `access_key`
+    
+    Args:
         - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
-        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
+        - **usage_share_consent** (`bool`): User's agreement to allow their data or usage information to be shared
+    
+    Returns:
+        A dictionary containing the results of the initialization process with the following fields:
+        
+        - **success** (`bool`): Indicates whether the operation was successful.
+        - **message** (`str`): A message describing the success or failure of the operation.
 
     Example:
         .. code-block:: python
@@ -71,11 +80,9 @@ def ez_init(access_key=None,
             access_key = "your_access_key_here"  # Replace with your actual access key
             ez_init(access_key)
 
-    Notes
-    -----
-    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
-    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
-
+    Notes:
+        - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+        - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
     """
     # update api and user info in hidden files
     init_resp = init_eazyml(access_key = access_key,
@@ -88,22 +95,24 @@ def ez_build_model(train_data, outcome, options={}):
     """
     Initialize and build a predictive model based on the provided dataset and options.
 
-    Parameters:
+    Args:
         - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the dataset for model initialization. Alternatively, you can provide the file path of the dataset (as a string).
         - **outcome** (`str`): The target variable for the model.
         - **options** (`dict`, optional): A dictionary of options to configure the model initialization process. If not provided, the function will use default settings. Supported keys include:
+            
             - **model_type** (`str`, optional): Specifies the type of model to build. The supported value is "predictive".
             - **spark_session** (`SparkSession` or `None`, optional): If a Spark session is provided, distributed computation will be used. If `None`, standard computation is used.
 
     Returns:
         - **dict**: A dictionary containing the results of the model building process with the following fields:
+            
             - **success** (`bool`): Indicates whether the model was successfully trained.
             - **message** (`str`): A message describing the success or failure of the operation.
 
             **On Success**:
-            - **model_performance** (`DataFrame`): A DataFrame providing the performance metrics of the trained model(s).
-            - **global_importance** (`DataFrame`): A DataFrame containing the feature importance scores.
-            - **model_info** (`Bytes`): Encrypted model information that will be used by `ez_predict` for making predictions on test data.
+                - **model_performance** (`DataFrame`): A DataFrame providing the performance metrics of the trained model(s).
+                - **global_importance** (`DataFrame`): A DataFrame containing the feature importance scores.
+                - **model_info** (`Bytes`): Encrypted model information that will be used by `ez_predict` for making predictions on test data.
 
     Note:
         - Please save the `response` obtained after building the model and provide the `model_info` to the `ez_predict` function for making predictions on test data.

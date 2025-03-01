@@ -14,6 +14,7 @@ and integration capabilities with existing workflows.
 
 
 .. toctree::
+   :numbered:
    :caption: PACKAGES
    :maxdepth: 2
    :hidden:

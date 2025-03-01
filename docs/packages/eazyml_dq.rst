@@ -21,3 +21,6 @@ Available APIs
 .. automodule:: eazyml_dq.client
    :members:
    :undoc-members:
+   :exclude-members:
+   :member-order: bysource
+   :show-inheritance:

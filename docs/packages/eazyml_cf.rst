@@ -20,3 +20,6 @@ Available APIs
 .. automodule:: eazyml_cf.client
    :members:
    :undoc-members:
+   :exclude-members: validate_input
+   :member-order: bysource
+   :show-inheritance:

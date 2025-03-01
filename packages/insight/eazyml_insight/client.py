@@ -18,13 +18,21 @@ from .license import (
 from .globals import logger as log
 log.initlog()
 
-def ez_init(access_key=None,
-                usage_share_consent=None,
-                usage_delete=False):
+def ez_init(access_key: str=None,
+                usage_share_consent: bool=None,
+                usage_delete: bool=False):
     """
-    Parameters:
+    Initialize EazyML package by passing `access_key`
+    
+    Args:
         - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
-        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
+        - **usage_share_consent** (`bool`): User's agreement to allow their data or usage information to be shared
+    
+    Returns:
+        A dictionary containing the results of the initialization process with the following fields:
+        
+        - **success** (`bool`): Indicates whether the operation was successful.
+        - **message** (`str`): A message describing the success or failure of the operation.
 
     Example:
         .. code-block:: python
@@ -36,11 +44,9 @@ def ez_init(access_key=None,
             access_key = "your_access_key_here"  # Replace with your actual access key
             ez_init(access_key)
 
-    Notes
-    -----
-    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
-    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
-
+    Notes:
+        - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+        - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
     """
     # update api and user info in hidden files
     init_resp = init_eazyml(access_key = access_key,
@@ -49,31 +55,33 @@ def ez_init(access_key=None,
     return init_resp
 
 
-def ez_insight(train_data, outcome,
-            options={}):
+def ez_insight(train_data: None, outcome: str,
+            options: dict={}):
     """
-    Fetch insights from the input training data based on the outcome, and options. 
-    Supports classification and regression tasks.
+    Fetch insights from the input training data based on the outcome, and options. Supports classification and regression tasks.
 
-    Parameters:
-        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
+    Args:
+        - **train_data** (`str/DataFrame`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
         - **outcome** (`str`): The target variable for the insight.
-        - **options** (`dict`, optional): A dictionary of options to configure the insight process. If not provided, the function will use default settings. Supported keys include:
+        - **options** (`dict/optional`): A dictionary of options to configure the insight process. If not provided, the function will use default settings. Supported keys include:
+            
             - **data_source** (`str`, optional): Specifies the data source type (e.g., "parquet" or "system").
 
     Returns:
-        - **dict**: A dictionary containing the results of the insight process with the following fields:
-            - **success** (`bool`): Indicates whether the operation was successful.
-            - **message** (`str`): A message describing the success or failure of the operation.
+        A dictionary containing the results of the insight process with the following fields:
+        
+        - **success** (`bool`): Indicates whether the operation was successful.
+        - **message** (`str`): A message describing the success or failure of the operation.
 
-            **On Success**:
+        **On Success**:
             - **insights** (`dict`): Contains model performance data such as insights and insight-score if the operation was successful.
-
+        
     Note:
         - Please save the `response` obtained after getting the insights and provide the `insights` to the `ez_validate` function for getting validation metrics on test data.
  
     Example:
-        .. code-block:: json
+        .. code-block:: python
+        
             from eazyml_insight import ez_insight
 
             # Define train data path (make sure the file path is correct).
@@ -248,25 +256,28 @@ def ez_validate(train_data, outcome, insights, test_data,
     Validate Augmented Intelligence insights on test data, based on mode, outcome, and options.
     Supports classification and regression tasks.
     
-    Parameters:
+    Args:
         - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
         - **outcome** (`str`): The target variable for the insight.
         - **insights** (`dict`): Augmented Intelligence insights provided by ez_insight.
         - **test_data** (`DataFrame` or `str`): A pandas DataFrame containing the test dataset. Alternatively, you can provide the file path of test dataset (as a string).
         - **options** (`dict`, optional): A dictionary of options to configure the validate process. If not provided, the function will use default settings. Supported keys include:
+            
             - **record_number** (`list`, optional): The record from the insight list whose validation needs to be explained.
 
     Returns:
-        - **dict**: A dictionary containing the results of the validate process with the following fields:
-            - **success** (`bool`): Indicates whether the operation was successful.
-            - **message** (`str`): A message describing the success or failure of the operation.
+        A dictionary containing the results of the validate process with the following fields:
+        
+        - **success** (`bool`): Indicates whether the operation was successful.
+        - **message** (`str`): A message describing the success or failure of the operation.
 
-            **On Success**:
+        **On Success**:
             - **validations** (`dict`): Contains model performance data such as accuracy, coverage, population if the operation was successful.
             - **validation_filter** (`dict`): Filtered test data for given record numbers.
  
     Example:
-        .. code-block:: json
+        .. code-block:: python
+
             from eazyml_insight import ez_validate
 
             # Define train data path (make sure the file path is correct).

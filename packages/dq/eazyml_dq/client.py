@@ -70,13 +70,21 @@ from .license.license import (
 from .globals import logger as log
 log.initlog()
 
-def ez_init(access_key=None,
-                usage_share_consent=None,
-                usage_delete=False):
+def ez_init(access_key: str=None,
+                usage_share_consent: bool=None,
+                usage_delete: bool=False):
     """
-    Parameters:
+    Initialize EazyML package by passing `access_key`
+    
+    Args:
         - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
-        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
+        - **usage_share_consent** (`bool`): User's agreement to allow their data or usage information to be shared
+    
+    Returns:
+        A dictionary containing the results of the initialization process with the following fields:
+        
+        - **success** (`bool`): Indicates whether the operation was successful.
+        - **message** (`str`): A message describing the success or failure of the operation.
 
     Example:
         .. code-block:: python
@@ -88,11 +96,9 @@ def ez_init(access_key=None,
             access_key = "your_access_key_here"  # Replace with your actual access key
             ez_init(access_key)
 
-    Notes
-    -----
-    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
-    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
-
+    Notes:
+        - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+        - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
     """
     # update api and user info in hidden files
     init_resp = init_eazyml(access_key = access_key,
@@ -106,10 +112,11 @@ def ez_data_quality(train_data, outcome, options = {}):
     Performs a series of data quality checks on the given dataset and
     returns a JSON response indicating the results of these checks.
 
-    Parameters:
+    Args:
         - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the training dataset. Alternatively, you can provide the file path of training dataset (as a string).
         - **outcome** (`str`): The target variable for the data quality.
         - **options** (`dict`, optional): A dictionary of options to configure the data quality process. If not provided, the function will use default settings. Supported keys include:
+            
             - **data_shape** (`str`, optional): The default is `no`. If `yes`, the function will perform a data shape check.
             - **data_balance** (`str`, optional): The default is `no`. If `yes`, the function will perform a data balance check.
             - **data_emptiness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data emptiness check.
@@ -124,20 +131,24 @@ def ez_data_quality(train_data, outcome, options = {}):
             - **dat_correctness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data correctness check.
 
     Returns:
+        
         - **dict**: A dictionary containing the results of the explanations with the following fields:
+            
             - **success** (`bool`): Indicates whether the operation was successful.
             - **message** (`str`): A message describing the success or failure of the operation.
 
+            
             **On Success**:
-            - **data_shape_quality** (`dict`): Contains results of data shape quality checks.
-            - **data_emptiness_quality** (`dict`): Includes results of data emptiness checks, such as the presence of missing or null values.
-            - **data_outliers_quality** (`dict`): Provides insights into the presence of outliers.
-            - **data_balance_quality** (`dict`): Contains information about the balance of data.
-            - **data_correlation_quality** (`dict`): Includes results of correlation checks, identifying highly correlated features or potential redundancies.
-            - **data_completeness_quality** (`dict`): Includes results of data completeness checks.
-            - **data_correctness_quality** (`dict`): Includes results of data correctness checks.
-            - **drift_quality** (`dict`): Includes results of data drift and model drift checks.
-            - **data_bad_quality_alerts** (`dict`): Summarizes critical quality issues detected, with the following fields:
+            
+                - **data_shape_quality** (`dict`): Contains results of data shape quality checks.
+                - **data_emptiness_quality** (`dict`): Includes results of data emptiness checks, such as the presence of missing or null values.
+                - **data_outliers_quality** (`dict`): Provides insights into the presence of outliers.
+                - **data_balance_quality** (`dict`): Contains information about the balance of data.
+                - **data_correlation_quality** (`dict`): Includes results of correlation checks, identifying highly correlated features or potential redundancies.
+                - **data_completeness_quality** (`dict`): Includes results of data completeness checks.
+                - **data_correctness_quality** (`dict`): Includes results of data correctness checks.
+                - **drift_quality** (`dict`): Includes results of data drift and model drift checks.
+                - **data_bad_quality_alerts** (`dict`): Summarizes critical quality issues detected, with the following fields:
                 - **data_shape_alert** (`bool`): Indicates if there are structural issues with the data (e.g., mismatched dimensions, irregular shapes).
                 - **data_balance_alert** (`bool`): Flags issues with data balance (e.g., uneven class distributions).
                 - **data_emptiness_alert** (`bool`): Signals significant levels of missing or null data.
@@ -147,7 +158,9 @@ def ez_data_quality(train_data, outcome, options = {}):
                 - **model_drift_alert** (`bool`): Flags model drift alerts based on interval and distributional model drift.
 
     Example:
-        .. code-block:: json
+        
+        .. code-block:: python
+            
             from eazyml_data_quality import ez_data_quality
 
             # Define train data path (make sure the file path is correct).

@@ -20,4 +20,7 @@ Available APIs
 .. automodule:: eazyml_insight.client
    :members:
    :undoc-members:
+   :exclude-members:
+   :member-order: bysource
+   :show-inheritance:
 

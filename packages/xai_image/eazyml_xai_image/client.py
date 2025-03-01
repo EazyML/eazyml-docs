@@ -50,13 +50,21 @@ from .license.license import (
 from .globals import logger as log
 log.initlog()
 
-def ez_init(access_key=None,
-                usage_share_consent=None,
-                usage_delete=False):
+def ez_init(access_key: str=None,
+                usage_share_consent: bool=None,
+                usage_delete: bool=False):
     """
-    Parameters:
+    Initialize EazyML package by passing `access_key`
+    
+    Args:
         - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
-        - **usage_share_consent** (`bool`): user's agreement to allow their data or usage information to be shared
+        - **usage_share_consent** (`bool`): User's agreement to allow their data or usage information to be shared
+    
+    Returns:
+        A dictionary containing the results of the initialization process with the following fields:
+        
+        - **success** (`bool`): Indicates whether the operation was successful.
+        - **message** (`str`): A message describing the success or failure of the operation.
 
     Example:
         .. code-block:: python
@@ -68,11 +76,9 @@ def ez_init(access_key=None,
             access_key = "your_access_key_here"  # Replace with your actual access key
             ez_init(access_key)
 
-    Notes
-    -----
-    - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
-    - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
-
+    Notes:
+        - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
+        - The access key will be stored in the environment, and other functions in EazyML will automatically use it when required.
     """
     # update api and user info in hidden files
     init_resp = init_eazyml(access_key = access_key,

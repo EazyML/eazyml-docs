@@ -21,4 +21,6 @@ Available APIs
 .. automodule:: eazyml_xai_image.client
    :members:
    :undoc-members:
-
+   :exclude-members:
+   :member-order: bysource
+   :show-inheritance:
