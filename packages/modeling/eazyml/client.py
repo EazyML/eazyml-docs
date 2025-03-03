@@ -98,6 +98,7 @@ def ez_build_model(train_data, outcome, options={}):
         - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the dataset for model initialization. Alternatively, you can provide the file path of the dataset (as a string).
         - **outcome** (`str`): The target variable for the model.
         - **options** (`dict`, optional): A dictionary of options to configure the model initialization process. If not provided, the function will use default settings. Supported keys include:
+            
             - **model_type** (`str`, optional): Specifies the type of model to build. The supported value is "predictive".
             - **spark_session** (`SparkSession` or `None`, optional): If a Spark session is provided, distributed computation will be used. If `None`, standard computation is used.
 
@@ -538,6 +539,7 @@ def ez_predict(test_data, model_info, options={}):
         - **test_data** (`DataFrame` or `str`): The dataset to be evaluated. It must have the same features as the dataset used for training.
         - **model_info** (`Bytes`): Contains the encrypted or unencrypted details about the trained model and its environment.
         - **options** (`dict`): A dictionary of configuration options for model initialization and prediction. Supported keys include:
+            
             - **model** (`str`, optional): Specifies the model to be used for prediction. If not provided, the default model from `model_info` is used.
             - **confidence_score** (`bool`, optional): Default is `False`. If `True`, the function provides a confidence score for classification models.
             - **spark_session** (`SparkSession` or `None`, optional): If provided, a Spark session will be used for distributed computation. If `None`, standard computation is used.
@@ -545,6 +547,7 @@ def ez_predict(test_data, model_info, options={}):
 
     Returns:
         - **dict**: A dictionary containing the result of the evaluation. The dictionary contains the following keys:
+            
             - **"success"** (`bool`): Indicates whether the operation was successful.
             - **"message"** (`str`): A message containing either an error or informational details.
             - If successful, the dictionary also contains:
