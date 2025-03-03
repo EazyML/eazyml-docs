@@ -103,12 +103,13 @@ def ez_build_model(train_data, outcome, options={}):
             - **spark_session** (`SparkSession` or `None`, optional): If a Spark session is provided, distributed computation will be used. If `None`, standard computation is used.
 
     Returns:
-        - **dict**: A dictionary containing the results of the model building process with the following fields:
+        A dictionary containing the results of the model building process with the following fields:
             
             - **success** (`bool`): Indicates whether the model was successfully trained.
             - **message** (`str`): A message describing the success or failure of the operation.
 
             **On Success**:
+            
             - **model_performance** (`DataFrame`): A DataFrame providing the performance metrics of the trained model(s).
             - **global_importance** (`DataFrame`): A DataFrame containing the feature importance scores.
             - **model_info** (`Bytes`): Encrypted model information that will be used by `ez_predict` for making predictions on test data.
