@@ -42,7 +42,7 @@ def ez_init(access_key: str=None,
             # Initialize the EazyML library with the access key.
             # This sets the `EAZYML_ACCESS_KEY` environment variable
             access_key = "your_access_key_here"  # Replace with your actual access key
-            ez_init(access_key)
+            _ = ez_init(access_key)
 
     Notes:
         - Make sure to call this function before using other functionalities of the EazyML library that require a valid access key.
