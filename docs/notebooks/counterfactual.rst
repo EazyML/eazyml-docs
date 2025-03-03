@@ -7,9 +7,9 @@ variables that shift outcomes from unfavorable to favorable.
 
 The following notebooks are available:
 
-1. `Airline passengers satisfaction <../_static/examples/examples/cf/airline_passengers_satisfaction/Demo - Airline dataset.html>`_
-2. `Fintech <../_static/examples/examples/cf/fintech/Demo - Fintech dataset.html>`_
-3. `House Pricing Regression Colab <../_static/examples/cf/house_price_prediction/HousePriceRegression.html>`
+1. `Airline passengers satisfaction <../_static/examples/cf/airline_passengers_satisfaction/Demo - Airline dataset.html>`_
+2. `Fintech <../_static/examples/cf/fintech/Demo - Fintech dataset.html>`_
+3. `House Pricing Regression Colab <../_static/examples/cf/house_price_prediction/HousePriceRegression.html>`_
 
 Try on Colab :
 
