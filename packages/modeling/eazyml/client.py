@@ -551,7 +551,8 @@ def ez_predict(test_data, model_info, options={}):
             
             - **"success"** (`bool`): Indicates whether the operation was successful.
             - **"message"** (`str`): A message containing either an error or informational details.
-            - If successful, the dictionary also contains:
+            
+            If successful, the dictionary also contains:
                 - **"pred_df"** (`DataFrame`): A DataFrame containing the predictions for the test dataset.
 
 
