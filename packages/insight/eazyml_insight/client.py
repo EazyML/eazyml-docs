@@ -26,7 +26,7 @@ def ez_init(access_key: str=None,
     
     Args:
         - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
-        - **usage_share_consent** (`bool`): User's agreement to allow their data or usage information to be shared
+        - **usage_share_consent** (`bool`): User's agreement to allow their usage information to be shared
     
     Returns:
         A dictionary containing the results of the initialization process with the following fields:
