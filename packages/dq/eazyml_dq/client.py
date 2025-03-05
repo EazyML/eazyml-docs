@@ -78,7 +78,7 @@ def ez_init(access_key: str=None,
     
     Args:
         - **access_key** (`str`): The access key to be set as an environment variable for EazyML.
-        - **usage_share_consent** (`bool`): User's agreement to allow their usage information to be shared. If consent is given, only OS information, Python version, and EazyML packages API call counts are collected.
+        - **usage_share_consent** (`bool`): User's agreement to allow their usage information to be shared
     
     Returns:
         A dictionary containing the results of the initialization process with the following fields:
@@ -89,7 +89,7 @@ def ez_init(access_key: str=None,
     Example:
         .. code-block:: python
 
-            from eazyml import ez_init
+            from eazyml_data_quality import ez_init
 
             # Initialize the EazyML library with the access key.
             # This sets the `EAZYML_ACCESS_KEY` environment variable
@@ -126,9 +126,9 @@ def ez_data_quality(train_data, outcome, options = {}):
             - **outcome_correlation** (`str`, optional): The default is `no`. If `yes`, the function will perform a data correlation check.
             - **data_drift** (`str`, optional): The default is `no`. If `yes`, the function will perform a data drift check.
             - **model_drift** (`str`, optional): The default is `no`. If `yes`, the function will perform a model drift check.
-            - **test_data** (`DataFrame` or `str`, optional): A pandas DataFrame containing the test dataset. Alternatively, you can provide the file path of test dataset (as a string).
+            - **prediction_data** (`DataFrame` or `str`, optional): A pandas DataFrame containing the test dataset. Alternatively, you can provide the file path of test dataset (as a string).
             - **data_completeness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data completeness check.
-            - **dat_correctness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data correctness check.
+            - **data_correctness** (`str`, optional): The default is `no`. If `yes`, the function will perform a data correctness check.
 
     Returns:
         - **dict**: A dictionary containing the results of the explanations with the following fields:
@@ -161,8 +161,8 @@ def ez_data_quality(train_data, outcome, options = {}):
             
             from eazyml_data_quality import ez_data_quality
 
-            # Define train data path (make sure the file path is correct).
-            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+            # Define training data path (make sure the file path is correct).
+            train_file_path = "path_to_your_training_data.csv"  # Replace with the correct file path
 
             # Define the outcome (target variable)
             outcome = "target"  # Replace with your actual target variable name
@@ -170,7 +170,7 @@ def ez_data_quality(train_data, outcome, options = {}):
             # Define test data path (make sure the file path is correct).
             test_file_path = "path_to_your_test_data.csv"  # Replace with the correct file path
 
-            # Set the options for data quality
+            # Set the options for performing the data quality
             dqa_options = {
                            "data_shape": "yes",
                            "data_balance": "yes",
@@ -185,13 +185,11 @@ def ez_data_quality(train_data, outcome, options = {}):
                            "data_correctness": "yes"
                           }
 
-            # Call the eazyml function to perform data quality
+            # Call the EazyML function to perform data quality
             dqa_response = ez_data_quality(train_file_path, outcome, options=dqa_options)
 
-            # dqa_response is a dictionary.
-            dqa_response.keys()
-
-            # Expected output (this will vary depending on the data):
+            # dqa_response is a dictionary object with following keys.
+            # print (dqa_response.keys())
             # dict_keys(['success', 'message', 'data_shape_quality', 'data_emptiness_quality', 'data_outliers_quality', 'data_balance_quality', 'data_correlation_quality', 'data_completeness_quality', 'data_correctness_quality', 'drift_quality', 'data_bad_quality_alerts'])
 
     """
