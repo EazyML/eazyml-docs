@@ -123,7 +123,7 @@ def ez_build_model(train_data, outcome, options={}):
         .. code-block:: python
 
             import pandas as pd
-            import pickle
+            import joblib
             from eazyml import ez_build_model
 
             # Load the training data (make sure the file path is correct).
@@ -139,15 +139,13 @@ def ez_build_model(train_data, outcome, options={}):
             # Call the eazyml function to build the model
             build_response = ez_build_model(train_data, outcome, options=build_options)
 
-            # build_response is a dictionary. Note: Do not print/view the response as it contains sensitive or encrypted model information in model_info.
-            build_response.keys()
-
-            # Expected output (this will vary depending on the data and model):            
+            # build_response is a dictionary object with following keys.
+            # print(build_response.keys())
             # dict_keys(['success', 'message', 'model_performance', 'global_importance', 'model_info'])
 
             # Save the response for later use (e.g., for predictions with ez_predict)
-            build_model_response_path = 'model_response.pkl'
-            pickle.dump(build_response, open(build_model_response_path, 'wb'))
+            build_model_response_path = 'model_response.joblib'
+            joblib.dump(build_response, build_model_response_path)
 
     """
     
@@ -288,8 +286,6 @@ def ez_build_model(train_data, outcome, options={}):
             dtype_df = pd.DataFrame(dtypes_list, columns=[g.VARIABLE_NAME, g.DATA_TYPE])
         else:
             dtype_df, ps_df = utility.get_smart_datatypes(train_data, extra_info)
-            if len(dtype_df[dtype_df["Data Type"]=="Datetime"])!=0:
-                return {"success": False, "message": tr_api.DATETIME_HANDLING}
 
         date_types = dtype_df.loc[dtype_df[g.DATA_TYPE]
                                     == g.DT_DATETIME][g.VARIABLE_NAME].tolist()
@@ -460,7 +456,8 @@ def ez_build_model(train_data, outcome, options={}):
                 if extra_info["outcome"] in cat_types:
                     cat_types.remove(extra_info["outcome"])
                 train_data = utility.create_dummy_features(train_data, cat_types)
-                
+                added_columns, train_data = utility.get_date_time_features(train_data, date_types)
+
                 log.log_db(f"Modelling Initialized") 
 
                 if not g.API_FLEXIBILITY:
@@ -553,7 +550,8 @@ def ez_predict(test_data, model_info, options={}):
             - **"message"** (`str`): A message containing either an error or informational details.
             
             If successful, the dictionary also contains:
-                - **"pred_df"** (`DataFrame`): A DataFrame containing the predictions for the test dataset.
+            
+            - **"pred_df"** (`DataFrame`): A DataFrame containing the predictions for the test dataset.
 
 
 
@@ -561,32 +559,29 @@ def ez_predict(test_data, model_info, options={}):
         .. code-block:: python
 
             import pandas as pd
-            import pickle
+            import joblib
             from eazyml import ez_predict
 
             # Load test data.
             test_file_path = "path_to_your_test_data.csv"
             test_data = pd.read_csv(test_file_path)
 
-            # Load output from ez_build_model. This should be the pickle file where model information is stored.
-            build_model_response_path = 'model_response.pkl'
-            build_model_response = pickle.load(open(build_model_response_path, 'rb'))
+            # Load output from ez_build_model. This should be the file where model information is stored.
+            build_model_response_path = 'model_response.joblib'
+            build_model_response = joblib.load(build_model_response_path)
             model_info = build_model_response["model_info"]
 
-            # Choose the model to use for prediction from the available performance options in the response.
+            # Choose the model for prediction from the key "model_performance" in the build_model_response object above. The default model is the top-performing model if no value is provided.
             pred_options = {"model": "Random Forest with Information Gain"}
 
             # Call the eazyml function to predict
             pred_response = ez_predict(test_data, model_info, options=pred_options)
 
-            # Check the keys of the prediction response. It will be a dictionary.
-            pred_response.keys()
-
-            # Example Output Keys(this will vary depending on your model and data):
+            # prediction response is a dictionary object with following keys.
+            # print(pred_response.keys())
             # dict_keys(['success', 'message', 'pred_df'])
             
-    """
-    
+    """    
     try:
         log.log_db(f"Initialze ez_predict")
 

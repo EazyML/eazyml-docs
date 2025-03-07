@@ -3,6 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. image:: _static/EazyML_logo.png
+   :alt: Project Logo
+   :align: center
+   :width: 500px
+
 EazyML Documentation
 ====================
 

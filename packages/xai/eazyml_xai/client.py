@@ -33,7 +33,7 @@ def ez_init(access_key: str=None,
     Example:
         .. code-block:: python
 
-            from eazyml import ez_init
+            from eazyml_xai import ez_init
 
             # Initialize the EazyML library with the access key.
             # This sets the `EAZYML_ACCESS_KEY` environment variable
@@ -81,8 +81,8 @@ def ez_explain(train_data, outcome, test_data, model_info,
             
             from eazyml_xai import ez_explain
 
-            # Define train data path (make sure the file path is correct).
-            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+            # Define training data path (make sure the file path is correct).
+            train_file_path = "path_to_your_training_data.csv"  # Replace with the correct file path
 
             # Define the outcome (target variable)
             outcome = "target"  # Replace with your actual target variable name
@@ -90,22 +90,20 @@ def ez_explain(train_data, outcome, test_data, model_info,
             # Define test data path (make sure the file path is correct).
             test_file_path = "path_to_your_test_data.csv"  # Replace with the correct file path
 
-            # Your trained model object
+            # Define trained model object
             model_info = '<trained model object>'
 
-            # Your trained scaler object
+            # Define trained scaler object
             scaler = '<trained scaler object>'
 
-            # Set the options for xai
+            # Set the options for fetching the explanations
             xai_options = {"record_number": [1, 2, 3], "scaler", scaler}
 
-            # Call the eazyml function to fetch the explanations
+            # Call the EazyML function to fetch the explanations
             xai_response = ez_explain(train_file_path, outcome, test_file_path, model_info, options=xai_options)
 
-            # insight_response is a dictionary.
-            xai_response.keys()
-
-            # Expected output (this will vary depending on the data and model):            
+            # xai_response is a dictionary object with following keys.
+            # print (xai_response.keys())
             # dict_keys(['success', 'message', 'explanations'])
 
     """
