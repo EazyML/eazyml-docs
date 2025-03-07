@@ -1,9 +1,9 @@
+.. _interactive:
+
 .. image:: ../_static/EazyML_logo.png
    :alt: Project Logo
    :align: center
    :width: 500px
-
-.. _interactive:
 
 EazyML notebook
 ====================
