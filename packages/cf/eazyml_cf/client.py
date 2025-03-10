@@ -173,7 +173,6 @@ def ez_cf_inference(test_data, outcome, selected_features,
                 - `label_encoder`: Encodes and decodes class labels for categorical outcomes.
     """
     
-
     try:
         # Validate inputs
         validate_input(test_data, outcome, selected_features, model_info, options)

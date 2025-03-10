@@ -30,7 +30,7 @@ sys.path.append(os.path.abspath('../packages/modeling'))
 # -- Project information -----------------------------------------------------
 
 project = 'EazyML'
-copyright = '2024, EazyML'
+copyright = '2025, EazyML'
 author = 'EazyML'
 
 # The full version, including alpha/beta/rc tags

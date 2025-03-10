@@ -18,9 +18,9 @@ from .license import (
 from .globals import logger as log
 log.initlog()
 
-def ez_init(access_key: str=None,
-                usage_share_consent: bool=None,
-                usage_delete: bool=False):
+def ez_init(access_key=None,
+                usage_share_consent=None,
+                usage_delete=False):
     """
     Initialize EazyML package by passing `access_key`
     
@@ -37,7 +37,7 @@ def ez_init(access_key: str=None,
     Example:
         .. code-block:: python
 
-            from eazyml import ez_init
+            from eazyml_insight import ez_init
 
             # Initialize the EazyML library with the access key.
             # This sets the `EAZYML_ACCESS_KEY` environment variable
@@ -55,8 +55,8 @@ def ez_init(access_key: str=None,
     return init_resp
 
 
-def ez_insight(train_data: None, outcome: str,
-            options: dict={}):
+def ez_insight(train_data, outcome,
+            options={}):
     """
     Fetch insights from the input training data based on the outcome, and options. Supports classification and regression tasks.
 
@@ -84,22 +84,20 @@ def ez_insight(train_data: None, outcome: str,
         
             from eazyml_insight import ez_insight
 
-            # Define train data path (make sure the file path is correct).
-            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+            # Define training data path (make sure the file path is correct).
+            train_file_path = "path_to_your_training_data.csv"  # Replace with the correct file path
 
             # Define the outcome (target variable)
             outcome = "target"  # Replace with your actual target variable name
 
-            # Set the options for insight
+            # Set the options for fetching the insights
             insight_options = {"data_source": "parquet"}
 
-            # Call the eazyml function to fetch the insights
+            # Call the EazyML function to fetch the insights
             insight_response = ez_insight(train_file_path, outcome, options=insight_options)
 
-            # insight_response is a dictionary.
-            insight_response.keys()
-
-            # Expected output (this will vary depending on the data and model):            
+            # insight_response is a dictionary object with following keys.
+            # print (insight_response.keys())
             # dict_keys(['success', 'message', 'insights'])
 
             # Save the response for later use (e.g., for validation with ez_validate)
@@ -250,6 +248,7 @@ def ez_insight(train_data: None, outcome: str,
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
 
+@validate_license
 def ez_validate(train_data, outcome, insights, test_data,
                 options={}):
     """
@@ -280,8 +279,8 @@ def ez_validate(train_data, outcome, insights, test_data,
 
             from eazyml_insight import ez_validate
 
-            # Define train data path (make sure the file path is correct).
-            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+            # Define training data path (make sure the file path is correct).
+            train_file_path = "path_to_your_training_data.csv"  # Replace with the correct file path
 
             # Define test data path (make sure the file path is correct).
             test_file_path = "path_to_your_test_data.csv"  # Replace with the correct file path
@@ -292,16 +291,14 @@ def ez_validate(train_data, outcome, insights, test_data,
             # Define the insights (response from ez_insight)
             insights = insight_response['insights']
 
-            # Set the options for validation
+            # Set the options for validating the insights
             validate_options = {"record_number": [1, 2, 3]}
 
-            # Call the eazyml function to get the validation metrics
+            # Call the EazyML function to get the validation metrics
             validate_response = ez_validate(train_file_path, outcome, insights, test_file_path, options=validate_options)
 
-            # validate_response is a dictionary.
-            validate_response.keys()
-
-            # Expected output (this will vary depending on the data and model):            
+            # validate_response is a dictionary object with following keys.
+            # print (validate_response.keys())
             # dict_keys(['success', 'message', 'validations', 'validation_filter'])
 
     """
