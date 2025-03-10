@@ -51,7 +51,6 @@ def ez_init(access_key: str=None,
     return init_resp
 
 
-@validate_license
 def ez_explain(train_data, outcome, test_data, model_info,
                options={}):
     """
