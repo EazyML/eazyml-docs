@@ -33,7 +33,7 @@ def ez_init(access_key: str=None,
     Example:
         .. code-block:: python
 
-            from eazyml import ez_init
+            from eazyml_xai import ez_init
 
             # Initialize the EazyML library with the access key.
             # This sets the `EAZYML_ACCESS_KEY` environment variable
@@ -51,6 +51,7 @@ def ez_init(access_key: str=None,
     return init_resp
 
 
+@validate_license
 def ez_explain(train_data, outcome, test_data, model_info,
                options={}):
     """
@@ -64,7 +65,6 @@ def ez_explain(train_data, outcome, test_data, model_info,
         - **options** (`dict`, optional): A dictionary of options to configure the explanation process. If not provided, the function will use default settings. Supported keys include:
             
             - **record_number** (`list`, optional): List of test data indices for which you want explanations. If not provided, it will compute the explanation for the first test data point.
-            - **scaler** (`obj`, optional): Scaler that you used on the training dataset during preprocessing.
             - **preprocessor** (`obj`, optional): Preprocessor that you used on the training dataset during preprocessing.
 
     Returns:
@@ -76,38 +76,136 @@ def ez_explain(train_data, outcome, test_data, model_info,
             **On Success**:
                 - **explanations** (`dict`): The generated explanations contain the explanation string and local importance.
 
-    Example:
+    Example Using EazyML Predictive Models:
         .. code-block:: python
-            
-            from eazyml_xai import ez_explain
 
-            # Define train data path (make sure the file path is correct).
-            train_file_path = "path_to_your_train_data.csv"  # Replace with the correct file path
+            from eazyml_xai import ez_init, ez_explain
+
+            # Initialize the EazyML automl library.
+            _ = ez_init()
+
+            # Load training data (Replace with the correct data path).
+            train_data_path = "path_to_your_training_data.csv"
+            train = pd.read_csv(train_data_path)
+
+            # Load test data (Replace with the correct data path).
+            test_data_path = "path_to_your_test_data.csv"
+            test = pd.read_csv(test_data_path)
 
             # Define the outcome (target variable)
-            outcome = "target"  # Replace with your actual target variable name
+            outcome = "target"  # Replace with your target variable name
 
-            # Define test data path (make sure the file path is correct).
-            test_file_path = "path_to_your_test_data.csv"  # Replace with the correct file path
+            # Build EazyML predictive models
+            build_options = {'model_type': 'predictive'}
+            build_resp = ez_build_model(train, outcome=outcome, options=build_options)
 
-            # Your trained model object
-            model_info = '<trained model object>'
+            # Use model_info from ez_build_model response
+            model_info = build_resp["model_info"]
 
-            # Your trained scaler object
-            scaler = '<trained scaler object>'
+            # Customize options for fetching explanations
+            xai_options = {"record_number": [1, 2, 3]}
 
-            # Set the options for xai
-            xai_options = {"record_number": [1, 2, 3], "scaler", scaler}
+            # Call the EazyML API to fetch the explanations
+            xai_response = ez_explain(train, outcome, test_data_path, model_info, options=xai_options)
 
-            # Call the eazyml function to fetch the explanations
-            xai_response = ez_explain(train_file_path, outcome, test_file_path, model_info, options=xai_options)
-
-            # insight_response is a dictionary.
-            xai_response.keys()
-
-            # Expected output (this will vary depending on the data and model):            
+            # xai_response is a dictionary object with following keys.
+            # print (xai_response.keys())
             # dict_keys(['success', 'message', 'explanations'])
+       
+    Example Using Your Model and EazyML Preprocessor:
+        .. code-block:: python
+            
+            from eazyml_xai import ez_init, ez_explain, create_onehot_encoded_features, ez_get_data_type
+            
+            # Initialize the EazyML automl library.
+            _ = ez_init()
 
+            # Load training data (Replace with the correct data path).
+            train_data_path = "path_to_your_training_data.csv"
+            train = pd.read_csv(train_data_path)
+
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your target variable name
+
+            # Define input features (X) and target variable (y)
+            y = train[outcome]
+            X = train.drop(outcome, axis=1)
+
+            # Load test data (Replace with the correct data path).
+            test_data_path = "path_to_your_test_data.csv"
+            test = pd.read_csv(test_data_path)
+
+            # Get data type of features
+            type_df = ez_get_data_type(train, outcome)
+
+            # List of categorical columns
+            cat_list = type_df[type_df['Data Type'] == 'categorical']['Variable Name'].tolist()
+            cat_list = [ele for ele in cat_list if ele != outcome]
+
+            # Create one-hot encoded features
+            train = create_onehot_encoded_features(train, cat_list)
+
+            # Define your model object (replace with any model of your choice)
+            model_info = <YourModelClass>(<parameters>)  # e.g., RandomForestClassifier(), LogisticRegression(), etc.
+
+            # Train your model object
+            model_info.fit(X, y)
+
+            # Customize options for fetching explanations
+            xai_options = {"record_number": [1, 2, 3]}
+
+            # Call the EazyML API to fetch the explanations
+            xai_response = ez_explain(train, outcome, test_data_path, model_info, options=xai_options)
+
+            # xai_response is a dictionary object with following keys.
+            # print (xai_response.keys())
+
+    Example Using Your Model and Preprocessor:
+        .. code-block:: python
+
+            from eazyml_xai import ez_init, ez_explain
+            
+            # Initialize the EazyML automl library.
+            _ = ez_init()
+
+            # Load training data (Replace with the correct data path).
+            train_data_path = "path_to_your_training_data.csv"
+            train = pd.read_csv(train_data_path)
+
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your target variable name
+
+            # Define input features (X) and target variable (y)
+            y = train[outcome]
+            X = train.drop(outcome, axis=1)
+
+            # Load test data (Replace with the correct data path).
+            test_data_path = "path_to_your_test_data.csv"
+            test = pd.read_csv(test_data_path)
+
+            # Implement your preprocessing steps within a custom preprocessor class and define it
+            # (Replace <YourPreprocessorClass> with the specific preprocessor class you're using)
+            preprocessor = <YourPreprocessorClass>(<parameters>)  # Example: StandardScaler(), CustomPreprocessor()
+
+            # Fit the preprocessor on your dataset
+            preprocessor.fit(X, y)
+
+            # Define your model object (replace with any model of your choice)
+            model_info = <YourModelClass>(<parameters>)  # e.g., RandomForestClassifier(), LogisticRegression(), etc.
+
+            # Train your model object
+            model_info.fit(X, y)
+
+            # Customize options for fetching explanations
+            xai_options = {"record_number": [1, 2, 3], "preprocessor", preprocessor}
+
+            # Call the EazyML API to fetch the explanations
+            xai_response = ez_explain(train_data_path, outcome, test_data_path, model_info, options=xai_options)
+
+            # xai_response is a dictionary object with following keys.
+            # print (xai_response.keys())
+            # dict_keys(['success', 'message', 'explanations'])
+   
     """
     try:
         data_source = "system"
@@ -369,12 +467,12 @@ def ez_explain(train_data, outcome, test_data, model_info,
         else:
             train_data, test_data, global_info_dict, cat_list =\
                 exai.preprocessing_steps(
-                train_data, test_data, data_type_dict, outcome)
+                train_data, test_data, data_type_dict, outcome, selected_features_list)
             for col in selected_features_list:
                 if col not in train_data.columns.tolist():
                     return {
                             "success": False,
-                            "message": "Please provide valid column name in selected_features_list"
+                            "message": "Test dataset is not consistent with the training dataset"
                             }
 
             train_data, test_data, rule_lime_dict = exai.processing_steps(
@@ -420,7 +518,7 @@ def ez_explain(train_data, outcome, test_data, model_info,
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
 
-def ez_create_dummy_features(df, cols):
+def create_onehot_encoded_features(df, cols):
     """Convert categorical variables into dummy/one-hot encoded variables.
     
     This function takes a DataFrame and a list of column names, and returns a new DataFrame where 
@@ -432,6 +530,34 @@ def ez_create_dummy_features(df, cols):
     
     Returns:
         A DataFrame with the specified columns replaced by their corresponding one-hot encoded dummy variables.
+    
+    Example:
+        .. code-block:: python
+
+            from eazyml_xai import ez_init, ez_get_data_type, create_onehot_encoded_features
+            
+            # Initialize the EazyML automl library.
+            _ = ez_init()
+
+            # Load data (Replace with the correct data path).
+            data_path = "path_to_your_data.csv"
+            data = pd.read_csv(data_path)
+
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your target variable name
+
+            # Get data type of features
+            type_df = ez_get_data_type(data, outcome)
+
+            # List of categorical columns
+            cat_list = type_df[type_df['Data Type'] == 'categorical']['Variable Name'].tolist()
+            cat_list = [ele for ele in cat_list if ele != outcome]
+
+            # Create one-hot encoded features
+            onehot_encoded_df = create_onehot_encoded_features(data, cat_list)
+
+            # The onehot_encoded_df is a one-hot encoded DataFrame.
+   
     """
     df = df.fillna("Null")
     return pd.get_dummies(
@@ -448,6 +574,29 @@ def ez_get_data_type(df, outcome):
     
     Returns:
         A DataFrame with Variable Name and corresponding Data Type
+    
+    Example:
+        .. code-block:: python
+
+            from eazyml_xai import ez_init, ez_get_data_type
+            
+            # Initialize the EazyML automl library.
+            _ = ez_init()
+
+            # Load data (Replace with the correct data path).
+            data_path = "path_to_your_data.csv"
+            data = pd.read_csv(data_path)
+
+            # Define the outcome (target variable)
+            outcome = "target"  # Replace with your target variable name
+
+            # Get data type of features
+            type_df = ez_get_data_type(data, outcome)
+
+            # type_df is a dataframe with following columns.
+            # print (type_df.columns)
+            # Index(['Variable Name', 'Data Type'], dtype='object')
+
     """
     df = df.fillna("Null")
     mode, data_type_dict, selected_features =\
@@ -455,20 +604,3 @@ def ez_get_data_type(df, outcome):
     type_df = pd.DataFrame(data_type_dict.items(), columns=[
         "Variable Name", "Data Type"])
     return type_df
-
-
-def ez_create_selected_features(df, outcome):
-    """
-    Creates a list of selected features based on input dataset and outcome variables to be used to train model.
-
-    Args:
-        - **df** (`pd.DataFrame`): pandas dataframe for which selected features are to be identified.
-        - **outcome** ('str'): Outcome variable name from the df
-    
-    Returns:
-        List of selected features.
-    """
-    df = df.fillna("Null")
-    mode, data_type_dict, selected_features =\
-        exai.get_mode_data_type_selected_features(df, outcome)
-    return  selected_features
