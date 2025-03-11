@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Insight_on_IRIS</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>HousePriceRegression</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7510,28 +7510,28 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9145c720-0326-4724-b2e3-60f436d12858">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="EazyML-Insights-Template">EazyML Insights Template<a class="anchor-link" href="#EazyML-Insights-Template">¶</a></h1>
+<h1 id="EazyML-Counterfactual">EazyML Counterfactual<a class="anchor-link" href="#EazyML-Counterfactual">¶</a></h1>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a616f634-ad67-455a-92e5-e7aee68e5ac6">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Define-Imports">Define Imports<a class="anchor-link" href="#Define-Imports">¶</a></h2>
+<h2 id="Install-eazyml-cf-library">Install eazyml-cf library<a class="anchor-link" href="#Install-eazyml-cf-library">¶</a></h2>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=2631476b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7539,15 +7539,25 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>eazyml-insight
-<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>eazyml-automl
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>eazyml-counterfactual
 <span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>gdown<span class="w"> </span>python-dotenv
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b5f96df4-96d0-49e5-8875-c89b40fe2299">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Imports-libraries">Imports libraries<a class="anchor-link" href="#Imports-libraries">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7556,15 +7566,22 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">eazyml_insight</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ez_insight</span><span class="p">,</span>
-    <span class="n">ez_init</span><span class="p">,</span>
-    <span class="n">ez_validate</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'../'</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">eazyml</span> <span class="k">as</span> <span class="nn">ez</span>
+<span class="kn">from</span> <span class="nn">eazyml_counterfactual</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">ez_cf_inference</span><span class="p">,</span>
+        <span class="n">ez_init</span>        
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">eazyml</span> <span class="kn">import</span> <span class="n">ez_display_df</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">OneHotEncoder</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">r2_score</span>
+
 <span class="kn">import</span> <span class="nn">gdown</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 <span class="n">load_dotenv</span><span class="p">()</span>
@@ -7586,17 +7603,17 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ed6dd06f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-Initialize-EazyML">1. Initialize EazyML<a class="anchor-link" href="#1.-Initialize-EazyML">¶</a></h2>
+<h3 id="Initalize-eazyml">Initalize eazyml<a class="anchor-link" href="#Initalize-eazyml">¶</a></h3>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9368081b-11aa-4b71-bff6-af121ff26423">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7604,7 +7621,7 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_init</span><span class="p">(</span><span class="n">access_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'EAZYML_ACCESS_KEY'</span><span class="p">))</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_init</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'EAZYML_ACCESS_KEY'</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -7624,17 +7641,28 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d2ec63d8-35da-4ee5-9c38-92cee982ed7e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-Define-Dataset-Files-and-Outcome-Variable">2. Define Dataset Files and Outcome Variable<a class="anchor-link" href="#2.-Define-Dataset-Files-and-Outcome-Variable">¶</a></h2>
+<h2 id="1.-Download-and-define-dataset-file-and-outcome-variable">1. Download and define dataset file and outcome variable<a class="anchor-link" href="#1.-Download-and-define-dataset-file-and-outcome-variable">¶</a></h2>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a35c10c1">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Download-dataset">Download dataset<a class="anchor-link" href="#Download-dataset">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7642,13 +7670,24 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'1-RO9K9-YYGK7Wp__ioth0xPD8XqtgvKT'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'1p7Udh2MjKyJPxI47FS89VowAz9ZEq_hG'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=81aa3231-9669-4a5c-a68e-b51b42d1d66c">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Define-dataset-file-and-outcome-variable">Define dataset file and outcome variable<a class="anchor-link" href="#Define-dataset-file-and-outcome-variable">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7656,51 +7695,141 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Names of the files that will be used by EazyML APIs</span>
-<span class="n">eazyml_train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s1">'IRIS_Train.csv'</span><span class="p">)</span>
-<span class="n">eazyml_test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s1">'IRIS_Test.csv'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"House Price Prediction - Train Data.xlsx"</span><span class="p">)</span>
+<span class="n">test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"House Price Prediction - Test Data.xlsx"</span><span class="p">)</span>
+<span class="n">outcome</span> <span class="o">=</span> <span class="s2">"House_Price"</span>
 
-<span class="c1"># The column name for outcome of interest</span>
-<span class="n">outcome</span> <span class="o">=</span> <span class="s2">"species"</span>
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">train_file</span><span class="p">)</span>
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">test_file</span><span class="p">)</span>
+
+<span class="n">ez</span><span class="o">.</span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">test_file</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">test_file</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=475515b3-34aa-4615-80f2-4fc5f8474bf0">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_08fa4 th {
+  text-align: left;
+}
+#T_08fa4 td {
+  text-align: left;
+}
+</style>
+<table id="T_08fa4">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_08fa4_level0_col0">Square_Footage</th>
+<th class="col_heading level0 col1" id="T_08fa4_level0_col1">Num_Bedrooms</th>
+<th class="col_heading level0 col2" id="T_08fa4_level0_col2">Num_Bathrooms</th>
+<th class="col_heading level0 col3" id="T_08fa4_level0_col3">Year_Built</th>
+<th class="col_heading level0 col4" id="T_08fa4_level0_col4">Lot_Size</th>
+<th class="col_heading level0 col5" id="T_08fa4_level0_col5">Garage_Size</th>
+<th class="col_heading level0 col6" id="T_08fa4_level0_col6">Neighborhood_Quality</th>
+<th class="col_heading level0 col7" id="T_08fa4_level0_col7">House_Price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_08fa4_level0_row0">0</th>
+<td class="data row0 col0" id="T_08fa4_row0_col0">4012</td>
+<td class="data row0 col1" id="T_08fa4_row0_col1">3</td>
+<td class="data row0 col2" id="T_08fa4_row0_col2">1</td>
+<td class="data row0 col3" id="T_08fa4_row0_col3">2016</td>
+<td class="data row0 col4" id="T_08fa4_row0_col4">2.098092</td>
+<td class="data row0 col5" id="T_08fa4_row0_col5">1</td>
+<td class="data row0 col6" id="T_08fa4_row0_col6">5</td>
+<td class="data row0 col7" id="T_08fa4_row0_col7">901000.488234</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_08fa4_level0_row1">1</th>
+<td class="data row1 col0" id="T_08fa4_row1_col0">2310</td>
+<td class="data row1 col1" id="T_08fa4_row1_col1">3</td>
+<td class="data row1 col2" id="T_08fa4_row1_col2">1</td>
+<td class="data row1 col3" id="T_08fa4_row1_col3">1988</td>
+<td class="data row1 col4" id="T_08fa4_row1_col4">1.369622</td>
+<td class="data row1 col5" id="T_08fa4_row1_col5">1</td>
+<td class="data row1 col6" id="T_08fa4_row1_col6">4</td>
+<td class="data row1 col7" id="T_08fa4_row1_col7">494537.511545</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_08fa4_level0_row2">2</th>
+<td class="data row2 col0" id="T_08fa4_row2_col0">4708</td>
+<td class="data row2 col1" id="T_08fa4_row2_col1">1</td>
+<td class="data row2 col2" id="T_08fa4_row2_col2">3</td>
+<td class="data row2 col3" id="T_08fa4_row2_col3">1962</td>
+<td class="data row2 col4" id="T_08fa4_row2_col4">1.792970</td>
+<td class="data row2 col5" id="T_08fa4_row2_col5">1</td>
+<td class="data row2 col6" id="T_08fa4_row2_col6">8</td>
+<td class="data row2 col7" id="T_08fa4_row2_col7">949404.200666</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_08fa4_level0_row3">3</th>
+<td class="data row3 col0" id="T_08fa4_row3_col0">4932</td>
+<td class="data row3 col1" id="T_08fa4_row3_col1">2</td>
+<td class="data row3 col2" id="T_08fa4_row3_col2">1</td>
+<td class="data row3 col3" id="T_08fa4_row3_col3">1972</td>
+<td class="data row3 col4" id="T_08fa4_row3_col4">4.479598</td>
+<td class="data row3 col5" id="T_08fa4_row3_col5">1</td>
+<td class="data row3 col6" id="T_08fa4_row3_col6">2</td>
+<td class="data row3 col7" id="T_08fa4_row3_col7">1040389.048136</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_08fa4_level0_row4">4</th>
+<td class="data row4 col0" id="T_08fa4_row4_col0">3646</td>
+<td class="data row4 col1" id="T_08fa4_row4_col1">1</td>
+<td class="data row4 col2" id="T_08fa4_row4_col2">1</td>
+<td class="data row4 col3" id="T_08fa4_row4_col3">1994</td>
+<td class="data row4 col4" id="T_08fa4_row4_col4">3.980987</td>
+<td class="data row4 col5" id="T_08fa4_row4_col5">0</td>
+<td class="data row4 col6" id="T_08fa4_row4_col6">9</td>
+<td class="data row4 col7" id="T_08fa4_row4_col7">794010.016734</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>(100, 8)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-EazyML-Insights">3. EazyML Insights<a class="anchor-link" href="#3.-EazyML-Insights">¶</a></h2>
+<h2 id="2.-Eazyml-modeling-and-counterfactual-inference">2. Eazyml modeling and counterfactual inference<a class="anchor-link" href="#2.-Eazyml-modeling-and-counterfactual-inference">¶</a></h2>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9255cabc-c8a2-4074-931c-afa9381bcc84">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.1-Auto-derive-Insights">3.1 Auto-derive Insights<a class="anchor-link" href="#3.1-Auto-derive-Insights">¶</a></h3>
+<h3 id="class-for-Preprocessing-and-data-transformation">class for Preprocessing and data transformation<a class="anchor-link" href="#class-for-Preprocessing-and-data-transformation">¶</a></h3>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6f11a093-65cd-408f-bf61-908f8a83e49d">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.1.1-Build-Insight-Model">3.1.1 Build Insight Model<a class="anchor-link" href="#3.1.1-Build-Insight-Model">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=807b3ba0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7708,24 +7837,89 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">ez_insight</span><span class="p">(</span><span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">UnifiedRegressorPreprocessor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numerical_imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">'mean'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="s1">'first'</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># To track whether preprocessing objects are fitted</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Split columns into numerical and categorical</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="nb">object</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+
+        <span class="c1"># Fit transformers for features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numerical_imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span><span class="p">])</span>
+
+        <span class="c1"># Fit transformer for the target variable (if provided)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape for scaler</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Preprocessor is not fitted yet. Call 'fit' first."</span><span class="p">)</span>
+
+        <span class="c1"># Apply transformations to numerical features</span>
+        <span class="n">X_numerical</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">])</span>
+        <span class="n">X_numerical</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_numerical</span><span class="p">)</span>
+
+        <span class="c1"># Apply transformations to categorical features</span>
+        <span class="n">X_categorical</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span><span class="p">])</span>
+
+        <span class="c1"># Get new column names for categorical features</span>
+        <span class="n">categorical_feature_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">categorical_encoder</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categorical_columns</span><span class="p">)</span>
+
+        <span class="c1"># Combine transformed numerical and categorical data</span>
+        <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_numerical</span><span class="p">,</span> <span class="n">X_categorical</span><span class="p">))</span>
+
+        <span class="c1"># Create a DataFrame with appropriate column names</span>
+        <span class="n">all_feature_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_columns</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">categorical_feature_names</span><span class="p">)</span>
+        <span class="n">X_transformed_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">all_feature_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="c1"># Transform the target variable (if provided)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape for scaler</span>
+            <span class="n">y_transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">X_transformed_df</span><span class="p">,</span> <span class="n">y_transformed</span>
+
+        <span class="k">return</span> <span class="n">X_transformed_df</span>
+
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">inverse_transform_outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Revert the scaling of the target variable to its original scale.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Preprocessor is not fitted yet. Call 'fit' first."</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape for scaler</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b6cfa82d-8292-4519-a0a1-e21611dda509">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.1.2-Convert-Response-to-DataFrame">3.1.2 Convert Response to DataFrame<a class="anchor-link" href="#3.1.2-Convert-Response-to-DataFrame">¶</a></h4>
+<h3 id="apply-preprocession-step-and-build-linear-regression-model-and-evaluate">apply preprocession step and build linear regression model and evaluate<a class="anchor-link" href="#apply-preprocession-step-and-build-linear-regression-model-and-evaluate">¶</a></h3>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=457bdb16-925b-4800-9e70-5e2cdff3d8a0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7733,35 +7927,250 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">insights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Assuming train_df and test_df are your original datasets</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">outcome</span><span class="p">])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">outcome</span><span class="p">])</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span>
+
+<span class="c1"># Fit the preprocessor on training data</span>
+<span class="n">preprocessor</span> <span class="o">=</span> <span class="n">UnifiedRegressorPreprocessor</span><span class="p">()</span>
+<span class="n">preprocessor</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Transform the train and test datasets</span>
+<span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train_transformed</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">X_test_transformed</span><span class="p">,</span> <span class="n">y_test_transformed</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+
+<span class="c1"># Train the Linear Regression model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train_transformed</span><span class="p">)</span>
+
+<span class="c1"># Make predictions on the test set</span>
+<span class="n">y_pred_transformed</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_transformed</span><span class="p">)</span>
+
+<span class="c1"># Revert predictions to the original scale</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">inverse_transform_outcome</span><span class="p">(</span><span class="n">y_pred_transformed</span><span class="p">)</span>
+
+<span class="c1"># Combine predictions with the original test DataFrame</span>
+<span class="n">test_results_df</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">test_results_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Predicted </span><span class="si">{</span><span class="n">outcome</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+
+<span class="c1"># Display the test DataFrame with predictions</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Test DataFrame with Predictions:"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">test_results_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Evaluate the model</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>  <span class="c1"># Calculate RMSE</span>
+<span class="n">mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Model Performance:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Root Mean Squared Error (RMSE): </span><span class="si">{</span><span class="n">rmse</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mean Absolute Error (MAE): </span><span class="si">{</span><span class="n">mae</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"R-squared (R2 Score): </span><span class="si">{</span><span class="n">r2</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c43f5578-778c-4560-b2cd-e6b96cf4a810">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+Test DataFrame with Predictions:
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Square_Footage</th>
+<th>Num_Bedrooms</th>
+<th>Num_Bathrooms</th>
+<th>Year_Built</th>
+<th>Lot_Size</th>
+<th>Garage_Size</th>
+<th>Neighborhood_Quality</th>
+<th>House_Price</th>
+<th>Predicted House_Price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>4012</td>
+<td>3</td>
+<td>1</td>
+<td>2016</td>
+<td>2.098092</td>
+<td>1</td>
+<td>5</td>
+<td>9.010005e+05</td>
+<td>8.684582e+05</td>
+</tr>
+<tr>
+<th>1</th>
+<td>2310</td>
+<td>3</td>
+<td>1</td>
+<td>1988</td>
+<td>1.369622</td>
+<td>1</td>
+<td>4</td>
+<td>4.945375e+05</td>
+<td>4.901319e+05</td>
+</tr>
+<tr>
+<th>2</th>
+<td>4708</td>
+<td>1</td>
+<td>3</td>
+<td>1962</td>
+<td>1.792970</td>
+<td>1</td>
+<td>8</td>
+<td>9.494042e+05</td>
+<td>9.456196e+05</td>
+</tr>
+<tr>
+<th>3</th>
+<td>4932</td>
+<td>2</td>
+<td>1</td>
+<td>1972</td>
+<td>4.479598</td>
+<td>1</td>
+<td>2</td>
+<td>1.040389e+06</td>
+<td>1.033595e+06</td>
+</tr>
+<tr>
+<th>4</th>
+<td>3646</td>
+<td>1</td>
+<td>1</td>
+<td>1994</td>
+<td>3.980987</td>
+<td>0</td>
+<td>9</td>
+<td>7.940100e+05</td>
+<td>7.764987e+05</td>
+</tr>
+<tr>
+<th>5</th>
+<td>3586</td>
+<td>2</td>
+<td>2</td>
+<td>1964</td>
+<td>2.568429</td>
+<td>0</td>
+<td>10</td>
+<td>7.240336e+05</td>
+<td>7.323173e+05</td>
+</tr>
+<tr>
+<th>6</th>
+<td>4638</td>
+<td>4</td>
+<td>3</td>
+<td>2000</td>
+<td>1.490399</td>
+<td>1</td>
+<td>3</td>
+<td>9.984392e+05</td>
+<td>9.951187e+05</td>
+</tr>
+<tr>
+<th>7</th>
+<td>4127</td>
+<td>5</td>
+<td>2</td>
+<td>1992</td>
+<td>1.026156</td>
+<td>2</td>
+<td>1</td>
+<td>9.097134e+05</td>
+<td>8.852059e+05</td>
+</tr>
+<tr>
+<th>8</th>
+<td>3781</td>
+<td>2</td>
+<td>1</td>
+<td>1989</td>
+<td>3.164076</td>
+<td>0</td>
+<td>9</td>
+<td>7.926815e+05</td>
+<td>7.965207e+05</td>
+</tr>
+<tr>
+<th>9</th>
+<td>4243</td>
+<td>2</td>
+<td>1</td>
+<td>2002</td>
+<td>4.498088</td>
+<td>2</td>
+<td>7</td>
+<td>9.474908e+05</td>
+<td>9.316157e+05</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+Model Performance:
+Root Mean Squared Error (RMSE): 10367.90
+Mean Absolute Error (MAE): 8185.60
+R-squared (R2 Score): 1.00
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.1.3-Display-Augmented-Insights">3.1.3 Display Augmented Insights<a class="anchor-link" href="#3.1.3-Display-Augmented-Insights">¶</a></h4>
+<h2 id="Call-counterfactual-inference-api-and-define-model_info,-selected_features-and-options">Call counterfactual inference api and define model_info, selected_features and options<a class="anchor-link" href="#Call-counterfactual-inference-api-and-define-model_info,-selected_features-and-options">¶</a></h2>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b8054a64-2c2b-4639-aa0e-3196d379fbea">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.1.3.1-For-Class-Iris-virginica">3.1.3.1 For Class Iris-virginica<a class="anchor-link" href="#3.1.3.1-For-Class-Iris-virginica">¶</a></h5>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9e5dc70f-fc64-4059-ad23-407c58978198">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7769,91 +8178,30 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">insights_df1</span> <span class="o">=</span> <span class="n">insights_df</span><span class="p">[</span><span class="n">insights_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Iris-virginica'</span><span class="p">]</span>
-<span class="n">ez_display_df</span><span class="p">(</span><span class="n">insights_df1</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">selected_features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Square_Footage'</span><span class="p">,</span> <span class="s1">'Num_Bedrooms'</span><span class="p">,</span> <span class="s1">'Num_Bathrooms'</span><span class="p">,</span> <span class="s1">'Year_Built'</span><span class="p">,</span> <span class="s1">'Lot_Size'</span><span class="p">,</span> <span class="s1">'Garage_Size'</span><span class="p">,</span> <span class="s1">'Neighborhood_Quality'</span><span class="p">]</span>
+<span class="n">invariants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Year_Built'</span><span class="p">]</span>
+<span class="n">variants</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span> <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">selected_features</span> <span class="k">if</span> <span class="n">feature</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">invariants</span><span class="p">]</span>
+
+<span class="c1"># Defining configurable parameters for counterfactual inference</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"variants"</span><span class="p">:</span> <span class="n">variants</span><span class="p">,</span>
+    <span class="s2">"outcome_ordinality"</span><span class="p">:</span> <span class="s2">"maximize"</span><span class="p">,</span>
+    <span class="s2">"train_data"</span><span class="p">:</span> <span class="n">train_file</span><span class="p">,</span>
+    <span class="s2">"preprocessor"</span><span class="p">:</span> <span class="n">preprocessor</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Specify the index of the test record for which counterfactual inference will be performed</span>
+<span class="n">test_index_no</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">test_results_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="n">test_index_no</span><span class="p">]]</span>
+
+<span class="c1"># Performing counterfactual inference </span>
+<span class="n">result</span><span class="p">,</span> <span class="n">optimal_transition_df</span> <span class="o">=</span> <span class="n">ez_cf_inference</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">selected_features</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<style type="text/css">
-#T_f23d9 th {
-  text-align: left;
-}
-#T_f23d9 td {
-  text-align: left;
-}
-</style>
-<table id="T_f23d9">
-<thead>
-<tr>
-<th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_f23d9_level0_col0">species</th>
-<th class="col_heading level0 col1" id="T_f23d9_level0_col1">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col2" id="T_f23d9_level0_col2">Insight Scores</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th class="row_heading level0 row0" id="T_f23d9_level0_row0">0</th>
-<td class="data row0 col0" id="T_f23d9_row0_col0">Iris-virginica</td>
-<td class="data row0 col1" id="T_f23d9_row0_col1">sepal_length is greater than 5.55,
-petal_width is greater than 1.75</td>
-<td class="data row0 col2" id="T_f23d9_row0_col2">0.836000</td>
-</tr>
-<tr>
-<th class="row_heading level0 row1" id="T_f23d9_level0_row1">1</th>
-<td class="data row1 col0" id="T_f23d9_row1_col0">Iris-virginica</td>
-<td class="data row1 col1" id="T_f23d9_row1_col1">petal_width is greater than 0.8,
-petal_length is greater than 4.75</td>
-<td class="data row1 col2" id="T_f23d9_row1_col2">0.833900</td>
-</tr>
-<tr>
-<th class="row_heading level0 row2" id="T_f23d9_level0_row2">2</th>
-<td class="data row2 col0" id="T_f23d9_row2_col0">Iris-virginica</td>
-<td class="data row2 col1" id="T_f23d9_row2_col1">petal_width is greater than 1.75</td>
-<td class="data row2 col2" id="T_f23d9_row2_col2">0.802800</td>
-</tr>
-<tr>
-<th class="row_heading level0 row3" id="T_f23d9_level0_row3">3</th>
-<td class="data row3 col0" id="T_f23d9_row3_col0">Iris-virginica</td>
-<td class="data row3 col1" id="T_f23d9_row3_col1">sepal_length is greater than 6.25,
-sepal_width is less than equal to 3.7,
-petal_length is greater than 5.05</td>
-<td class="data row3 col2" id="T_f23d9_row3_col2">0.752600</td>
-</tr>
-<tr>
-<th class="row_heading level0 row4" id="T_f23d9_level0_row4">4</th>
-<td class="data row4 col0" id="T_f23d9_row4_col0">Iris-virginica</td>
-<td class="data row4 col1" id="T_f23d9_row4_col1">sepal_length is greater than 6.25,
-sepal_width is less than equal to 3.7</td>
-<td class="data row4 col2" id="T_f23d9_row4_col2">0.583500</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2b29e4fb-2bac-4ab4-994e-1aa262a4baac">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.1.3.2-For-Class-Iris-versicolor">3.1.3.2 For Class Iris-versicolor<a class="anchor-link" href="#3.1.3.2-For-Class-Iris-versicolor">¶</a></h5>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f84a06f9-2d67-4c0f-b5c8-070fa6a52f18">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7861,8 +8209,7 @@ sepal_width is less than equal to 3.7</td>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">insights_df0</span> <span class="o">=</span> <span class="n">insights_df</span><span class="p">[</span><span class="n">insights_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Iris-versicolor'</span><span class="p">]</span>
-<span class="n">ez_display_df</span><span class="p">(</span><span class="n">insights_df0</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez</span><span class="o">.</span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7874,91 +8221,13 @@ sepal_width is less than equal to 3.7</td>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<style type="text/css">
-#T_ed71f th {
-  text-align: left;
-}
-#T_ed71f td {
-  text-align: left;
-}
-</style>
-<table id="T_ed71f">
-<thead>
-<tr>
-<th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_ed71f_level0_col0">species</th>
-<th class="col_heading level0 col1" id="T_ed71f_level0_col1">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col2" id="T_ed71f_level0_col2">Insight Scores</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th class="row_heading level0 row0" id="T_ed71f_level0_row0">20</th>
-<td class="data row0 col0" id="T_ed71f_row0_col0">Iris-versicolor</td>
-<td class="data row0 col1" id="T_ed71f_row0_col1">petal_width is greater than 0.8,
-petal_length is less than equal to 4.75</td>
-<td class="data row0 col2" id="T_ed71f_row0_col2">0.862100</td>
-</tr>
-<tr>
-<th class="row_heading level0 row1" id="T_ed71f_level0_row1">21</th>
-<td class="data row1 col0" id="T_ed71f_row1_col0">Iris-versicolor</td>
-<td class="data row1 col1" id="T_ed71f_row1_col1">petal_width in ( 0.8, 1.75 )</td>
-<td class="data row1 col2" id="T_ed71f_row1_col2">0.843200</td>
-</tr>
-<tr>
-<th class="row_heading level0 row2" id="T_ed71f_level0_row2">22</th>
-<td class="data row2 col0" id="T_ed71f_row2_col0">Iris-versicolor</td>
-<td class="data row2 col1" id="T_ed71f_row2_col1">petal_width in ( 0.8, 1.75 ),
-petal_length is less than equal to 4.95,
-sepal_width is greater than 2.55</td>
-<td class="data row2 col2" id="T_ed71f_row2_col2">0.707500</td>
-</tr>
-<tr>
-<th class="row_heading level0 row3" id="T_ed71f_level0_row3">23</th>
-<td class="data row3 col0" id="T_ed71f_row3_col0">Iris-versicolor</td>
-<td class="data row3 col1" id="T_ed71f_row3_col1">sepal_length is greater than 5.55,
-petal_width in ( 0.7, 1.75 ),
-petal_length is less than equal to 4.95</td>
-<td class="data row3 col2" id="T_ed71f_row3_col2">0.707500</td>
-</tr>
-<tr>
-<th class="row_heading level0 row4" id="T_ed71f_level0_row4">24</th>
-<td class="data row4 col0" id="T_ed71f_row4_col0">Iris-versicolor</td>
-<td class="data row4 col1" id="T_ed71f_row4_col1">sepal_length in ( 5.55, 6.25 ),
-sepal_width in ( 2.65, 3.7 ),
-petal_width is less than equal to 1.7</td>
-<td class="data row4 col2" id="T_ed71f_row4_col2">0.698400</td>
-</tr>
-</tbody>
-</table>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>&lt;IPython.core.display.JSON object&gt;</pre>
 </div>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4ca79cbe-1360-4a57-a9e8-731efe77e4c4">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.2-Validation-of-Insights">3.2 Validation of Insights<a class="anchor-link" href="#3.2-Validation-of-Insights">¶</a></h3>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ee5cb3fd-9213-4419-8916-9bf0db468945">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.1-Validating-Insights">3.2.1 Validating Insights<a class="anchor-link" href="#3.2.1-Validating-Insights">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=dabd023a-0cb7-4077-a938-94e3142234a7">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7966,71 +8235,7 @@ petal_width is less than equal to 1.7</td>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">record_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
-<span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'record_number'</span><span class="p">:</span> <span class="n">record_number</span><span class="p">}</span>
-<span class="n">val_response</span> <span class="o">=</span> <span class="n">ez_validate</span><span class="p">(</span><span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">],</span> <span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf766334-ddfb-48aa-ab78-ef98524e7029">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.2-Convert-Response-to-DataFrame">3.2.2 Convert Response to DataFrame<a class="anchor-link" href="#3.2.2-Convert-Response-to-DataFrame">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=ada28e26-d148-4c1b-be1b-b0f3c194a008">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">validate_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validations'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validations'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=338fbdba-3ed5-477f-9896-fbf2a2881ebf">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.3-Display-Validation-Metrics">3.2.3 Display Validation Metrics<a class="anchor-link" href="#3.2.3-Display-Validation-Metrics">¶</a></h4>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7199c71e-280b-4d9c-83de-0feb18b7139b">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.2.3.1-For-Class-Iris-virginica">3.2.3.1 For Class Iris-virginica<a class="anchor-link" href="#3.2.3.1-For-Class-Iris-virginica">¶</a></h5>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5989fbce-d0dc-4b98-9077-61a1674b6898">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">validate_df1</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="n">validate_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Iris-virginica'</span><span class="p">]</span>
-<span class="n">ez_display_df</span><span class="p">(</span><span class="n">validate_df1</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez</span><span class="o">.</span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">optimal_transition_df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8044,93 +8249,80 @@ petal_width is less than equal to 1.7</td>
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_b68fe th {
+#T_c20b2 th {
   text-align: left;
 }
-#T_b68fe td {
+#T_c20b2 td {
   text-align: left;
 }
 </style>
-<table id="T_b68fe">
+<table id="T_c20b2">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_b68fe_level0_col0">Test Data Point Number</th>
-<th class="col_heading level0 col1" id="T_b68fe_level0_col1">species</th>
-<th class="col_heading level0 col2" id="T_b68fe_level0_col2">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col3" id="T_b68fe_level0_col3">Insight Scores</th>
-<th class="col_heading level0 col4" id="T_b68fe_level0_col4">Accuracy</th>
-<th class="col_heading level0 col5" id="T_b68fe_level0_col5">Coverage</th>
-<th class="col_heading level0 col6" id="T_b68fe_level0_col6">Population</th>
-<th class="col_heading level0 col7" id="T_b68fe_level0_col7">Accuracy Count</th>
-<th class="col_heading level0 col8" id="T_b68fe_level0_col8">Total Population</th>
+<th class="col_heading level0 col0" id="T_c20b2_level0_col0">Feature</th>
+<th class="col_heading level0 col1" id="T_c20b2_level0_col1">Actual</th>
+<th class="col_heading level0 col2" id="T_c20b2_level0_col2">Optimal</th>
+<th class="col_heading level0 col3" id="T_c20b2_level0_col3">Percentage Change</th>
+<th class="col_heading level0 col4" id="T_c20b2_level0_col4">Absolute Change</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_b68fe_level0_row0">28</th>
-<td class="data row0 col0" id="T_b68fe_row0_col0">29</td>
-<td class="data row0 col1" id="T_b68fe_row0_col1">Iris-virginica</td>
-<td class="data row0 col2" id="T_b68fe_row0_col2">sepal_length is greater than 5.55,
-petal_width is greater than 1.75</td>
-<td class="data row0 col3" id="T_b68fe_row0_col3">0.836000</td>
-<td class="data row0 col4" id="T_b68fe_row0_col4">0.978300</td>
-<td class="data row0 col5" id="T_b68fe_row0_col5">0.306700</td>
-<td class="data row0 col6" id="T_b68fe_row0_col6">46</td>
-<td class="data row0 col7" id="T_b68fe_row0_col7">45</td>
-<td class="data row0 col8" id="T_b68fe_row0_col8">150</td>
+<th class="row_heading level0 row0" id="T_c20b2_level0_row0">0</th>
+<td class="data row0 col0" id="T_c20b2_row0_col0">Square_Footage</td>
+<td class="data row0 col1" id="T_c20b2_row0_col1">4012.000000</td>
+<td class="data row0 col2" id="T_c20b2_row0_col2">4814.400000</td>
+<td class="data row0 col3" id="T_c20b2_row0_col3">20.000000</td>
+<td class="data row0 col4" id="T_c20b2_row0_col4">802.400000</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_b68fe_level0_row1">29</th>
-<td class="data row1 col0" id="T_b68fe_row1_col0">30</td>
-<td class="data row1 col1" id="T_b68fe_row1_col1">Iris-virginica</td>
-<td class="data row1 col2" id="T_b68fe_row1_col2">petal_width is greater than 0.8,
-petal_length is greater than 4.75</td>
-<td class="data row1 col3" id="T_b68fe_row1_col3">0.833900</td>
-<td class="data row1 col4" id="T_b68fe_row1_col4">0.890900</td>
-<td class="data row1 col5" id="T_b68fe_row1_col5">0.366700</td>
-<td class="data row1 col6" id="T_b68fe_row1_col6">55</td>
-<td class="data row1 col7" id="T_b68fe_row1_col7">49</td>
-<td class="data row1 col8" id="T_b68fe_row1_col8">150</td>
+<th class="row_heading level0 row1" id="T_c20b2_level0_row1">1</th>
+<td class="data row1 col0" id="T_c20b2_row1_col0">Num_Bedrooms</td>
+<td class="data row1 col1" id="T_c20b2_row1_col1">3.000000</td>
+<td class="data row1 col2" id="T_c20b2_row1_col2">4.000000</td>
+<td class="data row1 col3" id="T_c20b2_row1_col3">33.300000</td>
+<td class="data row1 col4" id="T_c20b2_row1_col4">1.000000</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_b68fe_level0_row2">30</th>
-<td class="data row2 col0" id="T_b68fe_row2_col0">31</td>
-<td class="data row2 col1" id="T_b68fe_row2_col1">Iris-virginica</td>
-<td class="data row2 col2" id="T_b68fe_row2_col2">petal_width is greater than 1.75</td>
-<td class="data row2 col3" id="T_b68fe_row2_col3">0.802800</td>
-<td class="data row2 col4" id="T_b68fe_row2_col4">0.978300</td>
-<td class="data row2 col5" id="T_b68fe_row2_col5">0.306700</td>
-<td class="data row2 col6" id="T_b68fe_row2_col6">46</td>
-<td class="data row2 col7" id="T_b68fe_row2_col7">45</td>
-<td class="data row2 col8" id="T_b68fe_row2_col8">150</td>
+<th class="row_heading level0 row2" id="T_c20b2_level0_row2">2</th>
+<td class="data row2 col0" id="T_c20b2_row2_col0">Num_Bathrooms</td>
+<td class="data row2 col1" id="T_c20b2_row2_col1">1.000000</td>
+<td class="data row2 col2" id="T_c20b2_row2_col2">2.000000</td>
+<td class="data row2 col3" id="T_c20b2_row2_col3">100.000000</td>
+<td class="data row2 col4" id="T_c20b2_row2_col4">1.000000</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_b68fe_level0_row3">31</th>
-<td class="data row3 col0" id="T_b68fe_row3_col0">32</td>
-<td class="data row3 col1" id="T_b68fe_row3_col1">Iris-virginica</td>
-<td class="data row3 col2" id="T_b68fe_row3_col2">sepal_length is greater than 6.25,
-sepal_width is less than equal to 3.7,
-petal_length is greater than 5.05</td>
-<td class="data row3 col3" id="T_b68fe_row3_col3">0.752600</td>
-<td class="data row3 col4" id="T_b68fe_row3_col4">1.000000</td>
-<td class="data row3 col5" id="T_b68fe_row3_col5">0.220000</td>
-<td class="data row3 col6" id="T_b68fe_row3_col6">33</td>
-<td class="data row3 col7" id="T_b68fe_row3_col7">33</td>
-<td class="data row3 col8" id="T_b68fe_row3_col8">150</td>
+<th class="row_heading level0 row3" id="T_c20b2_level0_row3">3</th>
+<td class="data row3 col0" id="T_c20b2_row3_col0">Year_Built</td>
+<td class="data row3 col1" id="T_c20b2_row3_col1">2016.000000</td>
+<td class="data row3 col2" id="T_c20b2_row3_col2">2016.000000</td>
+<td class="data row3 col3" id="T_c20b2_row3_col3">0.000000</td>
+<td class="data row3 col4" id="T_c20b2_row3_col4">0.000000</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_b68fe_level0_row4">32</th>
-<td class="data row4 col0" id="T_b68fe_row4_col0">33</td>
-<td class="data row4 col1" id="T_b68fe_row4_col1">Iris-virginica</td>
-<td class="data row4 col2" id="T_b68fe_row4_col2">sepal_length is greater than 6.25,
-sepal_width is less than equal to 3.7</td>
-<td class="data row4 col3" id="T_b68fe_row4_col3">0.583500</td>
-<td class="data row4 col4" id="T_b68fe_row4_col4">0.714300</td>
-<td class="data row4 col5" id="T_b68fe_row4_col5">0.326700</td>
-<td class="data row4 col6" id="T_b68fe_row4_col6">49</td>
-<td class="data row4 col7" id="T_b68fe_row4_col7">35</td>
-<td class="data row4 col8" id="T_b68fe_row4_col8">150</td>
+<th class="row_heading level0 row4" id="T_c20b2_level0_row4">4</th>
+<td class="data row4 col0" id="T_c20b2_row4_col0">Lot_Size</td>
+<td class="data row4 col1" id="T_c20b2_row4_col1">2.100000</td>
+<td class="data row4 col2" id="T_c20b2_row4_col2">2.520000</td>
+<td class="data row4 col3" id="T_c20b2_row4_col3">20.000000</td>
+<td class="data row4 col4" id="T_c20b2_row4_col4">0.420000</td>
+</tr>
+<tr>
+<th class="row_heading level0 row5" id="T_c20b2_level0_row5">5</th>
+<td class="data row5 col0" id="T_c20b2_row5_col0">Garage_Size</td>
+<td class="data row5 col1" id="T_c20b2_row5_col1">1.000000</td>
+<td class="data row5 col2" id="T_c20b2_row5_col2">2.000000</td>
+<td class="data row5 col3" id="T_c20b2_row5_col3">100.000000</td>
+<td class="data row5 col4" id="T_c20b2_row5_col4">1.000000</td>
+</tr>
+<tr>
+<th class="row_heading level0 row6" id="T_c20b2_level0_row6">6</th>
+<td class="data row6 col0" id="T_c20b2_row6_col0">Neighborhood_Quality</td>
+<td class="data row6 col1" id="T_c20b2_row6_col1">5.000000</td>
+<td class="data row6 col2" id="T_c20b2_row6_col2">6.000000</td>
+<td class="data row6 col3" id="T_c20b2_row6_col3">20.000000</td>
+<td class="data row6 col4" id="T_c20b2_row6_col4">1.000000</td>
 </tr>
 </tbody>
 </table>
@@ -8138,316 +8330,7 @@ sepal_width is less than equal to 3.7</td>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=07a4efa2-fbdb-4846-83bc-7793d6eb4152">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.2.3.2-For-Class-Iris-versicolor">3.2.3.2 For Class Iris-versicolor<a class="anchor-link" href="#3.2.3.2-For-Class-Iris-versicolor">¶</a></h5>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=65e244e3-2ebe-4bce-a1ac-0d118ce5bc30">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">validate_df0</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="n">validate_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Iris-versicolor'</span><span class="p">]</span>
-<span class="n">ez_display_df</span><span class="p">(</span><span class="n">validate_df0</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<style type="text/css">
-#T_ffa14 th {
-  text-align: left;
-}
-#T_ffa14 td {
-  text-align: left;
-}
-</style>
-<table id="T_ffa14">
-<thead>
-<tr>
-<th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_ffa14_level0_col0">Test Data Point Number</th>
-<th class="col_heading level0 col1" id="T_ffa14_level0_col1">species</th>
-<th class="col_heading level0 col2" id="T_ffa14_level0_col2">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col3" id="T_ffa14_level0_col3">Insight Scores</th>
-<th class="col_heading level0 col4" id="T_ffa14_level0_col4">Accuracy</th>
-<th class="col_heading level0 col5" id="T_ffa14_level0_col5">Coverage</th>
-<th class="col_heading level0 col6" id="T_ffa14_level0_col6">Population</th>
-<th class="col_heading level0 col7" id="T_ffa14_level0_col7">Accuracy Count</th>
-<th class="col_heading level0 col8" id="T_ffa14_level0_col8">Total Population</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th class="row_heading level0 row0" id="T_ffa14_level0_row0">7</th>
-<td class="data row0 col0" id="T_ffa14_row0_col0">8</td>
-<td class="data row0 col1" id="T_ffa14_row0_col1">Iris-versicolor</td>
-<td class="data row0 col2" id="T_ffa14_row0_col2">petal_width is greater than 0.8,
-petal_length is less than equal to 4.75</td>
-<td class="data row0 col3" id="T_ffa14_row0_col3">0.862100</td>
-<td class="data row0 col4" id="T_ffa14_row0_col4">0.977800</td>
-<td class="data row0 col5" id="T_ffa14_row0_col5">0.300000</td>
-<td class="data row0 col6" id="T_ffa14_row0_col6">45</td>
-<td class="data row0 col7" id="T_ffa14_row0_col7">44</td>
-<td class="data row0 col8" id="T_ffa14_row0_col8">150</td>
-</tr>
-<tr>
-<th class="row_heading level0 row1" id="T_ffa14_level0_row1">8</th>
-<td class="data row1 col0" id="T_ffa14_row1_col0">9</td>
-<td class="data row1 col1" id="T_ffa14_row1_col1">Iris-versicolor</td>
-<td class="data row1 col2" id="T_ffa14_row1_col2">petal_width in ( 0.8, 1.75 )</td>
-<td class="data row1 col3" id="T_ffa14_row1_col3">0.843200</td>
-<td class="data row1 col4" id="T_ffa14_row1_col4">0.907400</td>
-<td class="data row1 col5" id="T_ffa14_row1_col5">0.360000</td>
-<td class="data row1 col6" id="T_ffa14_row1_col6">54</td>
-<td class="data row1 col7" id="T_ffa14_row1_col7">49</td>
-<td class="data row1 col8" id="T_ffa14_row1_col8">150</td>
-</tr>
-<tr>
-<th class="row_heading level0 row2" id="T_ffa14_level0_row2">9</th>
-<td class="data row2 col0" id="T_ffa14_row2_col0">10</td>
-<td class="data row2 col1" id="T_ffa14_row2_col1">Iris-versicolor</td>
-<td class="data row2 col2" id="T_ffa14_row2_col2">petal_width in ( 0.8, 1.75 ),
-petal_length is less than equal to 4.95,
-sepal_width is greater than 2.55</td>
-<td class="data row2 col3" id="T_ffa14_row2_col3">0.707500</td>
-<td class="data row2 col4" id="T_ffa14_row2_col4">1.000000</td>
-<td class="data row2 col5" id="T_ffa14_row2_col5">0.226700</td>
-<td class="data row2 col6" id="T_ffa14_row2_col6">34</td>
-<td class="data row2 col7" id="T_ffa14_row2_col7">34</td>
-<td class="data row2 col8" id="T_ffa14_row2_col8">150</td>
-</tr>
-<tr>
-<th class="row_heading level0 row3" id="T_ffa14_level0_row3">10</th>
-<td class="data row3 col0" id="T_ffa14_row3_col0">11</td>
-<td class="data row3 col1" id="T_ffa14_row3_col1">Iris-versicolor</td>
-<td class="data row3 col2" id="T_ffa14_row3_col2">sepal_length is greater than 5.55,
-petal_width in ( 0.7, 1.75 ),
-petal_length is less than equal to 4.95</td>
-<td class="data row3 col3" id="T_ffa14_row3_col3">0.707500</td>
-<td class="data row3 col4" id="T_ffa14_row3_col4">1.000000</td>
-<td class="data row3 col5" id="T_ffa14_row3_col5">0.240000</td>
-<td class="data row3 col6" id="T_ffa14_row3_col6">36</td>
-<td class="data row3 col7" id="T_ffa14_row3_col7">36</td>
-<td class="data row3 col8" id="T_ffa14_row3_col8">150</td>
-</tr>
-<tr>
-<th class="row_heading level0 row4" id="T_ffa14_level0_row4">11</th>
-<td class="data row4 col0" id="T_ffa14_row4_col0">12</td>
-<td class="data row4 col1" id="T_ffa14_row4_col1">Iris-versicolor</td>
-<td class="data row4 col2" id="T_ffa14_row4_col2">sepal_length in ( 5.55, 6.25 ),
-sepal_width in ( 2.65, 3.7 ),
-petal_width is less than equal to 1.7</td>
-<td class="data row4 col3" id="T_ffa14_row4_col3">0.698400</td>
-<td class="data row4 col4" id="T_ffa14_row4_col4">1.000000</td>
-<td class="data row4 col5" id="T_ffa14_row4_col5">0.126700</td>
-<td class="data row4 col6" id="T_ffa14_row4_col6">19</td>
-<td class="data row4 col7" id="T_ffa14_row4_col7">19</td>
-<td class="data row4 col8" id="T_ffa14_row4_col8">150</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d6f8bc9a-9728-4cd7-8231-b446640297c1">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">3.2.4 Display Filtered Data for Specific Record Numbers<a class="anchor-link" href="#3.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9d7ea0e3-36d8-4bcf-95e8-0138f563cd13">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">record_number</span><span class="p">)):</span>
-    <span class="nb">print</span> <span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validation_filter'</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">'Augmented Intelligence Insights'</span><span class="p">])</span>
-    <span class="n">filter_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validation_filter'</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">'filtered_data'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">val_response</span><span class="p">[</span>
-                             <span class="s1">'validation_filter'</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">'filtered_data'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">])</span> 
-    <span class="n">ez_display_df</span><span class="p">(</span><span class="n">filter_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-    <span class="nb">print</span> <span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>sepal_length is less than equal to 5.55
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<style type="text/css">
-#T_1cf8b th {
-  text-align: left;
-}
-#T_1cf8b td {
-  text-align: left;
-}
-</style>
-<table id="T_1cf8b">
-<thead>
-<tr>
-<th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_1cf8b_level0_col0">sepal_length</th>
-<th class="col_heading level0 col1" id="T_1cf8b_level0_col1">sepal_width</th>
-<th class="col_heading level0 col2" id="T_1cf8b_level0_col2">petal_length</th>
-<th class="col_heading level0 col3" id="T_1cf8b_level0_col3">petal_width</th>
-<th class="col_heading level0 col4" id="T_1cf8b_level0_col4">species</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th class="row_heading level0 row0" id="T_1cf8b_level0_row0">0</th>
-<td class="data row0 col0" id="T_1cf8b_row0_col0">5.100000</td>
-<td class="data row0 col1" id="T_1cf8b_row0_col1">3.500000</td>
-<td class="data row0 col2" id="T_1cf8b_row0_col2">1.400000</td>
-<td class="data row0 col3" id="T_1cf8b_row0_col3">0.200000</td>
-<td class="data row0 col4" id="T_1cf8b_row0_col4">IRIS-SETOSA</td>
-</tr>
-<tr>
-<th class="row_heading level0 row1" id="T_1cf8b_level0_row1">1</th>
-<td class="data row1 col0" id="T_1cf8b_row1_col0">4.900000</td>
-<td class="data row1 col1" id="T_1cf8b_row1_col1">3.000000</td>
-<td class="data row1 col2" id="T_1cf8b_row1_col2">1.400000</td>
-<td class="data row1 col3" id="T_1cf8b_row1_col3">0.200000</td>
-<td class="data row1 col4" id="T_1cf8b_row1_col4">IRIS-SETOSA</td>
-</tr>
-<tr>
-<th class="row_heading level0 row2" id="T_1cf8b_level0_row2">2</th>
-<td class="data row2 col0" id="T_1cf8b_row2_col0">4.700000</td>
-<td class="data row2 col1" id="T_1cf8b_row2_col1">3.200000</td>
-<td class="data row2 col2" id="T_1cf8b_row2_col2">1.300000</td>
-<td class="data row2 col3" id="T_1cf8b_row2_col3">0.200000</td>
-<td class="data row2 col4" id="T_1cf8b_row2_col4">IRIS-SETOSA</td>
-</tr>
-<tr>
-<th class="row_heading level0 row3" id="T_1cf8b_level0_row3">3</th>
-<td class="data row3 col0" id="T_1cf8b_row3_col0">4.600000</td>
-<td class="data row3 col1" id="T_1cf8b_row3_col1">3.100000</td>
-<td class="data row3 col2" id="T_1cf8b_row3_col2">1.500000</td>
-<td class="data row3 col3" id="T_1cf8b_row3_col3">0.200000</td>
-<td class="data row3 col4" id="T_1cf8b_row3_col4">IRIS-SETOSA</td>
-</tr>
-<tr>
-<th class="row_heading level0 row4" id="T_1cf8b_level0_row4">4</th>
-<td class="data row4 col0" id="T_1cf8b_row4_col0">5.000000</td>
-<td class="data row4 col1" id="T_1cf8b_row4_col1">3.600000</td>
-<td class="data row4 col2" id="T_1cf8b_row4_col2">1.400000</td>
-<td class="data row4 col3" id="T_1cf8b_row4_col3">0.200000</td>
-<td class="data row4 col4" id="T_1cf8b_row4_col4">IRIS-SETOSA</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>
-
-sepal_length in ( 5.55, 6.75 ),
-sepal_width is greater than 3.7
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<style type="text/css">
-#T_fbb85 th {
-  text-align: left;
-}
-#T_fbb85 td {
-  text-align: left;
-}
-</style>
-<table id="T_fbb85">
-<thead>
-<tr>
-<th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_fbb85_level0_col0">sepal_length</th>
-<th class="col_heading level0 col1" id="T_fbb85_level0_col1">sepal_width</th>
-<th class="col_heading level0 col2" id="T_fbb85_level0_col2">petal_length</th>
-<th class="col_heading level0 col3" id="T_fbb85_level0_col3">petal_width</th>
-<th class="col_heading level0 col4" id="T_fbb85_level0_col4">species</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th class="row_heading level0 row0" id="T_fbb85_level0_row0">0</th>
-<td class="data row0 col0" id="T_fbb85_row0_col0">5.800000</td>
-<td class="data row0 col1" id="T_fbb85_row0_col1">4.000000</td>
-<td class="data row0 col2" id="T_fbb85_row0_col2">1.200000</td>
-<td class="data row0 col3" id="T_fbb85_row0_col3">0.200000</td>
-<td class="data row0 col4" id="T_fbb85_row0_col4">IRIS-SETOSA</td>
-</tr>
-<tr>
-<th class="row_heading level0 row1" id="T_fbb85_level0_row1">1</th>
-<td class="data row1 col0" id="T_fbb85_row1_col0">5.700000</td>
-<td class="data row1 col1" id="T_fbb85_row1_col1">4.400000</td>
-<td class="data row1 col2" id="T_fbb85_row1_col2">1.500000</td>
-<td class="data row1 col3" id="T_fbb85_row1_col3">0.400000</td>
-<td class="data row1 col4" id="T_fbb85_row1_col4">IRIS-SETOSA</td>
-</tr>
-<tr>
-<th class="row_heading level0 row2" id="T_fbb85_level0_row2">2</th>
-<td class="data row2 col0" id="T_fbb85_row2_col0">5.700000</td>
-<td class="data row2 col1" id="T_fbb85_row2_col1">3.800000</td>
-<td class="data row2 col2" id="T_fbb85_row2_col2">1.700000</td>
-<td class="data row2 col3" id="T_fbb85_row2_col3">0.300000</td>
-<td class="data row2 col4" id="T_fbb85_row2_col4">IRIS-SETOSA</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>
-
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7b49167a-a76b-482e-9d4f-f892851952cc">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8461,7 +8344,7 @@ sepal_width is greater than 3.7
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6ec78abe">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

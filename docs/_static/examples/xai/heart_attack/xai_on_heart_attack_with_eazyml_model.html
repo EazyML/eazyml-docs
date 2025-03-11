@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Data_Quality</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>XAI_on_Heart_Attack_with_EazyML_Model</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7312,7 +7312,6 @@ a.anchor-link {
                     processEnvironments: true
                 },
                 displayAlign: 'center',
-                messageStyle: 'none',
                 CommonHTML: {
                     linebreaks: {
                     automatic: true
@@ -7511,18 +7510,18 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ce1a5dfe-7aac-4aa0-8f15-e6788ed54b6d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c57f452e-88d1-4318-8072-b984cae2879f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="EazyML-Data-Quality-Template">EazyML Data Quality Template<a class="anchor-link" href="#EazyML-Data-Quality-Template">¶</a></h1>
+<h1 id="EazyML-Explainable-AI-Template">EazyML Explainable AI Template<a class="anchor-link" href="#EazyML-Explainable-AI-Template">¶</a></h1>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9ea2af79-a33f-4f8a-966c-a52301c3d3d3">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ec6951e0-1c7e-4cc3-a93d-eae7960c99f6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7532,7 +7531,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7564d2af-384f-4db5-9b23-08a2d467563e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=159fc5f7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7540,28 +7539,33 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>eazyml-data-quality
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>eazyml-xai
 <span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>eazyml-automl
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>gdown<span class="w"> </span>python-dotenv
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4472ce57-f70b-499e-b73f-323fababe39c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d300545a-a429-4c48-ab1e-c148ae2a710d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">eazyml_data_quality</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">eazyml_xai</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ez_init</span><span class="p">,</span>
-    <span class="n">ez_data_quality</span>
+    <span class="n">ez_explain</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">eazyml</span> <span class="kn">import</span> <span class="n">ez_display_df</span><span class="p">,</span> <span class="n">ez_display_json</span>
+<span class="kn">from</span> <span class="nn">eazyml</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ez_display_df</span><span class="p">,</span>
+    <span class="n">ez_build_model</span>
+<span class="p">)</span>
+
 <span class="kn">import</span> <span class="nn">gdown</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -7572,8 +7576,20 @@ a.anchor-link {
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=72694c71">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dd0417d7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7583,12 +7599,12 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a019674e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e483eeac">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_init</span><span class="p">(</span><span class="n">access_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'EAZYML_ACCESS_KEY'</span><span class="p">))</span>
@@ -7597,8 +7613,21 @@ a.anchor-link {
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ae65c572-b631-4968-935d-e8349c5f5a70">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>{'success': True,
+ 'message': 'Initialized successfully. You may revoke your consent to sharing usage stats anytime. You have exclusive paid access.'}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b37ec197-edc0-4e77-9020-e176d880a2bc">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7608,7 +7637,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4814b88d-e23a-41b3-9239-2571b046741c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8e8fb501">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7616,417 +7645,357 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'1iW0QIS9Cuvqgi6VAwx5VuHixjSLqr0o2'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">gdown</span><span class="o">.</span><span class="n">download_folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'1EobxYR3pg_Z3Sd4sETfe4aJLAsT98fL2'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=2aa7312d-cd97-49f8-9341-57a4a32cbffc">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8097c5d5-ed97-4b4b-b8ae-c9819a7787f7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Names of the files that will be used by EazyML APIs</span>
-<span class="n">eazyml_train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"aframax_DEMO_2014_2022_train_processed_lag.xlsx"</span><span class="p">)</span>
-<span class="n">eazyml_test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"aframax_DEMO_2014_2022_test_raw.xlsx"</span><span class="p">)</span>
+<span class="n">train_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s1">'Heart_Attack_traindata.csv'</span><span class="p">)</span>
+<span class="n">test_file_path</span>  <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s1">'Heart_Attack_testdata.csv'</span><span class="p">)</span>
 
 <span class="c1"># The column name for outcome of interest</span>
-<span class="n">outcome</span> <span class="o">=</span> <span class="s2">"outcome_decision"</span>
+<span class="n">outcome</span> <span class="o">=</span> <span class="s1">'class'</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bf48dc36-9a00-4231-8240-94424909f517">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=71ca4f2c-0fc9-4db3-993a-8488e81cb5a1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-EazyML-Data-Quality-Assessment">3. EazyML Data Quality Assessment<a class="anchor-link" href="#3.-EazyML-Data-Quality-Assessment">¶</a></h2>
+<h2 id="3.-EazyML-Predictive-Models">3. EazyML Predictive Models<a class="anchor-link" href="#3.-EazyML-Predictive-Models">¶</a></h2>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=531b429a-ccf7-4f18-87c5-aea47361f6a7">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cd1dea51-1d9e-45b3-ad0e-97f4ddfbb03a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.1-Call-ez_data_quality-API,-Perform-All-Checks">3.1 Call ez_data_quality API, Perform All Checks<a class="anchor-link" href="#3.1-Call-ez_data_quality-API,-Perform-All-Checks">¶</a></h3>
+<h3 id="3.1-Reading-the-Datasets-and-Dropping-Unnecessary-Columns">3.1 Reading the Datasets and Dropping Unnecessary Columns<a class="anchor-link" href="#3.1-Reading-the-Datasets-and-Dropping-Unnecessary-Columns">¶</a></h3>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=04bb41ad-efef-4a63-8f9e-f633fab122e6">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c9a86d75-885e-4c89-a70b-a5765a8792b9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"data_shape"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"data_balance"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"data_emptiness"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"impute"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"data_outliers"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"remove_outliers"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"outcome_correlation"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"data_drift"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"model_drift"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"prediction_data"</span><span class="p">:</span> <span class="n">eazyml_test_file</span><span class="p">,</span>
-    <span class="s2">"data_completeness"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"data_correctness"</span><span class="p">:</span> <span class="s2">"yes"</span>
-<span class="p">}</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">discard_columns</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="n">res</span> <span class="o">=</span> <span class="n">ez_data_quality</span><span class="p">(</span><span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0f2c95de-dbb0-45b6-ab70-70ae08992b3c">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.2-Data-Quality-Assessment-Results">3.2 Data Quality Assessment Results<a class="anchor-link" href="#3.2-Data-Quality-Assessment-Results">¶</a></h3>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1bd0b210-8520-4db5-b4f2-6e2626c0acf2">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.1-Data-Quality-Alerts:-Check-if-Any-Alerts-Are-True">3.2.1 Data Quality Alerts: Check if Any Alerts Are True<a class="anchor-link" href="#3.2.1-Data-Quality-Alerts:-Check-if-Any-Alerts-Are-True">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8c311a7b-6712-44fb-90d5-ca4ff032bf4a">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">alerts</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'data_bad_quality_alerts'</span><span class="p">]</span>
-<span class="n">ez_display_json</span><span class="p">(</span><span class="n">alerts</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=08bcb321-217e-40cc-a3ad-e61977c90869">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.2-Data-Completeness?">3.2.2 Data Completeness?<a class="anchor-link" href="#3.2.2-Data-Completeness?">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=80c840ef-0ef5-4a38-9816-f4f40d20897a">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_completeness_quality'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=db2b4b6e-874a-4370-8096-c98163b9011e">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.3-Data-Balanced?">3.2.3 Data Balanced?<a class="anchor-link" href="#3.2.3-Data-Balanced?">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7db28322-b8f7-4c52-9f0f-2bca8c5443bd">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_balance_quality'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d8d6df7d-3521-4f0b-91d7-9c3bf3d1fee3">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.4-Data-Correctness?">3.2.4 Data Correctness?<a class="anchor-link" href="#3.2.4-Data-Correctness?">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=fbcb4438-0384-4965-bf50-914d79163381">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_correctness_quality'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f8146d59-48da-416a-805d-a8c9f7c32498">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.5-Data-Correlations?-Look-for-Strongly-Correlated-Features">3.2.5 Data Correlations? Look for Strongly Correlated Features<a class="anchor-link" href="#3.2.5-Data-Correlations?-Look-for-Strongly-Correlated-Features">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=17564231-5dd5-4a3a-86d9-c063bff8b731">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">feat_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_correlation_quality'</span><span class="p">][</span><span class="s1">'data_correlation'</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="n">df_corr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">feat_list</span><span class="p">)</span>
-<span class="n">corr_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="c1"># Reading Training Data</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">)</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">discard_columns</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s1">'data_correlation_quality'</span><span class="p">][</span><span class="s1">'data_correlation'</span><span class="p">]:</span>
-    <span class="n">corr_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0000</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_corr</span><span class="o">.</span><span class="n">columns</span><span class="p">))]</span>
-    <span class="n">corr_val</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">corr_list</span><span class="p">[</span><span class="n">feat_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">feat</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">1.0000</span>
-    <span class="k">for</span> <span class="n">another_feat</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s1">'data_correlation_quality'</span><span class="p">][</span><span class="s1">'data_correlation'</span><span class="p">][</span><span class="n">feat</span><span class="p">]:</span>
-        <span class="n">corr_list</span><span class="p">[</span><span class="n">feat_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">another_feat</span><span class="p">)]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'data_correlation_quality'</span><span class="p">][</span><span class="s1">'data_correlation'</span><span class="p">][</span><span class="n">feat</span><span class="p">][</span><span class="n">another_feat</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s1">'data_correlation_quality'</span><span class="p">][</span><span class="s1">'data_correlation'</span><span class="p">][</span><span class="n">feat</span><span class="p">][</span><span class="n">another_feat</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.90</span><span class="p">:</span>
-            <span class="n">corr_val</span><span class="p">[</span><span class="n">another_feat</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'data_correlation_quality'</span><span class="p">][</span><span class="s1">'data_correlation'</span><span class="p">][</span><span class="n">feat</span><span class="p">][</span><span class="n">another_feat</span><span class="p">]</span>
-    <span class="n">df_corr</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_list</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">corr_val</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">corr_dict</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_val</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c305a788-e7fc-4608-af4c-bb874e53a230">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">corr_dict</span><span class="p">)</span>
+<span class="c1"># Reading Test Data</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">test_file_path</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">discard_columns</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=17fe76d1-c87a-485b-abfb-938ff2a535a5">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2fe446a4-4885-4076-b35c-ce4458cba68c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.6-Data-Emptiness?">3.2.6 Data Emptiness?<a class="anchor-link" href="#3.2.6-Data-Emptiness?">¶</a></h4>
+<h3 id="3.2-Model-Training:-Several-Models-Trained">3.2 Model Training: Several Models Trained<a class="anchor-link" href="#3.2-Model-Training:-Several-Models-Trained">¶</a></h3>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8b50d2f7-fc34-4f25-9388-9cf5f592ff5d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=1f55b10f-92b5-4595-b92d-19b641fc0b33">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_emptiness_quality'</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">## Build Model</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'model_type'</span><span class="p">:</span> <span class="s1">'predictive'</span><span class="p">}</span>
+<span class="n">resp</span> <span class="o">=</span> <span class="n">ez_build_model</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=04bc5cc9-131d-4111-975a-275a8a38bb0e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5bef0a36-da82-4bc9-8dae-e5ab69d84cab">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.7-Data-Dimension?-Is-it-Adequate?">3.2.7 Data Dimension? Is it Adequate?<a class="anchor-link" href="#3.2.7-Data-Dimension?-Is-it-Adequate?">¶</a></h4>
+<h3 id="3.3-Show-Model-Performance">3.3 Show Model Performance<a class="anchor-link" href="#3.3-Show-Model-Performance">¶</a></h3>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cd0751ac-d1a7-4c7e-8bd6-3f666ff237bb">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8af9ae29-8bb9-4ec9-b66b-482f0d52e185">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_shape_quality'</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">resp</span><span class="p">[</span><span class="s1">'model_performance'</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=96ceda2a-751b-416d-861c-b05dd301c4ac">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_3629a th {
+  text-align: left;
+}
+#T_3629a td {
+  text-align: left;
+}
+</style>
+<table id="T_3629a">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_3629a_level0_col0">Model</th>
+<th class="col_heading level0 col1" id="T_3629a_level0_col1">Kappa</th>
+<th class="col_heading level0 col2" id="T_3629a_level0_col2">Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_3629a_level0_row0">0</th>
+<td class="data row0 col0" id="T_3629a_row0_col0">Bagged Decision Trees with Information Gain</td>
+<td class="data row0 col1" id="T_3629a_row0_col1">0.98</td>
+<td class="data row0 col2" id="T_3629a_row0_col2">0.99</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_3629a_level0_row1">1</th>
+<td class="data row1 col0" id="T_3629a_row1_col0">Random Forest with Information Gain</td>
+<td class="data row1 col1" id="T_3629a_row1_col1">0.98</td>
+<td class="data row1 col2" id="T_3629a_row1_col2">0.99</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_3629a_level0_row2">2</th>
+<td class="data row2 col0" id="T_3629a_row2_col0">Gradient Boosting Classifier</td>
+<td class="data row2 col1" id="T_3629a_row2_col1">0.98</td>
+<td class="data row2 col2" id="T_3629a_row2_col2">0.99</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_3629a_level0_row3">3</th>
+<td class="data row3 col0" id="T_3629a_row3_col0">Boosted Decision Trees with InformationGain</td>
+<td class="data row3 col1" id="T_3629a_row3_col1">0.96</td>
+<td class="data row3 col2" id="T_3629a_row3_col2">0.98</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_3629a_level0_row4">4</th>
+<td class="data row4 col0" id="T_3629a_row4_col0">Logistic Regression</td>
+<td class="data row4 col1" id="T_3629a_row4_col1">0.59</td>
+<td class="data row4 col2" id="T_3629a_row4_col2">0.80</td>
+</tr>
+<tr>
+<th class="row_heading level0 row5" id="T_3629a_level0_row5">5</th>
+<td class="data row5 col0" id="T_3629a_row5_col0">Naive Bayes</td>
+<td class="data row5 col1" id="T_3629a_row5_col1">0.44</td>
+<td class="data row5 col2" id="T_3629a_row5_col2">0.70</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2a1d67cb-8b9d-4fa5-8a73-d30c3924d4cd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.8-Data-Outliers?">3.2.8 Data Outliers?<a class="anchor-link" href="#3.2.8-Data-Outliers?">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=d1634bff-99c5-4c73-98d7-75b86466e969">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="n">outlier_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_outliers_quality'</span><span class="p">][</span><span class="s1">'outliers'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> \
-                              <span class="n">columns</span><span class="o">=</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_outliers_quality'</span><span class="p">][</span><span class="s1">'outliers'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">],</span> \
-                              <span class="n">index</span><span class="o">=</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_outliers_quality'</span><span class="p">][</span><span class="s1">'outliers'</span><span class="p">][</span><span class="s1">'indices'</span><span class="p">])</span>
-    <span class="n">ez_display_df</span><span class="p">(</span><span class="n">outlier_df</span><span class="p">)</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="nb">print</span> <span class="p">(</span><span class="s2">"no outlier"</span><span class="p">)</span>
-</pre></div>
+<h2 id="4.-Get-Explanations">4. Get Explanations<a class="anchor-link" href="#4.-Get-Explanations">¶</a></h2>
 </div>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4e199efb-ca97-4bd5-98f3-6d3125a05d3f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=99f441ca-6782-45f1-8ea3-b8b97cd24efc">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.9-Data-Drift-(Between-Train-and-Test-Datasets)">3.2.9 Data Drift (Between Train and Test Datasets)<a class="anchor-link" href="#3.2.9-Data-Drift-(Between-Train-and-Test-Datasets)">¶</a></h4>
+<h3 id="4.1-Use-model_info-from-ez_build_model">4.1 Use model_info from ez_build_model<a class="anchor-link" href="#4.1-Use-model_info-from-ez_build_model">¶</a></h3>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=55f48f8e-487c-4ce1-9f19-665848bec64a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=3ee8bd89-757a-484c-a4db-832cfa1be241">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'data_drift_analysis'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=559aa4cf-0e66-4eb8-bee9-33b7654adcb8">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ks_drift</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'data_drift_analysis'</span><span class="p">][</span><span class="s1">'ks_data_drift_analysis'</span><span class="p">][</span><span class="s1">'feature : p_value'</span><span class="p">]</span>
-<span class="n">drift_columns</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">ks_drift</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">ks_drift</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
-        <span class="n">drift_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">ks_drift</span><span class="p">[</span><span class="n">feature</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># In extra info, we have model information</span>
+<span class="n">model_info</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s2">"model_info"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f07219c7-d077-40ca-8c8c-e4ade4ad6c74">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d1fd6df5-1678-47e8-82e8-60ec50d8f5c5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.10-Model-Drift-(Between-Train-and-Test-Datasets)">3.2.10 Model Drift (Between Train and Test Datasets)<a class="anchor-link" href="#3.2.10-Model-Drift-(Between-Train-and-Test-Datasets)">¶</a></h4>
+<h3 id="4.2-Get-Explanations-for-5-Points">4.2 Get Explanations for 5 Points<a class="anchor-link" href="#4.2-Get-Explanations-for-5-Points">¶</a></h3>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6ff897e8-0f71-44ae-99e7-d3eee28b2a64">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7a728d22-ec90-4eda-bb44-90eb68f63e2a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'model_drift_analysis'</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'record_number'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">ez_explain</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">test_file_path</span><span class="p">,</span> <span class="n">model_info</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=0485634e-4821-4293-894c-8cee12708fd1">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=04056729-384f-4e4e-909b-439bc3ae5053">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="4.3-Display-Explanation-DataFrame">4.3 Display Explanation DataFrame<a class="anchor-link" href="#4.3-Display-Explanation-DataFrame">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ca70ecde-30c2-473e-9f07-042a1e78a496">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">interval_drift</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'model_drift_analysis'</span><span class="p">][</span><span class="s1">'interval_model_drift_analysis'</span><span class="p">][</span><span class="s1">'feature : OF_I'</span><span class="p">]</span>
-<span class="n">model_drift_columns</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">interval_drift</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">interval_drift</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
-        <span class="n">model_drift_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">interval_drift</span><span class="p">[</span><span class="n">feature</span><span class="p">])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ex_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">'explanations'</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="n">response</span><span class="p">[</span><span class="s1">'explanations'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">ez_display_df</span><span class="p">(</span><span class="n">ex_df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=2bfb5205-0ede-4793-9d24-af68fbf28448">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_fcdae th {
+  text-align: left;
+}
+#T_fcdae td {
+  text-align: left;
+}
+</style>
+<table id="T_fcdae">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_fcdae_level0_col0">record_numbers</th>
+<th class="col_heading level0 col1" id="T_fcdae_level0_col1">prediction</th>
+<th class="col_heading level0 col2" id="T_fcdae_level0_col2">explanation</th>
+<th class="col_heading level0 col3" id="T_fcdae_level0_col3">explainability_score</th>
+<th class="col_heading level0 col4" id="T_fcdae_level0_col4">local_importance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_fcdae_level0_row0">0</th>
+<td class="data row0 col0" id="T_fcdae_row0_col0">1</td>
+<td class="data row0 col1" id="T_fcdae_row0_col1">negative</td>
+<td class="data row0 col2" id="T_fcdae_row0_col2"> troponin is 0.01 (that is in range -0.32, 0.01) , kcm is 1.8 (that is less than or equal to 4.95)</td>
+<td class="data row0 col3" id="T_fcdae_row0_col3">97%</td>
+<td class="data row0 col4" id="T_fcdae_row0_col4">{'troponin': 0.65, 'kcm': 0.18, 'pressurehight': 0.09, 'gender': 0.08}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_fcdae_level0_row1">1</th>
+<td class="data row1 col0" id="T_fcdae_row1_col0">6</td>
+<td class="data row1 col1" id="T_fcdae_row1_col1">negative</td>
+<td class="data row1 col2" id="T_fcdae_row1_col2"> troponin is 0.0 (that is in range -0.31, 0.01) , kcm is 1.83 (that is less than or equal to 4.95) , gender is 1 </td>
+<td class="data row1 col3" id="T_fcdae_row1_col3">96%</td>
+<td class="data row1 col4" id="T_fcdae_row1_col4">{'troponin': 0.65, 'kcm': 0.18, 'gender': 0.17}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_fcdae_level0_row2">2</th>
+<td class="data row2 col0" id="T_fcdae_row2_col0">7</td>
+<td class="data row2 col1" id="T_fcdae_row2_col1">negative</td>
+<td class="data row2 col2" id="T_fcdae_row2_col2"> pressurehight is 179.0 (that is more than 157.5) , troponin is 0.0 (that is more than -0.3), gender is not 1 </td>
+<td class="data row2 col3" id="T_fcdae_row2_col3">31%</td>
+<td class="data row2 col4" id="T_fcdae_row2_col4">{'pressurehight': 0.38, 'troponin': 0.36, 'kcm': 0.16, 'gender': 0.1}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_fcdae_level0_row3">3</th>
+<td class="data row3 col0" id="T_fcdae_row3_col0">8</td>
+<td class="data row3 col1" id="T_fcdae_row3_col1">positive</td>
+<td class="data row3 col2" id="T_fcdae_row3_col2"> kcm is 300.0 (that is more than 256.83) , pressurehight is 214.0 (that is more than 183.01) , troponin is 2.37 (that is less than or equal to 2.37)</td>
+<td class="data row3 col3" id="T_fcdae_row3_col3">25%</td>
+<td class="data row3 col4" id="T_fcdae_row3_col4">{'kcm': 0.7, 'troponin': 0.26}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_fcdae_level0_row4">4</th>
+<td class="data row4 col0" id="T_fcdae_row4_col0">9</td>
+<td class="data row4 col1" id="T_fcdae_row4_col1">negative</td>
+<td class="data row4 col2" id="T_fcdae_row4_col2"> troponin is 0.0 (that is in range -0.3, 0.01) , kcm is 2.35 (that is in range -2.14, 6.29)</td>
+<td class="data row4 col3" id="T_fcdae_row4_col3">96%</td>
+<td class="data row4 col4" id="T_fcdae_row4_col4">{'troponin': 0.65, 'kcm': 0.18, 'gender': 0.13}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a8538c11">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
