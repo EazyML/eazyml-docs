@@ -5,7 +5,7 @@ It contains a number of notebooks related to Data Quality.
 
 The following notebooks are available:
 
-1. `Heart attack <../_static/examples/dq/heart_attack/Data_Quality_Heart_Attack.html>`_ :download:`Download <../_static/notebooks/dq/heart_attack/Data_Quality_Heart_Attack.ipynb>`
+1. `Heart attack <../_static/examples/dq/heart_attack/data_quality_heart_attack.html>`_ :download:`Download <../_static/notebooks/dq/heart_attack/data_quality_heart_attack.ipynb>`
 2. `Walmart <../_static/examples/dq/walmart/data_quality_walmart.html>`_ :download:`Download <../_static/notebooks/dq/walmart/data_quality_walmart.ipynb>`
 
 Try on Colab :
