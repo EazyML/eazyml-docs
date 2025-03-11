@@ -7,9 +7,9 @@ variables that shift outcomes from unfavorable to favorable.
 
 The following notebooks are available:
 
-1. `Airline passengers satisfaction <../_static/examples/cf/airline_satisfaction/airline_classification_demo.html>`_
-2. `Mobile price classification <../_static/examples/cf/mobile_price_range/mobile_price_classification_demo.html>`_
-3. `House pricing regression <../_static/examples/cf/house_price_prediction/house_regression_demo.html>`_
+1. `Airline passengers satisfaction <../_static/examples/cf/airline_satisfaction/airline_classification_demo.html>`_ :download:`Download <../_static/notebooks/cf/airline_satisfaction/airline_classification_demo.ipynb>`
+2. `Mobile price classification <../_static/examples/cf/mobile_price_range/mobile_price_classification_demo.html>`_ :download:`Download <../_static/notebooks/cf/mobile_price_range/mobile_price_classification_demo.ipynb>`
+3. `House pricing regression <../_static/examples/cf/house_price_prediction/house_regression_demo.html>`_ :download:`Download <../_static/notebooks/cf/house_price_prediction/house_regression_demo.ipynb>`
 
 Try on Colab :
 

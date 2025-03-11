@@ -6,9 +6,9 @@ fundamentals of augmented intelligence for classification, regression and more.
 
 The following notebooks are available:
 
-1. `IRIS Insight <../_static/examples/insight/iris/Insight_on_IRIS.html>`_
-2. `Heart attack classification <../_static/examples/insight/heart_attack/insight_on_heart_attack_classification.html>`_
-3. `House price prediction <../_static/examples/insight/house_price_prediction/insight_on_house_price_regression.html>`_
+1. `IRIS Insight <../_static/examples/insight/iris/Insight_on_IRIS.html>`_ :download:`Download <../_static/notebooks/insight/iris/Insight_on_IRIS.ipynb>`
+2. `Heart attack classification <../_static/examples/insight/heart_attack/insight_on_heart_attack_classification.html>`_ :download:`Download <../_static/notebooks/insight/heart_attack/insight_on_heart_attack_classification.ipynb>`
+3. `House price prediction <../_static/examples/insight/house_price_prediction/insight_on_house_price_regression.html>`_ :download:`Download <../_static/notebooks/insight/house_price_prediction/insight_on_house_price_regression.ipynb>`
 
 Try on Colab :
 

@@ -7,14 +7,14 @@ fundamentals for a model's prediction.
 The following notebooks are available:
 
 1. Heart attack 
-    - `Heart attack notebook using EazyML modeling <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_eazyml_model.html>`_
-    - `Heart attack notebook using custom model and EazyML preprocessing <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_user_model_and_eazyml_preprocessing.html>`_
-    - `Heart attack notebook using custom model and custom preprocessing <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_user_model_and_preprocessing.html>`_
+    - `Heart attack notebook using EazyML modeling <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_eazyml_model.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/xai_on_heart_attack_with_eazyml_model.ipynb>`
+    - `Heart attack notebook using custom model and EazyML preprocessing <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_user_model_and_eazyml_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/xai_on_heart_attack_with_user_model_and_eazyml_preprocessing.ipynb>`
+    - `Heart attack notebook using custom model and custom preprocessing <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_user_model_and_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/xai_on_heart_attack_with_user_model_and_preprocessing.ipynb>`
 
 2. IRIS
-    - `IRIS notebook using EazyML modeling <../_static/examples/xai/iris/xai_on_iris_with_eazyml_model.html>`_
-    - `IRIS notebook using custom model and EazyML preprocessing <../_static/examples/xai/iris/xai_on_iris_with_user_model_and_eazyml_preprocessing.html>`_
-    - `IRIS notebook using custom model and custom preprocessing <../_static/examples/xai/iris/xai_on_iris_with_user_model_and_preprocessing.html>`_
+    - `IRIS notebook using EazyML modeling <../_static/examples/xai/iris/xai_on_iris_with_eazyml_model.html>`_ :download:`Download <../_static/notebooks/xai/iris/xai_on_iris_with_eazyml_model.ipynb>`
+    - `IRIS notebook using custom model and EazyML preprocessing <../_static/examples/xai/iris/xai_on_iris_with_user_model_and_eazyml_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/iris/xai_on_iris_with_user_model_and_eazyml_preprocessing.ipynb>`
+    - `IRIS notebook using custom model and custom preprocessing <../_static/examples/xai/iris/xai_on_iris_with_user_model_and_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/iris/xai_on_iris_with_user_model_and_preprocessing.ipynb>`
 
 
 Try on Colab :
