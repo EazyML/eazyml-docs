@@ -5,8 +5,10 @@ It contains a number of notebooks related to Data Quality.
 
 The following notebooks are available:
 
-1. `Aframax <../_static/examples/dq/aframax/Data_Quality.html>`_
+1. `Heart attack <../_static/examples/dq/heart_attack/Data_Quality_Heart_Attack.html>`_
+2. `Walmart <../_static/examples/dq/walmart/data_quality_walmart.html>`_
 
 Try on Colab :
 
-1. `Aframax Colab <https://drive.google.com/file/d/13ZzEpD3XCdWyzBv91iEPk6Fhn45pwc1Q/view?usp=drive_link>`_
+1. `Heart attack colab <https://drive.google.com/file/d/1Aoig8Eb4zd87AielP02UkJDKugB-xVta/view?usp=drive_link>`_
+2. `Walmart colab <https://drive.google.com/file/d/1kFZZj023GqiW5x1P4bU7vjHyOeiKG4YC/view?usp=drive_link>`_

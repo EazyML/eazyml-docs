@@ -10,4 +10,4 @@ The following notebooks are available:
 
 Try on Colab :
 
-1. `Brain MRI Colab <https://drive.google.com/file/d/1tamfMb38LbweoF3ZwUogi6L1KIUU0S8M/view?usp=drive_link>`_
+1. `Brain MRI colab <https://drive.google.com/file/d/1tamfMb38LbweoF3ZwUogi6L1KIUU0S8M/view?usp=drive_link>`_

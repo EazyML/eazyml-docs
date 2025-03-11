@@ -10,5 +10,5 @@ The following notebooks are available:
 
 Try on Colab :
 
-1. `Heart attack Colab <https://drive.google.com/file/d/1ifkz8ageupdD0LsPXx0sc75IIREcuqgz/view?usp=drive_link>`_
-2. `Walmart Colab <https://drive.google.com/file/d/1DgoQ5rZINlrg7yWZO4Xw4GaEOn0KY2Fi/view?usp=drive_link>`_
+1. `Heart attack colab <https://drive.google.com/file/d/1ifkz8ageupdD0LsPXx0sc75IIREcuqgz/view?usp=drive_link>`_
+2. `Walmart colab <https://drive.google.com/file/d/1DgoQ5rZINlrg7yWZO4Xw4GaEOn0KY2Fi/view?usp=drive_link>`_
