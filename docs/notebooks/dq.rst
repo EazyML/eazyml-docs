@@ -6,7 +6,6 @@ It contains a number of notebooks related to Data Quality.
 The following notebooks are available:
 
 1. `Heart attack classification <../_static/examples/dq/heart_attack/data_quality_heart_attack.html>`_ :download:`Download <../_static/notebooks/dq/heart_attack/data_quality_heart_attack.ipynb>`
-    - :download:`Dataset <https://www.kaggle.com/datasets/iamsouravbanerjee/heart-attack-prediction-dataset>`
 2. `Walmart sales prediction <../_static/examples/dq/walmart/data_quality_walmart.html>`_ :download:`Download <../_static/notebooks/dq/walmart/data_quality_walmart.ipynb>`
 
 Try on Colab :
