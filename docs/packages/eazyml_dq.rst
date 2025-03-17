@@ -23,7 +23,7 @@ To install ``Data Quality`` package:
 Available APIs
 --------------
 
-.. automodule:: eazyml_dq.client
+.. automodule:: eazyml_data_quality.client
    :members:
    :undoc-members:
    :exclude-members:

@@ -86,7 +86,6 @@ def ez_init(access_key: str=None,
                                 usage_delete=usage_delete)
     return init_resp
 
-
 def ez_xai_image_explain(filename,
                          model_path,
                          predicted_filename,
@@ -297,7 +296,6 @@ def ez_xai_image_explain(filename,
             "message": INTERNAL_SERVER_ERROR
         }
 
-
 def ez_image_active_learning(filenames,
                              model_path,
                              predicted_filenames,
@@ -501,7 +499,6 @@ def ez_image_active_learning(filenames,
             "success": False,
             "message": INTERNAL_SERVER_ERROR
         }
-
 
 def ez_image_online_learning(new_training_data_path,
                              model_path,
@@ -764,7 +761,6 @@ def ez_image_online_learning(new_training_data_path,
             "success": False,
             "message": INTERNAL_SERVER_ERROR
         }
-    
 
 def ez_image_model_evaluate(validation_data_path,
                              model_path,

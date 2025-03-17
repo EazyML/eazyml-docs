@@ -22,7 +22,7 @@ To install ``Counterfactual`` package:
 Available APIs
 --------------
 
-.. automodule:: eazyml_cf.client
+.. automodule:: eazyml_counterfactual.client
    :members:
    :undoc-members:
    :exclude-members: validate_input

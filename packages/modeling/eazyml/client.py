@@ -89,7 +89,6 @@ def ez_init(access_key: str=None,
                                 usage_delete=usage_delete)
     return init_resp
 
-
 def ez_build_model(train_data, outcome, options={}):
     """
     Initialize and build a predictive model based on the provided dataset and options.
@@ -527,7 +526,6 @@ def ez_build_model(train_data, outcome, options={}):
         log.log_db(("Exception in ez_model", e))
         log.log_db(traceback.print_exc())
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
-
 
 def ez_predict(test_data, model_info, options={}):
     """

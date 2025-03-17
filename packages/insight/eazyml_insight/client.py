@@ -54,7 +54,6 @@ def ez_init(access_key=None,
                                 usage_delete=usage_delete)
     return init_resp
 
-
 def ez_insight(train_data, outcome,
             options={}):
     """
@@ -247,8 +246,6 @@ def ez_insight(train_data, outcome,
         print(e)
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
-
-@validate_license
 def ez_validate(train_data, outcome, insights, test_data,
                 options={}):
     """

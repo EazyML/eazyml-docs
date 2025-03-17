@@ -50,7 +50,6 @@ def ez_init(access_key: str=None,
                                 usage_delete=usage_delete)
     return init_resp
 
-
 def ez_explain(train_data, outcome, test_data, model_info,
                options={}):
     """
