@@ -7,14 +7,14 @@ fundamentals for a model's prediction.
 The following notebooks are available:
 
 1. Heart attack 
-    - `Heart attack classification using EazyML modeling <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_eazyml_model.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/xai_on_heart_attack_with_eazyml_model.ipynb>`
-    - `Heart attack classification using custom model and EazyML preprocessing <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_user_model_and_eazyml_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/xai_on_heart_attack_with_user_model_and_eazyml_preprocessing.ipynb>`
-    - `Heart attack classification using custom model and custom preprocessing <../_static/examples/xai/heart_attack/xai_on_heart_attack_with_user_model_and_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/xai_on_heart_attack_with_user_model_and_preprocessing.ipynb>`
+    - `Heart attack classification using EazyML modeling <../_static/examples/xai/heart_attack/Heart_attack_classification_using_custom_model_and_custom_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/Heart_attack_classification_using_custom_model_and_custom_preprocessing.ipynb>`
+    - `Heart attack classification using custom model and EazyML preprocessing <../_static/examples/xai/heart_attack/Heart_attack_classification_using_custom_model_and_EazyML_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/Heart_attack_classification_using_custom_model_and_EazyML_preprocessing.ipynb>`
+    - `Heart attack classification using custom model and custom preprocessing <../_static/examples/xai/heart_attack/Heart_attack_classification_using_EazyML_modeling.html>`_ :download:`Download <../_static/notebooks/xai/heart_attack/Heart_attack_classification_using_EazyML_modeling.ipynb>`
 
 2. IRIS
-    - `IRIS flower species classification using EazyML modeling <../_static/examples/xai/iris/xai_on_iris_with_eazyml_model.html>`_ :download:`Download <../_static/notebooks/xai/iris/xai_on_iris_with_eazyml_model.ipynb>`
-    - `IRIS flower species classification using custom model and EazyML preprocessing <../_static/examples/xai/iris/xai_on_iris_with_user_model_and_eazyml_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/iris/xai_on_iris_with_user_model_and_eazyml_preprocessing.ipynb>`
-    - `IRIS flower species classification using custom model and custom preprocessing <../_static/examples/xai/iris/xai_on_iris_with_user_model_and_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/iris/xai_on_iris_with_user_model_and_preprocessing.ipynb>`
+    - `IRIS flower species classification using EazyML modeling <../_static/examples/xai/iris/IRIS_flower_species_classification_using_custom_model_and_custom_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/iris/IRIS_flower_species_classification_using_custom_model_and_custom_preprocessing.ipynb>`
+    - `IRIS flower species classification using custom model and EazyML preprocessing <../_static/examples/xai/iris/IRIS_flower_species_classification_using_custom_model_and_EazyML_preprocessing.html>`_ :download:`Download <../_static/notebooks/xai/iris/IRIS_flower_species_classification_using_custom_model_and_EazyML_preprocessing.ipynb>`
+    - `IRIS flower species classification using custom model and custom preprocessing <../_static/examples/xai/iris/IRIS_flower_species_classification_using_EazyML_modeling.html>`_ :download:`Download <../_static/notebooks/xai/iris/IRIS_flower_species_classification_using_EazyML_modeling.ipynb>`
 
 
 Try on Colab :
