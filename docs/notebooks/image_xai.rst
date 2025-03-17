@@ -11,4 +11,4 @@ The following notebooks are available:
 
 Try on Colab :
 
-1. `Brain mri Colab <https://drive.google.com/file/d/1tamfMb38LbweoF3ZwUogi6L1KIUU0S8M/view?usp=drive_link>`_
+1. `Brain mri Colab <../https://drive.google.com/file/d/1tamfMb38LbweoF3ZwUogi6L1KIUU0S8M/view?usp=drive_link>`_
