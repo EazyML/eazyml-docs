@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Heart_attack_classification_using_EazyML_modeling</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Heart_attack_classification_using_EazyML_modeling_copy</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7548,12 +7548,12 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=d300545a-a429-4c48-ab1e-c148ae2a710d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d300545a-a429-4c48-ab1e-c148ae2a710d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -7577,6 +7577,18 @@ a.anchor-link {
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dd0417d7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7588,16 +7600,29 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e483eeac">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e483eeac">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_init</span><span class="p">(</span><span class="n">access_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'EAZYML_ACCESS_KEY'</span><span class="p">))</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>{'success': True,
+ 'message': 'Initialized successfully. You may revoke your consent to sharing usage stats anytime. You have exclusive paid access.'}</pre>
 </div>
 </div>
 </div>
@@ -7632,7 +7657,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Names of the files that will be used by EazyML APIs</span>
@@ -7673,7 +7698,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">discard_columns</span> <span class="o">=</span> <span class="p">[]</span>
@@ -7706,7 +7731,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1">## Build Model</span>
@@ -7728,16 +7753,83 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8af9ae29-8bb9-4ec9-b66b-482f0d52e185">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8af9ae29-8bb9-4ec9-b66b-482f0d52e185">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">resp</span><span class="p">[</span><span class="s1">'model_performance'</span><span class="p">])</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_7d71d th {
+  text-align: left;
+}
+#T_7d71d td {
+  text-align: left;
+}
+</style>
+<table id="T_7d71d">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_7d71d_level0_col0">Model</th>
+<th class="col_heading level0 col1" id="T_7d71d_level0_col1">Kappa</th>
+<th class="col_heading level0 col2" id="T_7d71d_level0_col2">Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_7d71d_level0_row0">0</th>
+<td class="data row0 col0" id="T_7d71d_row0_col0">Bagged Decision Trees with Information Gain</td>
+<td class="data row0 col1" id="T_7d71d_row0_col1">0.98</td>
+<td class="data row0 col2" id="T_7d71d_row0_col2">0.99</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_7d71d_level0_row1">1</th>
+<td class="data row1 col0" id="T_7d71d_row1_col0">Random Forest with Information Gain</td>
+<td class="data row1 col1" id="T_7d71d_row1_col1">0.98</td>
+<td class="data row1 col2" id="T_7d71d_row1_col2">0.99</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_7d71d_level0_row2">2</th>
+<td class="data row2 col0" id="T_7d71d_row2_col0">Gradient Boosting Classifier</td>
+<td class="data row2 col1" id="T_7d71d_row2_col1">0.98</td>
+<td class="data row2 col2" id="T_7d71d_row2_col2">0.99</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_7d71d_level0_row3">3</th>
+<td class="data row3 col0" id="T_7d71d_row3_col0">Boosted Decision Trees with InformationGain</td>
+<td class="data row3 col1" id="T_7d71d_row3_col1">0.96</td>
+<td class="data row3 col2" id="T_7d71d_row3_col2">0.98</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_7d71d_level0_row4">4</th>
+<td class="data row4 col0" id="T_7d71d_row4_col0">Logistic Regression</td>
+<td class="data row4 col1" id="T_7d71d_row4_col1">0.59</td>
+<td class="data row4 col2" id="T_7d71d_row4_col2">0.80</td>
+</tr>
+<tr>
+<th class="row_heading level0 row5" id="T_7d71d_level0_row5">5</th>
+<td class="data row5 col0" id="T_7d71d_row5_col0">Naive Bayes</td>
+<td class="data row5 col1" id="T_7d71d_row5_col1">0.44</td>
+<td class="data row5 col2" id="T_7d71d_row5_col2">0.70</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -7769,7 +7861,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># In extra info, we have model information</span>
@@ -7795,7 +7887,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'record_number'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]}</span>
@@ -7816,17 +7908,90 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=ca70ecde-30c2-473e-9f07-042a1e78a496">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ca70ecde-30c2-473e-9f07-042a1e78a496">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ex_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">'explanations'</span><span class="p">]],</span> <span class="n">columns</span><span class="o">=</span><span class="n">response</span><span class="p">[</span><span class="s1">'explanations'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="n">ez_display_df</span><span class="p">(</span><span class="n">ex_df</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_47257 th {
+  text-align: left;
+}
+#T_47257 td {
+  text-align: left;
+}
+</style>
+<table id="T_47257">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_47257_level0_col0">record_numbers</th>
+<th class="col_heading level0 col1" id="T_47257_level0_col1">prediction</th>
+<th class="col_heading level0 col2" id="T_47257_level0_col2">explanation</th>
+<th class="col_heading level0 col3" id="T_47257_level0_col3">explainability_score</th>
+<th class="col_heading level0 col4" id="T_47257_level0_col4">local_importance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_47257_level0_row0">0</th>
+<td class="data row0 col0" id="T_47257_row0_col0">1</td>
+<td class="data row0 col1" id="T_47257_row0_col1">negative</td>
+<td class="data row0 col2" id="T_47257_row0_col2"> troponin is 0.01 (that is in range -0.32, 0.01) , kcm is 1.8 (that is less than or equal to 4.95)</td>
+<td class="data row0 col3" id="T_47257_row0_col3">97%</td>
+<td class="data row0 col4" id="T_47257_row0_col4">{'troponin': 0.65, 'kcm': 0.18, 'pressurehight': 0.09, 'gender': 0.08}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_47257_level0_row1">1</th>
+<td class="data row1 col0" id="T_47257_row1_col0">6</td>
+<td class="data row1 col1" id="T_47257_row1_col1">negative</td>
+<td class="data row1 col2" id="T_47257_row1_col2"> troponin is 0.0 (that is in range -0.3, 0.01) , kcm is 1.83 (that is in range -2.4, 6.29)</td>
+<td class="data row1 col3" id="T_47257_row1_col3">96%</td>
+<td class="data row1 col4" id="T_47257_row1_col4">{'troponin': 0.64, 'kcm': 0.19, 'gender': 0.16}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_47257_level0_row2">2</th>
+<td class="data row2 col0" id="T_47257_row2_col0">7</td>
+<td class="data row2 col1" id="T_47257_row2_col1">negative</td>
+<td class="data row2 col2" id="T_47257_row2_col2"> pressurehight is 179.0 (that is more than 157.5) , troponin is 0.0 (that is more than -0.3), gender is not 1 </td>
+<td class="data row2 col3" id="T_47257_row2_col3">31%</td>
+<td class="data row2 col4" id="T_47257_row2_col4">{'pressurehight': 0.38, 'troponin': 0.36, 'kcm': 0.16, 'gender': 0.1}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_47257_level0_row3">3</th>
+<td class="data row3 col0" id="T_47257_row3_col0">8</td>
+<td class="data row3 col1" id="T_47257_row3_col1">positive</td>
+<td class="data row3 col2" id="T_47257_row3_col2"> kcm is 300.0 (that is more than 256.83) , pressurehight is 214.0 (that is more than 183.01) , troponin is 2.37 (that is less than or equal to 2.37)</td>
+<td class="data row3 col3" id="T_47257_row3_col3">25%</td>
+<td class="data row3 col4" id="T_47257_row3_col4">{'kcm': 0.7, 'troponin': 0.26}</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_47257_level0_row4">4</th>
+<td class="data row4 col0" id="T_47257_row4_col0">9</td>
+<td class="data row4 col1" id="T_47257_row4_col1">negative</td>
+<td class="data row4 col2" id="T_47257_row4_col2"> troponin is 0.0 (that is in range -0.3, 0.01) , kcm is 2.35 (that is in range -2.14, 6.29)</td>
+<td class="data row4 col3" id="T_47257_row4_col3">96%</td>
+<td class="data row4 col4" id="T_47257_row4_col4">{'troponin': 0.65, 'kcm': 0.18, 'gender': 0.13}</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>

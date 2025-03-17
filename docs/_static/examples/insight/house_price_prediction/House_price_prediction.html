@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>House_price_prediction</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>House_price_prediction_copy</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7548,12 +7548,12 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=47be001c-67df-4054-a3c6-77c36d6e2c14">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=47be001c-67df-4054-a3c6-77c36d6e2c14">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -7574,6 +7574,18 @@ a.anchor-link {
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=efd8316f-858b-4823-9938-4cf1da204140">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7585,16 +7597,29 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=fb332c0f-43d1-4b1b-ab98-9fa713f8f4dd">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fb332c0f-43d1-4b1b-ab98-9fa713f8f4dd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_init</span><span class="p">(</span><span class="n">access_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'EAZYML_ACCESS_KEY'</span><span class="p">))</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>{'success': True,
+ 'message': 'Initialized successfully. You may revoke your consent to sharing usage stats anytime. You have exclusive paid access.'}</pre>
 </div>
 </div>
 </div>
@@ -7629,7 +7654,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Names of the files that will be used by EazyML APIs</span>
@@ -7681,7 +7706,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">ez_insight</span><span class="p">(</span><span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
@@ -7706,7 +7731,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">insights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">])</span>
@@ -7726,16 +7751,81 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9e5dc70f-fc64-4059-ad23-407c58978198">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9e5dc70f-fc64-4059-ad23-407c58978198">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">insights_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_ebc2f th {
+  text-align: left;
+}
+#T_ebc2f td {
+  text-align: left;
+}
+</style>
+<table id="T_ebc2f">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_ebc2f_level0_col0">House_Price</th>
+<th class="col_heading level0 col1" id="T_ebc2f_level0_col1">Augmented Intelligence Insights</th>
+<th class="col_heading level0 col2" id="T_ebc2f_level0_col2">Insight Scores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_ebc2f_level0_row0">0</th>
+<td class="data row0 col0" id="T_ebc2f_row0_col0">783720.906  [+/- 44168.201]</td>
+<td class="data row0 col1" id="T_ebc2f_row0_col1">Square_Footage in ( 3344.0, 3918.0 )</td>
+<td class="data row0 col2" id="T_ebc2f_row0_col2">0.924100</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_ebc2f_level0_row1">1</th>
+<td class="data row1 col0" id="T_ebc2f_row1_col0">530132.99  [+/- 31276.672]</td>
+<td class="data row1 col1" id="T_ebc2f_row1_col1">Square_Footage in ( 2220.5, 2508.5 )</td>
+<td class="data row1 col2" id="T_ebc2f_row1_col2">0.896700</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_ebc2f_level0_row2">2</th>
+<td class="data row2 col0" id="T_ebc2f_row2_col0">990834.236  [+/- 28225.397]</td>
+<td class="data row2 col1" id="T_ebc2f_row2_col1">Square_Footage in ( 4350.5, 4742.5 ),
+Year_Built is greater than 1975.5</td>
+<td class="data row2 col2" id="T_ebc2f_row2_col2">0.875700</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_ebc2f_level0_row3">3</th>
+<td class="data row3 col0" id="T_ebc2f_row3_col0">736522.541  [+/- 19601.668]</td>
+<td class="data row3 col1" id="T_ebc2f_row3_col1">Square_Footage in ( 3344.0, 3610.5 ),
+Lot_Size is less than equal to 3.08</td>
+<td class="data row3 col2" id="T_ebc2f_row3_col2">0.871100</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_ebc2f_level0_row4">4</th>
+<td class="data row4 col0" id="T_ebc2f_row4_col0">802289.279  [+/- 22598.325]</td>
+<td class="data row4 col1" id="T_ebc2f_row4_col1">Square_Footage in ( 3610.5, 3918.0 ),
+Lot_Size is less than equal to 3.14,
+Year_Built is greater than 1969.0</td>
+<td class="data row4 col2" id="T_ebc2f_row4_col2">0.869700</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -7767,7 +7857,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">record_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
@@ -7794,7 +7884,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">validate_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validations'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validations'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">])</span>
@@ -7814,16 +7904,117 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=f41d593e-fad2-4752-8e18-71fe105ea7a4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f41d593e-fad2-4752-8e18-71fe105ea7a4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_df</span><span class="p">(</span><span class="n">validate_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_23246 th {
+  text-align: left;
+}
+#T_23246 td {
+  text-align: left;
+}
+</style>
+<table id="T_23246">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_23246_level0_col0">Test Data Point Number</th>
+<th class="col_heading level0 col1" id="T_23246_level0_col1">House_Price</th>
+<th class="col_heading level0 col2" id="T_23246_level0_col2">Augmented Intelligence Insights</th>
+<th class="col_heading level0 col3" id="T_23246_level0_col3">Insight Scores</th>
+<th class="col_heading level0 col4" id="T_23246_level0_col4">Accuracy</th>
+<th class="col_heading level0 col5" id="T_23246_level0_col5">Coverage</th>
+<th class="col_heading level0 col6" id="T_23246_level0_col6">Population</th>
+<th class="col_heading level0 col7" id="T_23246_level0_col7">RMSE</th>
+<th class="col_heading level0 col8" id="T_23246_level0_col8">Total Population</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_23246_level0_row0">0</th>
+<td class="data row0 col0" id="T_23246_row0_col0">1</td>
+<td class="data row0 col1" id="T_23246_row0_col1">783720.906  [+/- 44168.201]</td>
+<td class="data row0 col2" id="T_23246_row0_col2">Square_Footage in ( 3344.0, 3918.0 )</td>
+<td class="data row0 col3" id="T_23246_row0_col3">0.924100</td>
+<td class="data row0 col4" id="T_23246_row0_col4">0.950400</td>
+<td class="data row0 col5" id="T_23246_row0_col5">0.200000</td>
+<td class="data row0 col6" id="T_23246_row0_col6">20</td>
+<td class="data row0 col7" id="T_23246_row0_col7">40244.972800</td>
+<td class="data row0 col8" id="T_23246_row0_col8">100</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_23246_level0_row1">1</th>
+<td class="data row1 col0" id="T_23246_row1_col0">2</td>
+<td class="data row1 col1" id="T_23246_row1_col1">530132.99  [+/- 31276.672]</td>
+<td class="data row1 col2" id="T_23246_row1_col2">Square_Footage in ( 2220.5, 2508.5 )</td>
+<td class="data row1 col3" id="T_23246_row1_col3">0.896700</td>
+<td class="data row1 col4" id="T_23246_row1_col4">0.948900</td>
+<td class="data row1 col5" id="T_23246_row1_col5">0.050000</td>
+<td class="data row1 col6" id="T_23246_row1_col6">5</td>
+<td class="data row1 col7" id="T_23246_row1_col7">27888.187400</td>
+<td class="data row1 col8" id="T_23246_row1_col8">100</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_23246_level0_row2">2</th>
+<td class="data row2 col0" id="T_23246_row2_col0">3</td>
+<td class="data row2 col1" id="T_23246_row2_col1">990834.236  [+/- 28225.397]</td>
+<td class="data row2 col2" id="T_23246_row2_col2">Square_Footage in ( 4350.5, 4742.5 ),
+Year_Built is greater than 1975.5</td>
+<td class="data row2 col3" id="T_23246_row2_col3">0.875700</td>
+<td class="data row2 col4" id="T_23246_row2_col4">0.975100</td>
+<td class="data row2 col5" id="T_23246_row2_col5">0.050000</td>
+<td class="data row2 col6" id="T_23246_row2_col6">5</td>
+<td class="data row2 col7" id="T_23246_row2_col7">25413.877400</td>
+<td class="data row2 col8" id="T_23246_row2_col8">100</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_23246_level0_row3">3</th>
+<td class="data row3 col0" id="T_23246_row3_col0">4</td>
+<td class="data row3 col1" id="T_23246_row3_col1">736522.541  [+/- 19601.668]</td>
+<td class="data row3 col2" id="T_23246_row3_col2">Square_Footage in ( 3344.0, 3610.5 ),
+Lot_Size is less than equal to 3.08</td>
+<td class="data row3 col3" id="T_23246_row3_col3">0.871100</td>
+<td class="data row3 col4" id="T_23246_row3_col4">0.955200</td>
+<td class="data row3 col5" id="T_23246_row3_col5">0.070000</td>
+<td class="data row3 col6" id="T_23246_row3_col6">7</td>
+<td class="data row3 col7" id="T_23246_row3_col7">34945.526700</td>
+<td class="data row3 col8" id="T_23246_row3_col8">100</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_23246_level0_row4">4</th>
+<td class="data row4 col0" id="T_23246_row4_col0">5</td>
+<td class="data row4 col1" id="T_23246_row4_col1">802289.279  [+/- 22598.325]</td>
+<td class="data row4 col2" id="T_23246_row4_col2">Square_Footage in ( 3610.5, 3918.0 ),
+Lot_Size is less than equal to 3.14,
+Year_Built is greater than 1969.0</td>
+<td class="data row4 col3" id="T_23246_row4_col3">0.869700</td>
+<td class="data row4 col4" id="T_23246_row4_col4">0.995500</td>
+<td class="data row4 col5" id="T_23246_row4_col5">0.030000</td>
+<td class="data row4 col6" id="T_23246_row4_col6">3</td>
+<td class="data row4 col7" id="T_23246_row4_col7">3666.763100</td>
+<td class="data row4 col8" id="T_23246_row4_col8">100</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -7839,12 +8030,12 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e8d89e83-5b2d-495e-91fc-84a4920e2e4d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e8d89e83-5b2d-495e-91fc-84a4920e2e4d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">record_number</span><span class="p">)):</span>
@@ -7854,6 +8045,277 @@ a.anchor-link {
     <span class="n">ez_display_df</span><span class="p">(</span><span class="n">filter_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
     <span class="nb">print</span> <span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Square_Footage in ( 4350.5, 4742.5 ),
+Year_Built is greater than 1975.5
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_aabac th {
+  text-align: left;
+}
+#T_aabac td {
+  text-align: left;
+}
+</style>
+<table id="T_aabac">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_aabac_level0_col0">Square_Footage</th>
+<th class="col_heading level0 col1" id="T_aabac_level0_col1">Year_Built</th>
+<th class="col_heading level0 col2" id="T_aabac_level0_col2">Lot_Size</th>
+<th class="col_heading level0 col3" id="T_aabac_level0_col3">Neighborhood_Quality</th>
+<th class="col_heading level0 col4" id="T_aabac_level0_col4">House_Price</th>
+<th class="col_heading level0 col5" id="T_aabac_level0_col5">Num_Bedrooms_1</th>
+<th class="col_heading level0 col6" id="T_aabac_level0_col6">Num_Bedrooms_2</th>
+<th class="col_heading level0 col7" id="T_aabac_level0_col7">Num_Bedrooms_3</th>
+<th class="col_heading level0 col8" id="T_aabac_level0_col8">Num_Bedrooms_4</th>
+<th class="col_heading level0 col9" id="T_aabac_level0_col9">Num_Bedrooms_5</th>
+<th class="col_heading level0 col10" id="T_aabac_level0_col10">Num_Bathrooms_1</th>
+<th class="col_heading level0 col11" id="T_aabac_level0_col11">Num_Bathrooms_2</th>
+<th class="col_heading level0 col12" id="T_aabac_level0_col12">Num_Bathrooms_3</th>
+<th class="col_heading level0 col13" id="T_aabac_level0_col13">Garage_Size_0</th>
+<th class="col_heading level0 col14" id="T_aabac_level0_col14">Garage_Size_1</th>
+<th class="col_heading level0 col15" id="T_aabac_level0_col15">Garage_Size_2</th>
+<th class="col_heading level0 col16" id="T_aabac_level0_col16">filter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_aabac_level0_row0">0</th>
+<td class="data row0 col0" id="T_aabac_row0_col0">4638</td>
+<td class="data row0 col1" id="T_aabac_row0_col1">2000</td>
+<td class="data row0 col2" id="T_aabac_row0_col2">1.490399</td>
+<td class="data row0 col3" id="T_aabac_row0_col3">3</td>
+<td class="data row0 col4" id="T_aabac_row0_col4">998439.237114</td>
+<td class="data row0 col5" id="T_aabac_row0_col5">False</td>
+<td class="data row0 col6" id="T_aabac_row0_col6">False</td>
+<td class="data row0 col7" id="T_aabac_row0_col7">False</td>
+<td class="data row0 col8" id="T_aabac_row0_col8">True</td>
+<td class="data row0 col9" id="T_aabac_row0_col9">False</td>
+<td class="data row0 col10" id="T_aabac_row0_col10">False</td>
+<td class="data row0 col11" id="T_aabac_row0_col11">False</td>
+<td class="data row0 col12" id="T_aabac_row0_col12">True</td>
+<td class="data row0 col13" id="T_aabac_row0_col13">False</td>
+<td class="data row0 col14" id="T_aabac_row0_col14">True</td>
+<td class="data row0 col15" id="T_aabac_row0_col15">False</td>
+<td class="data row0 col16" id="T_aabac_row0_col16">1</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_aabac_level0_row1">1</th>
+<td class="data row1 col0" id="T_aabac_row1_col0">4363</td>
+<td class="data row1 col1" id="T_aabac_row1_col1">2018</td>
+<td class="data row1 col2" id="T_aabac_row1_col2">4.933867</td>
+<td class="data row1 col3" id="T_aabac_row1_col3">3</td>
+<td class="data row1 col4" id="T_aabac_row1_col4">1008539.156234</td>
+<td class="data row1 col5" id="T_aabac_row1_col5">False</td>
+<td class="data row1 col6" id="T_aabac_row1_col6">False</td>
+<td class="data row1 col7" id="T_aabac_row1_col7">False</td>
+<td class="data row1 col8" id="T_aabac_row1_col8">False</td>
+<td class="data row1 col9" id="T_aabac_row1_col9">True</td>
+<td class="data row1 col10" id="T_aabac_row1_col10">False</td>
+<td class="data row1 col11" id="T_aabac_row1_col11">True</td>
+<td class="data row1 col12" id="T_aabac_row1_col12">False</td>
+<td class="data row1 col13" id="T_aabac_row1_col13">False</td>
+<td class="data row1 col14" id="T_aabac_row1_col14">True</td>
+<td class="data row1 col15" id="T_aabac_row1_col15">False</td>
+<td class="data row1 col16" id="T_aabac_row1_col16">1</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_aabac_level0_row2">2</th>
+<td class="data row2 col0" id="T_aabac_row2_col0">4671</td>
+<td class="data row2 col1" id="T_aabac_row2_col1">2017</td>
+<td class="data row2 col2" id="T_aabac_row2_col2">1.931223</td>
+<td class="data row2 col3" id="T_aabac_row2_col3">7</td>
+<td class="data row2 col4" id="T_aabac_row2_col4">1028282.311822</td>
+<td class="data row2 col5" id="T_aabac_row2_col5">False</td>
+<td class="data row2 col6" id="T_aabac_row2_col6">False</td>
+<td class="data row2 col7" id="T_aabac_row2_col7">False</td>
+<td class="data row2 col8" id="T_aabac_row2_col8">True</td>
+<td class="data row2 col9" id="T_aabac_row2_col9">False</td>
+<td class="data row2 col10" id="T_aabac_row2_col10">False</td>
+<td class="data row2 col11" id="T_aabac_row2_col11">False</td>
+<td class="data row2 col12" id="T_aabac_row2_col12">True</td>
+<td class="data row2 col13" id="T_aabac_row2_col13">False</td>
+<td class="data row2 col14" id="T_aabac_row2_col14">True</td>
+<td class="data row2 col15" id="T_aabac_row2_col15">False</td>
+<td class="data row2 col16" id="T_aabac_row2_col16">1</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_aabac_level0_row3">3</th>
+<td class="data row3 col0" id="T_aabac_row3_col0">4615</td>
+<td class="data row3 col1" id="T_aabac_row3_col1">2000</td>
+<td class="data row3 col2" id="T_aabac_row3_col2">1.721147</td>
+<td class="data row3 col3" id="T_aabac_row3_col3">4</td>
+<td class="data row3 col4" id="T_aabac_row3_col4">993273.079661</td>
+<td class="data row3 col5" id="T_aabac_row3_col5">False</td>
+<td class="data row3 col6" id="T_aabac_row3_col6">False</td>
+<td class="data row3 col7" id="T_aabac_row3_col7">False</td>
+<td class="data row3 col8" id="T_aabac_row3_col8">True</td>
+<td class="data row3 col9" id="T_aabac_row3_col9">False</td>
+<td class="data row3 col10" id="T_aabac_row3_col10">False</td>
+<td class="data row3 col11" id="T_aabac_row3_col11">True</td>
+<td class="data row3 col12" id="T_aabac_row3_col12">False</td>
+<td class="data row3 col13" id="T_aabac_row3_col13">False</td>
+<td class="data row3 col14" id="T_aabac_row3_col14">True</td>
+<td class="data row3 col15" id="T_aabac_row3_col15">False</td>
+<td class="data row3 col16" id="T_aabac_row3_col16">1</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_aabac_level0_row4">4</th>
+<td class="data row4 col0" id="T_aabac_row4_col0">4493</td>
+<td class="data row4 col1" id="T_aabac_row4_col1">2008</td>
+<td class="data row4 col2" id="T_aabac_row4_col2">0.966554</td>
+<td class="data row4 col3" id="T_aabac_row4_col3">4</td>
+<td class="data row4 col4" id="T_aabac_row4_col4">951093.546994</td>
+<td class="data row4 col5" id="T_aabac_row4_col5">False</td>
+<td class="data row4 col6" id="T_aabac_row4_col6">False</td>
+<td class="data row4 col7" id="T_aabac_row4_col7">True</td>
+<td class="data row4 col8" id="T_aabac_row4_col8">False</td>
+<td class="data row4 col9" id="T_aabac_row4_col9">False</td>
+<td class="data row4 col10" id="T_aabac_row4_col10">False</td>
+<td class="data row4 col11" id="T_aabac_row4_col11">False</td>
+<td class="data row4 col12" id="T_aabac_row4_col12">True</td>
+<td class="data row4 col13" id="T_aabac_row4_col13">True</td>
+<td class="data row4 col14" id="T_aabac_row4_col14">False</td>
+<td class="data row4 col15" id="T_aabac_row4_col15">False</td>
+<td class="data row4 col16" id="T_aabac_row4_col16">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+
+Square_Footage in ( 3610.5, 3918.0 ),
+Lot_Size is less than equal to 3.14,
+Year_Built is greater than 1969.0
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_a2c89 th {
+  text-align: left;
+}
+#T_a2c89 td {
+  text-align: left;
+}
+</style>
+<table id="T_a2c89">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_a2c89_level0_col0">Square_Footage</th>
+<th class="col_heading level0 col1" id="T_a2c89_level0_col1">Year_Built</th>
+<th class="col_heading level0 col2" id="T_a2c89_level0_col2">Lot_Size</th>
+<th class="col_heading level0 col3" id="T_a2c89_level0_col3">Neighborhood_Quality</th>
+<th class="col_heading level0 col4" id="T_a2c89_level0_col4">House_Price</th>
+<th class="col_heading level0 col5" id="T_a2c89_level0_col5">Num_Bedrooms_1</th>
+<th class="col_heading level0 col6" id="T_a2c89_level0_col6">Num_Bedrooms_2</th>
+<th class="col_heading level0 col7" id="T_a2c89_level0_col7">Num_Bedrooms_3</th>
+<th class="col_heading level0 col8" id="T_a2c89_level0_col8">Num_Bedrooms_4</th>
+<th class="col_heading level0 col9" id="T_a2c89_level0_col9">Num_Bedrooms_5</th>
+<th class="col_heading level0 col10" id="T_a2c89_level0_col10">Num_Bathrooms_1</th>
+<th class="col_heading level0 col11" id="T_a2c89_level0_col11">Num_Bathrooms_2</th>
+<th class="col_heading level0 col12" id="T_a2c89_level0_col12">Num_Bathrooms_3</th>
+<th class="col_heading level0 col13" id="T_a2c89_level0_col13">Garage_Size_0</th>
+<th class="col_heading level0 col14" id="T_a2c89_level0_col14">Garage_Size_1</th>
+<th class="col_heading level0 col15" id="T_a2c89_level0_col15">Garage_Size_2</th>
+<th class="col_heading level0 col16" id="T_a2c89_level0_col16">filter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_a2c89_level0_row0">0</th>
+<td class="data row0 col0" id="T_a2c89_row0_col0">3778</td>
+<td class="data row0 col1" id="T_a2c89_row0_col1">2006</td>
+<td class="data row0 col2" id="T_a2c89_row0_col2">1.576141</td>
+<td class="data row0 col3" id="T_a2c89_row0_col3">5</td>
+<td class="data row0 col4" id="T_a2c89_row0_col4">818613.710803</td>
+<td class="data row0 col5" id="T_a2c89_row0_col5">False</td>
+<td class="data row0 col6" id="T_a2c89_row0_col6">True</td>
+<td class="data row0 col7" id="T_a2c89_row0_col7">False</td>
+<td class="data row0 col8" id="T_a2c89_row0_col8">False</td>
+<td class="data row0 col9" id="T_a2c89_row0_col9">False</td>
+<td class="data row0 col10" id="T_a2c89_row0_col10">False</td>
+<td class="data row0 col11" id="T_a2c89_row0_col11">True</td>
+<td class="data row0 col12" id="T_a2c89_row0_col12">False</td>
+<td class="data row0 col13" id="T_a2c89_row0_col13">False</td>
+<td class="data row0 col14" id="T_a2c89_row0_col14">False</td>
+<td class="data row0 col15" id="T_a2c89_row0_col15">True</td>
+<td class="data row0 col16" id="T_a2c89_row0_col16">1</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_a2c89_level0_row1">1</th>
+<td class="data row1 col0" id="T_a2c89_row1_col0">3670</td>
+<td class="data row1 col1" id="T_a2c89_row1_col1">2012</td>
+<td class="data row1 col2" id="T_a2c89_row1_col2">2.063782</td>
+<td class="data row1 col3" id="T_a2c89_row1_col3">7</td>
+<td class="data row1 col4" id="T_a2c89_row1_col4">813296.809026</td>
+<td class="data row1 col5" id="T_a2c89_row1_col5">False</td>
+<td class="data row1 col6" id="T_a2c89_row1_col6">False</td>
+<td class="data row1 col7" id="T_a2c89_row1_col7">True</td>
+<td class="data row1 col8" id="T_a2c89_row1_col8">False</td>
+<td class="data row1 col9" id="T_a2c89_row1_col9">False</td>
+<td class="data row1 col10" id="T_a2c89_row1_col10">False</td>
+<td class="data row1 col11" id="T_a2c89_row1_col11">False</td>
+<td class="data row1 col12" id="T_a2c89_row1_col12">True</td>
+<td class="data row1 col13" id="T_a2c89_row1_col13">False</td>
+<td class="data row1 col14" id="T_a2c89_row1_col14">True</td>
+<td class="data row1 col15" id="T_a2c89_row1_col15">False</td>
+<td class="data row1 col16" id="T_a2c89_row1_col16">1</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_a2c89_level0_row2">2</th>
+<td class="data row2 col0" id="T_a2c89_row2_col0">3702</td>
+<td class="data row2 col1" id="T_a2c89_row2_col1">1984</td>
+<td class="data row2 col2" id="T_a2c89_row2_col2">2.892098</td>
+<td class="data row2 col3" id="T_a2c89_row2_col3">10</td>
+<td class="data row2 col4" id="T_a2c89_row2_col4">809686.201144</td>
+<td class="data row2 col5" id="T_a2c89_row2_col5">False</td>
+<td class="data row2 col6" id="T_a2c89_row2_col6">False</td>
+<td class="data row2 col7" id="T_a2c89_row2_col7">False</td>
+<td class="data row2 col8" id="T_a2c89_row2_col8">False</td>
+<td class="data row2 col9" id="T_a2c89_row2_col9">True</td>
+<td class="data row2 col10" id="T_a2c89_row2_col10">True</td>
+<td class="data row2 col11" id="T_a2c89_row2_col11">False</td>
+<td class="data row2 col12" id="T_a2c89_row2_col12">False</td>
+<td class="data row2 col13" id="T_a2c89_row2_col13">True</td>
+<td class="data row2 col14" id="T_a2c89_row2_col14">False</td>
+<td class="data row2 col15" id="T_a2c89_row2_col15">False</td>
+<td class="data row2 col16" id="T_a2c89_row2_col16">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+
+</pre>
 </div>
 </div>
 </div>
