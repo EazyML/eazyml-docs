@@ -14,6 +14,6 @@ The following notebooks are available:
 
 Try on Colab :
 
-1. `Airline passengers satisfaction classification Colab <../https://drive.google.com/file/d/15bcfr5O-nLT_NllGYcL4VZWLrSVIUm1h/view?usp=drive_link>`_
-2. `House price prediction Colab <../https://drive.google.com/file/d/1y9LPQQxwU0ivKY9rTNiMIRLZ3L9b0_p0/view?usp=drive_link>`_
-3. `Mobile price range classification Colab <../https://drive.google.com/file/d/1IfC9xHOUBKRdh6jo3hhhbrNpQFq7Nea7/view?usp=drive_link>`_
+1. `Airline passengers satisfaction classification Colab <https://drive.google.com/file/d/15bcfr5O-nLT_NllGYcL4VZWLrSVIUm1h/view?usp=drive_link>`_
+2. `House price prediction Colab <https://drive.google.com/file/d/1y9LPQQxwU0ivKY9rTNiMIRLZ3L9b0_p0/view?usp=drive_link>`_
+3. `Mobile price range classification Colab <https://drive.google.com/file/d/1IfC9xHOUBKRdh6jo3hhhbrNpQFq7Nea7/view?usp=drive_link>`_

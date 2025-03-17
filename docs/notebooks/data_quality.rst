@@ -11,5 +11,5 @@ The following notebooks are available:
 
 Try on Colab :
 
-1. `Heart attack classification Colab <../https://drive.google.com/file/d/1Aoig8Eb4zd87AielP02UkJDKugB-xVta/view?usp=drive_link>`_
-2. `Walmart sales prediction Colab <../https://drive.google.com/file/d/1kFZZj023GqiW5x1P4bU7vjHyOeiKG4YC/view?usp=drive_link>`_
+1. `Heart attack classification Colab <https://drive.google.com/file/d/1Aoig8Eb4zd87AielP02UkJDKugB-xVta/view?usp=drive_link>`_
+2. `Walmart sales prediction Colab <https://drive.google.com/file/d/1kFZZj023GqiW5x1P4bU7vjHyOeiKG4YC/view?usp=drive_link>`_
