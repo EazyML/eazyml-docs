@@ -7593,7 +7593,18 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-Initialize-EazyML">1. Initialize EazyML<a class="anchor-link" href="#1.-Initialize-EazyML">¶</a></h2><p>The <code>ez_init</code> function uses the <code>EAZYML_ACCESS_KEY</code> environment variable for authentication. If the variable is not set, it defaults to a trial license.</p>
+<h2 id="1.-Initialize-EazyML">1. Initialize EazyML<a class="anchor-link" href="#1.-Initialize-EazyML">¶</a></h2>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=00165255-f357-4eca-8a5e-7771befe1b4d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The <code>ez_init</code> function uses the <code>EAZYML_ACCESS_KEY</code> environment variable for authentication. If the variable is not set, it defaults to a trial license.</p>
 </div>
 </div>
 </div>
@@ -7658,12 +7669,182 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Names of the files that will be used by EazyML APIs</span>
-<span class="n">eazyml_train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_traindata.csv"</span><span class="p">)</span>
-<span class="n">eazyml_test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_testdata.csv"</span><span class="p">)</span>
+<span class="n">train_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_traindata.csv"</span><span class="p">)</span>
+<span class="n">test_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_testdata.csv"</span><span class="p">)</span>
 
 <span class="c1"># The column name for outcome of interest</span>
 <span class="n">outcome</span> <span class="o">=</span> <span class="s2">"class"</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=27edcc7e-5f65-4bfe-9538-f12ad005721a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="3.-Dataset-Information">3. Dataset Information<a class="anchor-link" href="#3.-Dataset-Information">¶</a></h2>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cda52b0c-7815-46e3-a277-34b7626bd5b2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The dataset used in this notebook is the <strong>Heart Attack Dataset</strong>, which is a well-known dataset in machine learning and statistics. It contains data about patients, with several features (such as age, gender, blood pressure levels, and heart-related measurements) to predict the likelihood of a heart attack.</p>
+<h3 id="Columns-in-the-Dataset:">Columns in the Dataset:<a class="anchor-link" href="#Columns-in-the-Dataset:">¶</a></h3><ul>
+<li><strong>age</strong>: The age of the patient, measured in years.</li>
+<li><strong>gender</strong>: The gender of the patient, represented as a categorical variable (e.g., 1 = male, 0 = female).</li>
+<li><strong>impulse</strong>: Refers to the patient's pulse rate, measured in beats per minute (bpm).</li>
+<li><strong>pressurehight</strong>: Refers to systolic blood pressure, the higher number in a blood pressure reading (e.g., 120/80 mmHg).</li>
+<li><strong>pressurelow</strong>: Refers to diastolic blood pressure, the lower number in a blood pressure reading (e.g., 120/80 mmHg).</li>
+<li><strong>glucose</strong>: A measurement related to the heart, likely referring to potassium (K) concentration.</li>
+<li><strong>kcm</strong>: This refer to a measurement related to the heart, related to potassium (K) concentration.</li>
+<li><strong>troponin</strong>: A protein found in the heart muscle, measured to assess heart damage (especially after a heart attack).</li>
+<li><strong>class</strong>: The target variable, indicating the presence or absence of a condition or disease (e.g., 1 = heart attack, 0 = no heart attack).</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8da9cd09-dc98-4dd3-84cf-e9255b8752ac">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="3.1-Display-the-Dataset">3.1 Display the Dataset<a class="anchor-link" href="#3.1-Display-the-Dataset">¶</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=69018bb1-8922-4b2e-9807-0d1c81e51660">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Below is a preview of the dataset:</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0338f9a3-df5a-4f96-a994-a205fec8d4b2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Load the dataset from the provided file</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">)</span>
+
+<span class="c1"># Display the first few rows of the dataset</span>
+<span class="n">ez_display_df</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_3c3f4 th {
+  text-align: left;
+}
+#T_3c3f4 td {
+  text-align: left;
+}
+</style>
+<table id="T_3c3f4">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_3c3f4_level0_col0">age</th>
+<th class="col_heading level0 col1" id="T_3c3f4_level0_col1">gender</th>
+<th class="col_heading level0 col2" id="T_3c3f4_level0_col2">impluse</th>
+<th class="col_heading level0 col3" id="T_3c3f4_level0_col3">pressurehight</th>
+<th class="col_heading level0 col4" id="T_3c3f4_level0_col4">pressurelow</th>
+<th class="col_heading level0 col5" id="T_3c3f4_level0_col5">glucose</th>
+<th class="col_heading level0 col6" id="T_3c3f4_level0_col6">kcm</th>
+<th class="col_heading level0 col7" id="T_3c3f4_level0_col7">troponin</th>
+<th class="col_heading level0 col8" id="T_3c3f4_level0_col8">class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_3c3f4_level0_row0">0</th>
+<td class="data row0 col0" id="T_3c3f4_row0_col0">64</td>
+<td class="data row0 col1" id="T_3c3f4_row0_col1">1</td>
+<td class="data row0 col2" id="T_3c3f4_row0_col2">66</td>
+<td class="data row0 col3" id="T_3c3f4_row0_col3">160</td>
+<td class="data row0 col4" id="T_3c3f4_row0_col4">83</td>
+<td class="data row0 col5" id="T_3c3f4_row0_col5">160.000000</td>
+<td class="data row0 col6" id="T_3c3f4_row0_col6">1.800000</td>
+<td class="data row0 col7" id="T_3c3f4_row0_col7">0.012000</td>
+<td class="data row0 col8" id="T_3c3f4_row0_col8">negative</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_3c3f4_level0_row1">1</th>
+<td class="data row1 col0" id="T_3c3f4_row1_col0">21</td>
+<td class="data row1 col1" id="T_3c3f4_row1_col1">1</td>
+<td class="data row1 col2" id="T_3c3f4_row1_col2">94</td>
+<td class="data row1 col3" id="T_3c3f4_row1_col3">98</td>
+<td class="data row1 col4" id="T_3c3f4_row1_col4">46</td>
+<td class="data row1 col5" id="T_3c3f4_row1_col5">296.000000</td>
+<td class="data row1 col6" id="T_3c3f4_row1_col6">6.750000</td>
+<td class="data row1 col7" id="T_3c3f4_row1_col7">1.060000</td>
+<td class="data row1 col8" id="T_3c3f4_row1_col8">positive</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_3c3f4_level0_row2">2</th>
+<td class="data row2 col0" id="T_3c3f4_row2_col0">55</td>
+<td class="data row2 col1" id="T_3c3f4_row2_col1">1</td>
+<td class="data row2 col2" id="T_3c3f4_row2_col2">64</td>
+<td class="data row2 col3" id="T_3c3f4_row2_col3">160</td>
+<td class="data row2 col4" id="T_3c3f4_row2_col4">77</td>
+<td class="data row2 col5" id="T_3c3f4_row2_col5">270.000000</td>
+<td class="data row2 col6" id="T_3c3f4_row2_col6">1.990000</td>
+<td class="data row2 col7" id="T_3c3f4_row2_col7">0.003000</td>
+<td class="data row2 col8" id="T_3c3f4_row2_col8">negative</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_3c3f4_level0_row3">3</th>
+<td class="data row3 col0" id="T_3c3f4_row3_col0">64</td>
+<td class="data row3 col1" id="T_3c3f4_row3_col1">1</td>
+<td class="data row3 col2" id="T_3c3f4_row3_col2">70</td>
+<td class="data row3 col3" id="T_3c3f4_row3_col3">120</td>
+<td class="data row3 col4" id="T_3c3f4_row3_col4">55</td>
+<td class="data row3 col5" id="T_3c3f4_row3_col5">270.000000</td>
+<td class="data row3 col6" id="T_3c3f4_row3_col6">13.870000</td>
+<td class="data row3 col7" id="T_3c3f4_row3_col7">0.122000</td>
+<td class="data row3 col8" id="T_3c3f4_row3_col8">positive</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_3c3f4_level0_row4">4</th>
+<td class="data row4 col0" id="T_3c3f4_row4_col0">55</td>
+<td class="data row4 col1" id="T_3c3f4_row4_col1">1</td>
+<td class="data row4 col2" id="T_3c3f4_row4_col2">64</td>
+<td class="data row4 col3" id="T_3c3f4_row4_col3">112</td>
+<td class="data row4 col4" id="T_3c3f4_row4_col4">65</td>
+<td class="data row4 col5" id="T_3c3f4_row4_col5">300.000000</td>
+<td class="data row4 col6" id="T_3c3f4_row4_col6">1.080000</td>
+<td class="data row4 col7" id="T_3c3f4_row4_col7">0.003000</td>
+<td class="data row4 col8" id="T_3c3f4_row4_col8">negative</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -7675,7 +7856,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-EazyML-Insights">3. EazyML Insights<a class="anchor-link" href="#3.-EazyML-Insights">¶</a></h2>
+<h2 id="4.-EazyML-Insights">4. EazyML Insights<a class="anchor-link" href="#4.-EazyML-Insights">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7686,7 +7867,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.1-Auto-derive-Insights">3.1 Auto-derive Insights<a class="anchor-link" href="#3.1-Auto-derive-Insights">¶</a></h3>
+<h3 id="4.1-Auto-derive-Insights">4.1 Auto-derive Insights<a class="anchor-link" href="#4.1-Auto-derive-Insights">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7697,7 +7878,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.1.1-Build-Insight-Model">3.1.1 Build Insight Model<a class="anchor-link" href="#3.1.1-Build-Insight-Model">¶</a></h4>
+<h4 id="4.1.1-Build-Insight-Model">4.1.1 Build Insight Model<a class="anchor-link" href="#4.1.1-Build-Insight-Model">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7706,10 +7887,10 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">ez_insight</span><span class="p">(</span><span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">ez_insight</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
 </pre></div>
 </div>
 </div>
@@ -7722,7 +7903,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.1.2-Convert-Response-to-DataFrame">3.1.2 Convert Response to DataFrame<a class="anchor-link" href="#3.1.2-Convert-Response-to-DataFrame">¶</a></h4>
+<h4 id="4.1.2-Convert-Response-to-DataFrame">4.1.2 Convert Response to DataFrame<a class="anchor-link" href="#4.1.2-Convert-Response-to-DataFrame">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7731,7 +7912,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">insights_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">])</span>
@@ -7747,7 +7928,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.1.3-Display-Augmented-Insights">3.1.3 Display Augmented Insights<a class="anchor-link" href="#3.1.3-Display-Augmented-Insights">¶</a></h4>
+<h4 id="4.1.3-Display-Augmented-Insights">4.1.3 Display Augmented Insights<a class="anchor-link" href="#4.1.3-Display-Augmented-Insights">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7758,7 +7939,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.1.3.1-For-Class-positive">3.1.3.1 For Class positive<a class="anchor-link" href="#3.1.3.1-For-Class-positive">¶</a></h5>
+<h5 id="4.1.3.1-For-Class-positive">4.1.3.1 For Class positive<a class="anchor-link" href="#4.1.3.1-For-Class-positive">¶</a></h5>
 </div>
 </div>
 </div>
@@ -7767,7 +7948,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">insights_df1</span> <span class="o">=</span> <span class="n">insights_df</span><span class="p">[</span><span class="n">insights_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'positive'</span><span class="p">]</span>
@@ -7785,57 +7966,57 @@ a.anchor-link {
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_e675b th {
+#T_3dd65 th {
   text-align: left;
 }
-#T_e675b td {
+#T_3dd65 td {
   text-align: left;
 }
 </style>
-<table id="T_e675b">
+<table id="T_3dd65">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_e675b_level0_col0">class</th>
-<th class="col_heading level0 col1" id="T_e675b_level0_col1">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col2" id="T_e675b_level0_col2">Insight Scores</th>
+<th class="col_heading level0 col0" id="T_3dd65_level0_col0">class</th>
+<th class="col_heading level0 col1" id="T_3dd65_level0_col1">Augmented Intelligence Insights</th>
+<th class="col_heading level0 col2" id="T_3dd65_level0_col2">Insight Scores</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_e675b_level0_row0">0</th>
-<td class="data row0 col0" id="T_e675b_row0_col0">positive</td>
-<td class="data row0 col1" id="T_e675b_row0_col1">troponin is greater than 0.01</td>
-<td class="data row0 col2" id="T_e675b_row0_col2">0.932400</td>
+<th class="row_heading level0 row0" id="T_3dd65_level0_row0">0</th>
+<td class="data row0 col0" id="T_3dd65_row0_col0">positive</td>
+<td class="data row0 col1" id="T_3dd65_row0_col1">troponin is greater than 0.01</td>
+<td class="data row0 col2" id="T_3dd65_row0_col2">0.932400</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_e675b_level0_row1">1</th>
-<td class="data row1 col0" id="T_e675b_row1_col0">positive</td>
-<td class="data row1 col1" id="T_e675b_row1_col1">pressurelow is less than equal to 80.5,
+<th class="row_heading level0 row1" id="T_3dd65_level0_row1">1</th>
+<td class="data row1 col0" id="T_3dd65_row1_col0">positive</td>
+<td class="data row1 col1" id="T_3dd65_row1_col1">pressurelow is less than equal to 80.5,
 troponin is greater than 0.01</td>
-<td class="data row1 col2" id="T_e675b_row1_col2">0.930900</td>
+<td class="data row1 col2" id="T_3dd65_row1_col2">0.930900</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_e675b_level0_row2">2</th>
-<td class="data row2 col0" id="T_e675b_row2_col0">positive</td>
-<td class="data row2 col1" id="T_e675b_row2_col1">troponin is greater than 0.01,
+<th class="row_heading level0 row2" id="T_3dd65_level0_row2">2</th>
+<td class="data row2 col0" id="T_3dd65_row2_col0">positive</td>
+<td class="data row2 col1" id="T_3dd65_row2_col1">troponin is greater than 0.01,
 kcm is greater than 0.88</td>
-<td class="data row2 col2" id="T_e675b_row2_col2">0.930000</td>
+<td class="data row2 col2" id="T_3dd65_row2_col2">0.930000</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_e675b_level0_row3">3</th>
-<td class="data row3 col0" id="T_e675b_row3_col0">positive</td>
-<td class="data row3 col1" id="T_e675b_row3_col1">troponin is greater than 0.01,
+<th class="row_heading level0 row3" id="T_3dd65_level0_row3">3</th>
+<td class="data row3 col0" id="T_3dd65_row3_col0">positive</td>
+<td class="data row3 col1" id="T_3dd65_row3_col1">troponin is greater than 0.01,
 pressurehight is greater than 59.0</td>
-<td class="data row3 col2" id="T_e675b_row3_col2">0.920700</td>
+<td class="data row3 col2" id="T_3dd65_row3_col2">0.920700</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_e675b_level0_row4">4</th>
-<td class="data row4 col0" id="T_e675b_row4_col0">positive</td>
-<td class="data row4 col1" id="T_e675b_row4_col1">troponin is greater than 0.01,
+<th class="row_heading level0 row4" id="T_3dd65_level0_row4">4</th>
+<td class="data row4 col0" id="T_3dd65_row4_col0">positive</td>
+<td class="data row4 col1" id="T_3dd65_row4_col1">troponin is greater than 0.01,
 pressurehight is greater than 59.0,
 kcm is greater than 0.51</td>
-<td class="data row4 col2" id="T_e675b_row4_col2">0.916000</td>
+<td class="data row4 col2" id="T_3dd65_row4_col2">0.916000</td>
 </tr>
 </tbody>
 </table>
@@ -7850,7 +8031,7 @@ kcm is greater than 0.51</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.1.3.2-For-Class-negative">3.1.3.2 For Class negative<a class="anchor-link" href="#3.1.3.2-For-Class-negative">¶</a></h5>
+<h5 id="4.1.3.2-For-Class-negative">4.1.3.2 For Class negative<a class="anchor-link" href="#4.1.3.2-For-Class-negative">¶</a></h5>
 </div>
 </div>
 </div>
@@ -7859,7 +8040,7 @@ kcm is greater than 0.51</td>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">insights_df0</span> <span class="o">=</span> <span class="n">insights_df</span><span class="p">[</span><span class="n">insights_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'negative'</span><span class="p">]</span>
@@ -7877,61 +8058,61 @@ kcm is greater than 0.51</td>
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_ca594 th {
+#T_ab9c9 th {
   text-align: left;
 }
-#T_ca594 td {
+#T_ab9c9 td {
   text-align: left;
 }
 </style>
-<table id="T_ca594">
+<table id="T_ab9c9">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_ca594_level0_col0">class</th>
-<th class="col_heading level0 col1" id="T_ca594_level0_col1">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col2" id="T_ca594_level0_col2">Insight Scores</th>
+<th class="col_heading level0 col0" id="T_ab9c9_level0_col0">class</th>
+<th class="col_heading level0 col1" id="T_ab9c9_level0_col1">Augmented Intelligence Insights</th>
+<th class="col_heading level0 col2" id="T_ab9c9_level0_col2">Insight Scores</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_ca594_level0_row0">86</th>
-<td class="data row0 col0" id="T_ca594_row0_col0">negative</td>
-<td class="data row0 col1" id="T_ca594_row0_col1">pressurelow is less than equal to 80.5,
+<th class="row_heading level0 row0" id="T_ab9c9_level0_row0">86</th>
+<td class="data row0 col0" id="T_ab9c9_row0_col0">negative</td>
+<td class="data row0 col1" id="T_ab9c9_row0_col1">pressurelow is less than equal to 80.5,
 troponin is less than equal to 0.01,
 kcm is less than equal to 6.29</td>
-<td class="data row0 col2" id="T_ca594_row0_col2">0.962300</td>
+<td class="data row0 col2" id="T_ab9c9_row0_col2">0.962300</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_ca594_level0_row1">87</th>
-<td class="data row1 col0" id="T_ca594_row1_col0">negative</td>
-<td class="data row1 col1" id="T_ca594_row1_col1">troponin is less than equal to 0.01,
+<th class="row_heading level0 row1" id="T_ab9c9_level0_row1">87</th>
+<td class="data row1 col0" id="T_ab9c9_row1_col0">negative</td>
+<td class="data row1 col1" id="T_ab9c9_row1_col1">troponin is less than equal to 0.01,
 kcm is less than equal to 6.29</td>
-<td class="data row1 col2" id="T_ca594_row1_col2">0.948500</td>
+<td class="data row1 col2" id="T_ab9c9_row1_col2">0.948500</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_ca594_level0_row2">88</th>
-<td class="data row2 col0" id="T_ca594_row2_col0">negative</td>
-<td class="data row2 col1" id="T_ca594_row2_col1">troponin is less than equal to 0.01,
+<th class="row_heading level0 row2" id="T_ab9c9_level0_row2">88</th>
+<td class="data row2 col0" id="T_ab9c9_row2_col0">negative</td>
+<td class="data row2 col1" id="T_ab9c9_row2_col1">troponin is less than equal to 0.01,
 pressurehight is less than equal to 151.5,
 kcm is less than equal to 6.29</td>
-<td class="data row2 col2" id="T_ca594_row2_col2">0.928300</td>
+<td class="data row2 col2" id="T_ab9c9_row2_col2">0.928300</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_ca594_level0_row3">89</th>
-<td class="data row3 col0" id="T_ca594_row3_col0">negative</td>
-<td class="data row3 col1" id="T_ca594_row3_col1">troponin is less than equal to 0.01,
+<th class="row_heading level0 row3" id="T_ab9c9_level0_row3">89</th>
+<td class="data row3 col0" id="T_ab9c9_row3_col0">negative</td>
+<td class="data row3 col1" id="T_ab9c9_row3_col1">troponin is less than equal to 0.01,
 kcm is less than equal to 4.88,
 glucose is greater than 55.0</td>
-<td class="data row3 col2" id="T_ca594_row3_col2">0.927600</td>
+<td class="data row3 col2" id="T_ab9c9_row3_col2">0.927600</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_ca594_level0_row4">90</th>
-<td class="data row4 col0" id="T_ca594_row4_col0">negative</td>
-<td class="data row4 col1" id="T_ca594_row4_col1">troponin is less than equal to 0.01,
+<th class="row_heading level0 row4" id="T_ab9c9_level0_row4">90</th>
+<td class="data row4 col0" id="T_ab9c9_row4_col0">negative</td>
+<td class="data row4 col1" id="T_ab9c9_row4_col1">troponin is less than equal to 0.01,
 kcm is less than equal to 4.88,
 impluse is less than equal to 89.5</td>
-<td class="data row4 col2" id="T_ca594_row4_col2">0.907600</td>
+<td class="data row4 col2" id="T_ab9c9_row4_col2">0.907600</td>
 </tr>
 </tbody>
 </table>
@@ -7946,7 +8127,7 @@ impluse is less than equal to 89.5</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.2-Validation-of-Insights">3.2 Validation of Insights<a class="anchor-link" href="#3.2-Validation-of-Insights">¶</a></h3>
+<h3 id="4.2-Validation-of-Insights">4.2 Validation of Insights<a class="anchor-link" href="#4.2-Validation-of-Insights">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7957,7 +8138,7 @@ impluse is less than equal to 89.5</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.1-Validating-Insights">3.2.1 Validating Insights<a class="anchor-link" href="#3.2.1-Validating-Insights">¶</a></h4>
+<h4 id="4.2.1-Validating-Insights">4.2.1 Validating Insights<a class="anchor-link" href="#4.2.1-Validating-Insights">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7966,12 +8147,12 @@ impluse is less than equal to 89.5</td>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">record_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
 <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'record_number'</span><span class="p">:</span> <span class="n">record_number</span><span class="p">}</span>
-<span class="n">val_response</span> <span class="o">=</span> <span class="n">ez_validate</span><span class="p">(</span><span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">],</span> <span class="n">eazyml_test_file</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">val_response</span> <span class="o">=</span> <span class="n">ez_validate</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="s1">'insights'</span><span class="p">],</span> <span class="n">test_file_path</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7984,7 +8165,7 @@ impluse is less than equal to 89.5</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.2-Convert-Response-to-DataFrame">3.2.2 Convert Response to DataFrame<a class="anchor-link" href="#3.2.2-Convert-Response-to-DataFrame">¶</a></h4>
+<h4 id="4.2.2-Convert-Response-to-DataFrame">4.2.2 Convert Response to DataFrame<a class="anchor-link" href="#4.2.2-Convert-Response-to-DataFrame">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7993,7 +8174,7 @@ impluse is less than equal to 89.5</td>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">validate_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validations'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">val_response</span><span class="p">[</span><span class="s1">'validations'</span><span class="p">][</span><span class="s1">'columns'</span><span class="p">])</span>
@@ -8009,7 +8190,7 @@ impluse is less than equal to 89.5</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.3-Display-Validation-Metrics">3.2.3 Display Validation Metrics<a class="anchor-link" href="#3.2.3-Display-Validation-Metrics">¶</a></h4>
+<h4 id="4.2.3-Display-Validation-Metrics">4.2.3 Display Validation Metrics<a class="anchor-link" href="#4.2.3-Display-Validation-Metrics">¶</a></h4>
 </div>
 </div>
 </div>
@@ -8020,7 +8201,7 @@ impluse is less than equal to 89.5</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.2.3.1-For-Class-positive">3.2.3.1 For Class positive<a class="anchor-link" href="#3.2.3.1-For-Class-positive">¶</a></h5>
+<h5 id="4.2.3.1-For-Class-positive">4.2.3.1 For Class positive<a class="anchor-link" href="#4.2.3.1-For-Class-positive">¶</a></h5>
 </div>
 </div>
 </div>
@@ -8029,7 +8210,7 @@ impluse is less than equal to 89.5</td>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">validate_df1</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="n">validate_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'positive'</span><span class="p">]</span>
@@ -8047,93 +8228,93 @@ impluse is less than equal to 89.5</td>
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_5b439 th {
+#T_9113b th {
   text-align: left;
 }
-#T_5b439 td {
+#T_9113b td {
   text-align: left;
 }
 </style>
-<table id="T_5b439">
+<table id="T_9113b">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_5b439_level0_col0">Test Data Point Number</th>
-<th class="col_heading level0 col1" id="T_5b439_level0_col1">class</th>
-<th class="col_heading level0 col2" id="T_5b439_level0_col2">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col3" id="T_5b439_level0_col3">Insight Scores</th>
-<th class="col_heading level0 col4" id="T_5b439_level0_col4">Accuracy</th>
-<th class="col_heading level0 col5" id="T_5b439_level0_col5">Coverage</th>
-<th class="col_heading level0 col6" id="T_5b439_level0_col6">Population</th>
-<th class="col_heading level0 col7" id="T_5b439_level0_col7">Accuracy Count</th>
-<th class="col_heading level0 col8" id="T_5b439_level0_col8">Total Population</th>
+<th class="col_heading level0 col0" id="T_9113b_level0_col0">Test Data Point Number</th>
+<th class="col_heading level0 col1" id="T_9113b_level0_col1">class</th>
+<th class="col_heading level0 col2" id="T_9113b_level0_col2">Augmented Intelligence Insights</th>
+<th class="col_heading level0 col3" id="T_9113b_level0_col3">Insight Scores</th>
+<th class="col_heading level0 col4" id="T_9113b_level0_col4">Accuracy</th>
+<th class="col_heading level0 col5" id="T_9113b_level0_col5">Coverage</th>
+<th class="col_heading level0 col6" id="T_9113b_level0_col6">Population</th>
+<th class="col_heading level0 col7" id="T_9113b_level0_col7">Accuracy Count</th>
+<th class="col_heading level0 col8" id="T_9113b_level0_col8">Total Population</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_5b439_level0_row0">109</th>
-<td class="data row0 col0" id="T_5b439_row0_col0">110</td>
-<td class="data row0 col1" id="T_5b439_row0_col1">positive</td>
-<td class="data row0 col2" id="T_5b439_row0_col2">troponin is greater than 0.01</td>
-<td class="data row0 col3" id="T_5b439_row0_col3">0.932400</td>
-<td class="data row0 col4" id="T_5b439_row0_col4">0.714300</td>
-<td class="data row0 col5" id="T_5b439_row0_col5">0.482800</td>
-<td class="data row0 col6" id="T_5b439_row0_col6">14</td>
-<td class="data row0 col7" id="T_5b439_row0_col7">10</td>
-<td class="data row0 col8" id="T_5b439_row0_col8">29</td>
+<th class="row_heading level0 row0" id="T_9113b_level0_row0">109</th>
+<td class="data row0 col0" id="T_9113b_row0_col0">110</td>
+<td class="data row0 col1" id="T_9113b_row0_col1">positive</td>
+<td class="data row0 col2" id="T_9113b_row0_col2">troponin is greater than 0.01</td>
+<td class="data row0 col3" id="T_9113b_row0_col3">0.932400</td>
+<td class="data row0 col4" id="T_9113b_row0_col4">0.714300</td>
+<td class="data row0 col5" id="T_9113b_row0_col5">0.482800</td>
+<td class="data row0 col6" id="T_9113b_row0_col6">14</td>
+<td class="data row0 col7" id="T_9113b_row0_col7">10</td>
+<td class="data row0 col8" id="T_9113b_row0_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_5b439_level0_row1">110</th>
-<td class="data row1 col0" id="T_5b439_row1_col0">111</td>
-<td class="data row1 col1" id="T_5b439_row1_col1">positive</td>
-<td class="data row1 col2" id="T_5b439_row1_col2">pressurelow is less than equal to 80.5,
+<th class="row_heading level0 row1" id="T_9113b_level0_row1">110</th>
+<td class="data row1 col0" id="T_9113b_row1_col0">111</td>
+<td class="data row1 col1" id="T_9113b_row1_col1">positive</td>
+<td class="data row1 col2" id="T_9113b_row1_col2">pressurelow is less than equal to 80.5,
 troponin is greater than 0.01</td>
-<td class="data row1 col3" id="T_5b439_row1_col3">0.930900</td>
-<td class="data row1 col4" id="T_5b439_row1_col4">0.875000</td>
-<td class="data row1 col5" id="T_5b439_row1_col5">0.275900</td>
-<td class="data row1 col6" id="T_5b439_row1_col6">8</td>
-<td class="data row1 col7" id="T_5b439_row1_col7">7</td>
-<td class="data row1 col8" id="T_5b439_row1_col8">29</td>
+<td class="data row1 col3" id="T_9113b_row1_col3">0.930900</td>
+<td class="data row1 col4" id="T_9113b_row1_col4">0.875000</td>
+<td class="data row1 col5" id="T_9113b_row1_col5">0.275900</td>
+<td class="data row1 col6" id="T_9113b_row1_col6">8</td>
+<td class="data row1 col7" id="T_9113b_row1_col7">7</td>
+<td class="data row1 col8" id="T_9113b_row1_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_5b439_level0_row2">111</th>
-<td class="data row2 col0" id="T_5b439_row2_col0">112</td>
-<td class="data row2 col1" id="T_5b439_row2_col1">positive</td>
-<td class="data row2 col2" id="T_5b439_row2_col2">troponin is greater than 0.01,
+<th class="row_heading level0 row2" id="T_9113b_level0_row2">111</th>
+<td class="data row2 col0" id="T_9113b_row2_col0">112</td>
+<td class="data row2 col1" id="T_9113b_row2_col1">positive</td>
+<td class="data row2 col2" id="T_9113b_row2_col2">troponin is greater than 0.01,
 kcm is greater than 0.88</td>
-<td class="data row2 col3" id="T_5b439_row2_col3">0.930000</td>
-<td class="data row2 col4" id="T_5b439_row2_col4">0.692300</td>
-<td class="data row2 col5" id="T_5b439_row2_col5">0.448300</td>
-<td class="data row2 col6" id="T_5b439_row2_col6">13</td>
-<td class="data row2 col7" id="T_5b439_row2_col7">9</td>
-<td class="data row2 col8" id="T_5b439_row2_col8">29</td>
+<td class="data row2 col3" id="T_9113b_row2_col3">0.930000</td>
+<td class="data row2 col4" id="T_9113b_row2_col4">0.692300</td>
+<td class="data row2 col5" id="T_9113b_row2_col5">0.448300</td>
+<td class="data row2 col6" id="T_9113b_row2_col6">13</td>
+<td class="data row2 col7" id="T_9113b_row2_col7">9</td>
+<td class="data row2 col8" id="T_9113b_row2_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_5b439_level0_row3">112</th>
-<td class="data row3 col0" id="T_5b439_row3_col0">113</td>
-<td class="data row3 col1" id="T_5b439_row3_col1">positive</td>
-<td class="data row3 col2" id="T_5b439_row3_col2">troponin is greater than 0.01,
+<th class="row_heading level0 row3" id="T_9113b_level0_row3">112</th>
+<td class="data row3 col0" id="T_9113b_row3_col0">113</td>
+<td class="data row3 col1" id="T_9113b_row3_col1">positive</td>
+<td class="data row3 col2" id="T_9113b_row3_col2">troponin is greater than 0.01,
 pressurehight is greater than 59.0</td>
-<td class="data row3 col3" id="T_5b439_row3_col3">0.920700</td>
-<td class="data row3 col4" id="T_5b439_row3_col4">0.714300</td>
-<td class="data row3 col5" id="T_5b439_row3_col5">0.482800</td>
-<td class="data row3 col6" id="T_5b439_row3_col6">14</td>
-<td class="data row3 col7" id="T_5b439_row3_col7">10</td>
-<td class="data row3 col8" id="T_5b439_row3_col8">29</td>
+<td class="data row3 col3" id="T_9113b_row3_col3">0.920700</td>
+<td class="data row3 col4" id="T_9113b_row3_col4">0.714300</td>
+<td class="data row3 col5" id="T_9113b_row3_col5">0.482800</td>
+<td class="data row3 col6" id="T_9113b_row3_col6">14</td>
+<td class="data row3 col7" id="T_9113b_row3_col7">10</td>
+<td class="data row3 col8" id="T_9113b_row3_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_5b439_level0_row4">113</th>
-<td class="data row4 col0" id="T_5b439_row4_col0">114</td>
-<td class="data row4 col1" id="T_5b439_row4_col1">positive</td>
-<td class="data row4 col2" id="T_5b439_row4_col2">troponin is greater than 0.01,
+<th class="row_heading level0 row4" id="T_9113b_level0_row4">113</th>
+<td class="data row4 col0" id="T_9113b_row4_col0">114</td>
+<td class="data row4 col1" id="T_9113b_row4_col1">positive</td>
+<td class="data row4 col2" id="T_9113b_row4_col2">troponin is greater than 0.01,
 pressurehight is greater than 59.0,
 kcm is greater than 0.51</td>
-<td class="data row4 col3" id="T_5b439_row4_col3">0.916000</td>
-<td class="data row4 col4" id="T_5b439_row4_col4">0.714300</td>
-<td class="data row4 col5" id="T_5b439_row4_col5">0.482800</td>
-<td class="data row4 col6" id="T_5b439_row4_col6">14</td>
-<td class="data row4 col7" id="T_5b439_row4_col7">10</td>
-<td class="data row4 col8" id="T_5b439_row4_col8">29</td>
+<td class="data row4 col3" id="T_9113b_row4_col3">0.916000</td>
+<td class="data row4 col4" id="T_9113b_row4_col4">0.714300</td>
+<td class="data row4 col5" id="T_9113b_row4_col5">0.482800</td>
+<td class="data row4 col6" id="T_9113b_row4_col6">14</td>
+<td class="data row4 col7" id="T_9113b_row4_col7">10</td>
+<td class="data row4 col8" id="T_9113b_row4_col8">29</td>
 </tr>
 </tbody>
 </table>
@@ -8148,7 +8329,7 @@ kcm is greater than 0.51</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5 id="3.2.3.2-For-Class-negative">3.2.3.2 For Class negative<a class="anchor-link" href="#3.2.3.2-For-Class-negative">¶</a></h5>
+<h5 id="4.2.3.2-For-Class-negative">4.2.3.2 For Class negative<a class="anchor-link" href="#4.2.3.2-For-Class-negative">¶</a></h5>
 </div>
 </div>
 </div>
@@ -8157,7 +8338,7 @@ kcm is greater than 0.51</td>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">validate_df0</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="n">validate_df</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'negative'</span><span class="p">]</span>
@@ -8175,97 +8356,97 @@ kcm is greater than 0.51</td>
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_3f3be th {
+#T_9174b th {
   text-align: left;
 }
-#T_3f3be td {
+#T_9174b td {
   text-align: left;
 }
 </style>
-<table id="T_3f3be">
+<table id="T_9174b">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_3f3be_level0_col0">Test Data Point Number</th>
-<th class="col_heading level0 col1" id="T_3f3be_level0_col1">class</th>
-<th class="col_heading level0 col2" id="T_3f3be_level0_col2">Augmented Intelligence Insights</th>
-<th class="col_heading level0 col3" id="T_3f3be_level0_col3">Insight Scores</th>
-<th class="col_heading level0 col4" id="T_3f3be_level0_col4">Accuracy</th>
-<th class="col_heading level0 col5" id="T_3f3be_level0_col5">Coverage</th>
-<th class="col_heading level0 col6" id="T_3f3be_level0_col6">Population</th>
-<th class="col_heading level0 col7" id="T_3f3be_level0_col7">Accuracy Count</th>
-<th class="col_heading level0 col8" id="T_3f3be_level0_col8">Total Population</th>
+<th class="col_heading level0 col0" id="T_9174b_level0_col0">Test Data Point Number</th>
+<th class="col_heading level0 col1" id="T_9174b_level0_col1">class</th>
+<th class="col_heading level0 col2" id="T_9174b_level0_col2">Augmented Intelligence Insights</th>
+<th class="col_heading level0 col3" id="T_9174b_level0_col3">Insight Scores</th>
+<th class="col_heading level0 col4" id="T_9174b_level0_col4">Accuracy</th>
+<th class="col_heading level0 col5" id="T_9174b_level0_col5">Coverage</th>
+<th class="col_heading level0 col6" id="T_9174b_level0_col6">Population</th>
+<th class="col_heading level0 col7" id="T_9174b_level0_col7">Accuracy Count</th>
+<th class="col_heading level0 col8" id="T_9174b_level0_col8">Total Population</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_3f3be_level0_row0">0</th>
-<td class="data row0 col0" id="T_3f3be_row0_col0">1</td>
-<td class="data row0 col1" id="T_3f3be_row0_col1">negative</td>
-<td class="data row0 col2" id="T_3f3be_row0_col2">pressurelow is less than equal to 80.5,
+<th class="row_heading level0 row0" id="T_9174b_level0_row0">0</th>
+<td class="data row0 col0" id="T_9174b_row0_col0">1</td>
+<td class="data row0 col1" id="T_9174b_row0_col1">negative</td>
+<td class="data row0 col2" id="T_9174b_row0_col2">pressurelow is less than equal to 80.5,
 troponin is less than equal to 0.01,
 kcm is less than equal to 6.29</td>
-<td class="data row0 col3" id="T_3f3be_row0_col3">0.962300</td>
-<td class="data row0 col4" id="T_3f3be_row0_col4">1.000000</td>
-<td class="data row0 col5" id="T_3f3be_row0_col5">0.310300</td>
-<td class="data row0 col6" id="T_3f3be_row0_col6">9</td>
-<td class="data row0 col7" id="T_3f3be_row0_col7">9</td>
-<td class="data row0 col8" id="T_3f3be_row0_col8">29</td>
+<td class="data row0 col3" id="T_9174b_row0_col3">0.962300</td>
+<td class="data row0 col4" id="T_9174b_row0_col4">1.000000</td>
+<td class="data row0 col5" id="T_9174b_row0_col5">0.310300</td>
+<td class="data row0 col6" id="T_9174b_row0_col6">9</td>
+<td class="data row0 col7" id="T_9174b_row0_col7">9</td>
+<td class="data row0 col8" id="T_9174b_row0_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_3f3be_level0_row1">1</th>
-<td class="data row1 col0" id="T_3f3be_row1_col0">2</td>
-<td class="data row1 col1" id="T_3f3be_row1_col1">negative</td>
-<td class="data row1 col2" id="T_3f3be_row1_col2">troponin is less than equal to 0.01,
+<th class="row_heading level0 row1" id="T_9174b_level0_row1">1</th>
+<td class="data row1 col0" id="T_9174b_row1_col0">2</td>
+<td class="data row1 col1" id="T_9174b_row1_col1">negative</td>
+<td class="data row1 col2" id="T_9174b_row1_col2">troponin is less than equal to 0.01,
 kcm is less than equal to 6.29</td>
-<td class="data row1 col3" id="T_3f3be_row1_col3">0.948500</td>
-<td class="data row1 col4" id="T_3f3be_row1_col4">1.000000</td>
-<td class="data row1 col5" id="T_3f3be_row1_col5">0.413800</td>
-<td class="data row1 col6" id="T_3f3be_row1_col6">12</td>
-<td class="data row1 col7" id="T_3f3be_row1_col7">12</td>
-<td class="data row1 col8" id="T_3f3be_row1_col8">29</td>
+<td class="data row1 col3" id="T_9174b_row1_col3">0.948500</td>
+<td class="data row1 col4" id="T_9174b_row1_col4">1.000000</td>
+<td class="data row1 col5" id="T_9174b_row1_col5">0.413800</td>
+<td class="data row1 col6" id="T_9174b_row1_col6">12</td>
+<td class="data row1 col7" id="T_9174b_row1_col7">12</td>
+<td class="data row1 col8" id="T_9174b_row1_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_3f3be_level0_row2">2</th>
-<td class="data row2 col0" id="T_3f3be_row2_col0">3</td>
-<td class="data row2 col1" id="T_3f3be_row2_col1">negative</td>
-<td class="data row2 col2" id="T_3f3be_row2_col2">troponin is less than equal to 0.01,
+<th class="row_heading level0 row2" id="T_9174b_level0_row2">2</th>
+<td class="data row2 col0" id="T_9174b_row2_col0">3</td>
+<td class="data row2 col1" id="T_9174b_row2_col1">negative</td>
+<td class="data row2 col2" id="T_9174b_row2_col2">troponin is less than equal to 0.01,
 pressurehight is less than equal to 151.5,
 kcm is less than equal to 6.29</td>
-<td class="data row2 col3" id="T_3f3be_row2_col3">0.928300</td>
-<td class="data row2 col4" id="T_3f3be_row2_col4">1.000000</td>
-<td class="data row2 col5" id="T_3f3be_row2_col5">0.241400</td>
-<td class="data row2 col6" id="T_3f3be_row2_col6">7</td>
-<td class="data row2 col7" id="T_3f3be_row2_col7">7</td>
-<td class="data row2 col8" id="T_3f3be_row2_col8">29</td>
+<td class="data row2 col3" id="T_9174b_row2_col3">0.928300</td>
+<td class="data row2 col4" id="T_9174b_row2_col4">1.000000</td>
+<td class="data row2 col5" id="T_9174b_row2_col5">0.241400</td>
+<td class="data row2 col6" id="T_9174b_row2_col6">7</td>
+<td class="data row2 col7" id="T_9174b_row2_col7">7</td>
+<td class="data row2 col8" id="T_9174b_row2_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_3f3be_level0_row3">3</th>
-<td class="data row3 col0" id="T_3f3be_row3_col0">4</td>
-<td class="data row3 col1" id="T_3f3be_row3_col1">negative</td>
-<td class="data row3 col2" id="T_3f3be_row3_col2">troponin is less than equal to 0.01,
+<th class="row_heading level0 row3" id="T_9174b_level0_row3">3</th>
+<td class="data row3 col0" id="T_9174b_row3_col0">4</td>
+<td class="data row3 col1" id="T_9174b_row3_col1">negative</td>
+<td class="data row3 col2" id="T_9174b_row3_col2">troponin is less than equal to 0.01,
 kcm is less than equal to 4.88,
 glucose is greater than 55.0</td>
-<td class="data row3 col3" id="T_3f3be_row3_col3">0.927600</td>
-<td class="data row3 col4" id="T_3f3be_row3_col4">1.000000</td>
-<td class="data row3 col5" id="T_3f3be_row3_col5">0.413800</td>
-<td class="data row3 col6" id="T_3f3be_row3_col6">12</td>
-<td class="data row3 col7" id="T_3f3be_row3_col7">12</td>
-<td class="data row3 col8" id="T_3f3be_row3_col8">29</td>
+<td class="data row3 col3" id="T_9174b_row3_col3">0.927600</td>
+<td class="data row3 col4" id="T_9174b_row3_col4">1.000000</td>
+<td class="data row3 col5" id="T_9174b_row3_col5">0.413800</td>
+<td class="data row3 col6" id="T_9174b_row3_col6">12</td>
+<td class="data row3 col7" id="T_9174b_row3_col7">12</td>
+<td class="data row3 col8" id="T_9174b_row3_col8">29</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_3f3be_level0_row4">4</th>
-<td class="data row4 col0" id="T_3f3be_row4_col0">5</td>
-<td class="data row4 col1" id="T_3f3be_row4_col1">negative</td>
-<td class="data row4 col2" id="T_3f3be_row4_col2">troponin is less than equal to 0.01,
+<th class="row_heading level0 row4" id="T_9174b_level0_row4">4</th>
+<td class="data row4 col0" id="T_9174b_row4_col0">5</td>
+<td class="data row4 col1" id="T_9174b_row4_col1">negative</td>
+<td class="data row4 col2" id="T_9174b_row4_col2">troponin is less than equal to 0.01,
 kcm is less than equal to 4.88,
 impluse is less than equal to 89.5</td>
-<td class="data row4 col3" id="T_3f3be_row4_col3">0.907600</td>
-<td class="data row4 col4" id="T_3f3be_row4_col4">1.000000</td>
-<td class="data row4 col5" id="T_3f3be_row4_col5">0.379300</td>
-<td class="data row4 col6" id="T_3f3be_row4_col6">11</td>
-<td class="data row4 col7" id="T_3f3be_row4_col7">11</td>
-<td class="data row4 col8" id="T_3f3be_row4_col8">29</td>
+<td class="data row4 col3" id="T_9174b_row4_col3">0.907600</td>
+<td class="data row4 col4" id="T_9174b_row4_col4">1.000000</td>
+<td class="data row4 col5" id="T_9174b_row4_col5">0.379300</td>
+<td class="data row4 col6" id="T_9174b_row4_col6">11</td>
+<td class="data row4 col7" id="T_9174b_row4_col7">11</td>
+<td class="data row4 col8" id="T_9174b_row4_col8">29</td>
 </tr>
 </tbody>
 </table>
@@ -8280,7 +8461,7 @@ impluse is less than equal to 89.5</td>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">3.2.4 Display Filtered Data for Specific Record Numbers<a class="anchor-link" href="#3.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">¶</a></h4>
+<h4 id="4.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">4.2.4 Display Filtered Data for Specific Record Numbers<a class="anchor-link" href="#4.2.4-Display-Filtered-Data-for-Specific-Record-Numbers">¶</a></h4>
 </div>
 </div>
 </div>
@@ -8289,7 +8470,7 @@ impluse is less than equal to 89.5</td>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">record_number</span><span class="p">)):</span>
@@ -8320,94 +8501,94 @@ kcm is less than equal to 6.29
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_e3057 th {
+#T_1b52c th {
   text-align: left;
 }
-#T_e3057 td {
+#T_1b52c td {
   text-align: left;
 }
 </style>
-<table id="T_e3057">
+<table id="T_1b52c">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_e3057_level0_col0">age</th>
-<th class="col_heading level0 col1" id="T_e3057_level0_col1">impluse</th>
-<th class="col_heading level0 col2" id="T_e3057_level0_col2">pressurehight</th>
-<th class="col_heading level0 col3" id="T_e3057_level0_col3">pressurelow</th>
-<th class="col_heading level0 col4" id="T_e3057_level0_col4">glucose</th>
-<th class="col_heading level0 col5" id="T_e3057_level0_col5">kcm</th>
-<th class="col_heading level0 col6" id="T_e3057_level0_col6">troponin</th>
-<th class="col_heading level0 col7" id="T_e3057_level0_col7">class</th>
-<th class="col_heading level0 col8" id="T_e3057_level0_col8">gender_0</th>
-<th class="col_heading level0 col9" id="T_e3057_level0_col9">gender_1</th>
+<th class="col_heading level0 col0" id="T_1b52c_level0_col0">age</th>
+<th class="col_heading level0 col1" id="T_1b52c_level0_col1">impluse</th>
+<th class="col_heading level0 col2" id="T_1b52c_level0_col2">pressurehight</th>
+<th class="col_heading level0 col3" id="T_1b52c_level0_col3">pressurelow</th>
+<th class="col_heading level0 col4" id="T_1b52c_level0_col4">glucose</th>
+<th class="col_heading level0 col5" id="T_1b52c_level0_col5">kcm</th>
+<th class="col_heading level0 col6" id="T_1b52c_level0_col6">troponin</th>
+<th class="col_heading level0 col7" id="T_1b52c_level0_col7">class</th>
+<th class="col_heading level0 col8" id="T_1b52c_level0_col8">gender_0</th>
+<th class="col_heading level0 col9" id="T_1b52c_level0_col9">gender_1</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_e3057_level0_row0">0</th>
-<td class="data row0 col0" id="T_e3057_row0_col0">55</td>
-<td class="data row0 col1" id="T_e3057_row0_col1">64</td>
-<td class="data row0 col2" id="T_e3057_row0_col2">112</td>
-<td class="data row0 col3" id="T_e3057_row0_col3">65</td>
-<td class="data row0 col4" id="T_e3057_row0_col4">300</td>
-<td class="data row0 col5" id="T_e3057_row0_col5">1.080000</td>
-<td class="data row0 col6" id="T_e3057_row0_col6">0.003000</td>
-<td class="data row0 col7" id="T_e3057_row0_col7">NEGATIVE</td>
-<td class="data row0 col8" id="T_e3057_row0_col8">False</td>
-<td class="data row0 col9" id="T_e3057_row0_col9">True</td>
+<th class="row_heading level0 row0" id="T_1b52c_level0_row0">0</th>
+<td class="data row0 col0" id="T_1b52c_row0_col0">55</td>
+<td class="data row0 col1" id="T_1b52c_row0_col1">64</td>
+<td class="data row0 col2" id="T_1b52c_row0_col2">112</td>
+<td class="data row0 col3" id="T_1b52c_row0_col3">65</td>
+<td class="data row0 col4" id="T_1b52c_row0_col4">300</td>
+<td class="data row0 col5" id="T_1b52c_row0_col5">1.080000</td>
+<td class="data row0 col6" id="T_1b52c_row0_col6">0.003000</td>
+<td class="data row0 col7" id="T_1b52c_row0_col7">NEGATIVE</td>
+<td class="data row0 col8" id="T_1b52c_row0_col8">False</td>
+<td class="data row0 col9" id="T_1b52c_row0_col9">True</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_e3057_level0_row1">1</th>
-<td class="data row1 col0" id="T_e3057_row1_col0">58</td>
-<td class="data row1 col1" id="T_e3057_row1_col1">61</td>
-<td class="data row1 col2" id="T_e3057_row1_col2">112</td>
-<td class="data row1 col3" id="T_e3057_row1_col3">58</td>
-<td class="data row1 col4" id="T_e3057_row1_col4">87</td>
-<td class="data row1 col5" id="T_e3057_row1_col5">1.830000</td>
-<td class="data row1 col6" id="T_e3057_row1_col6">0.004000</td>
-<td class="data row1 col7" id="T_e3057_row1_col7">NEGATIVE</td>
-<td class="data row1 col8" id="T_e3057_row1_col8">True</td>
-<td class="data row1 col9" id="T_e3057_row1_col9">False</td>
+<th class="row_heading level0 row1" id="T_1b52c_level0_row1">1</th>
+<td class="data row1 col0" id="T_1b52c_row1_col0">58</td>
+<td class="data row1 col1" id="T_1b52c_row1_col1">61</td>
+<td class="data row1 col2" id="T_1b52c_row1_col2">112</td>
+<td class="data row1 col3" id="T_1b52c_row1_col3">58</td>
+<td class="data row1 col4" id="T_1b52c_row1_col4">87</td>
+<td class="data row1 col5" id="T_1b52c_row1_col5">1.830000</td>
+<td class="data row1 col6" id="T_1b52c_row1_col6">0.004000</td>
+<td class="data row1 col7" id="T_1b52c_row1_col7">NEGATIVE</td>
+<td class="data row1 col8" id="T_1b52c_row1_col8">True</td>
+<td class="data row1 col9" id="T_1b52c_row1_col9">False</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_e3057_level0_row2">2</th>
-<td class="data row2 col0" id="T_e3057_row2_col0">47</td>
-<td class="data row2 col1" id="T_e3057_row2_col1">76</td>
-<td class="data row2 col2" id="T_e3057_row2_col2">120</td>
-<td class="data row2 col3" id="T_e3057_row2_col3">70</td>
-<td class="data row2 col4" id="T_e3057_row2_col4">319</td>
-<td class="data row2 col5" id="T_e3057_row2_col5">2.570000</td>
-<td class="data row2 col6" id="T_e3057_row2_col6">0.003000</td>
-<td class="data row2 col7" id="T_e3057_row2_col7">NEGATIVE</td>
-<td class="data row2 col8" id="T_e3057_row2_col8">False</td>
-<td class="data row2 col9" id="T_e3057_row2_col9">True</td>
+<th class="row_heading level0 row2" id="T_1b52c_level0_row2">2</th>
+<td class="data row2 col0" id="T_1b52c_row2_col0">47</td>
+<td class="data row2 col1" id="T_1b52c_row2_col1">76</td>
+<td class="data row2 col2" id="T_1b52c_row2_col2">120</td>
+<td class="data row2 col3" id="T_1b52c_row2_col3">70</td>
+<td class="data row2 col4" id="T_1b52c_row2_col4">319</td>
+<td class="data row2 col5" id="T_1b52c_row2_col5">2.570000</td>
+<td class="data row2 col6" id="T_1b52c_row2_col6">0.003000</td>
+<td class="data row2 col7" id="T_1b52c_row2_col7">NEGATIVE</td>
+<td class="data row2 col8" id="T_1b52c_row2_col8">False</td>
+<td class="data row2 col9" id="T_1b52c_row2_col9">True</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_e3057_level0_row3">3</th>
-<td class="data row3 col0" id="T_e3057_row3_col0">45</td>
-<td class="data row3 col1" id="T_e3057_row3_col1">70</td>
-<td class="data row3 col2" id="T_e3057_row3_col2">100</td>
-<td class="data row3 col3" id="T_e3057_row3_col3">68</td>
-<td class="data row3 col4" id="T_e3057_row3_col4">96</td>
-<td class="data row3 col5" id="T_e3057_row3_col5">0.606000</td>
-<td class="data row3 col6" id="T_e3057_row3_col6">0.004000</td>
-<td class="data row3 col7" id="T_e3057_row3_col7">NEGATIVE</td>
-<td class="data row3 col8" id="T_e3057_row3_col8">True</td>
-<td class="data row3 col9" id="T_e3057_row3_col9">False</td>
+<th class="row_heading level0 row3" id="T_1b52c_level0_row3">3</th>
+<td class="data row3 col0" id="T_1b52c_row3_col0">45</td>
+<td class="data row3 col1" id="T_1b52c_row3_col1">70</td>
+<td class="data row3 col2" id="T_1b52c_row3_col2">100</td>
+<td class="data row3 col3" id="T_1b52c_row3_col3">68</td>
+<td class="data row3 col4" id="T_1b52c_row3_col4">96</td>
+<td class="data row3 col5" id="T_1b52c_row3_col5">0.606000</td>
+<td class="data row3 col6" id="T_1b52c_row3_col6">0.004000</td>
+<td class="data row3 col7" id="T_1b52c_row3_col7">NEGATIVE</td>
+<td class="data row3 col8" id="T_1b52c_row3_col8">True</td>
+<td class="data row3 col9" id="T_1b52c_row3_col9">False</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_e3057_level0_row4">4</th>
-<td class="data row4 col0" id="T_e3057_row4_col0">37</td>
-<td class="data row4 col1" id="T_e3057_row4_col1">72</td>
-<td class="data row4 col2" id="T_e3057_row4_col2">107</td>
-<td class="data row4 col3" id="T_e3057_row4_col3">86</td>
-<td class="data row4 col4" id="T_e3057_row4_col4">274</td>
-<td class="data row4 col5" id="T_e3057_row4_col5">2.890000</td>
-<td class="data row4 col6" id="T_e3057_row4_col6">0.003000</td>
-<td class="data row4 col7" id="T_e3057_row4_col7">NEGATIVE</td>
-<td class="data row4 col8" id="T_e3057_row4_col8">True</td>
-<td class="data row4 col9" id="T_e3057_row4_col9">False</td>
+<th class="row_heading level0 row4" id="T_1b52c_level0_row4">4</th>
+<td class="data row4 col0" id="T_1b52c_row4_col0">37</td>
+<td class="data row4 col1" id="T_1b52c_row4_col1">72</td>
+<td class="data row4 col2" id="T_1b52c_row4_col2">107</td>
+<td class="data row4 col3" id="T_1b52c_row4_col3">86</td>
+<td class="data row4 col4" id="T_1b52c_row4_col4">274</td>
+<td class="data row4 col5" id="T_1b52c_row4_col5">2.890000</td>
+<td class="data row4 col6" id="T_1b52c_row4_col6">0.003000</td>
+<td class="data row4 col7" id="T_1b52c_row4_col7">NEGATIVE</td>
+<td class="data row4 col8" id="T_1b52c_row4_col8">True</td>
+<td class="data row4 col9" id="T_1b52c_row4_col9">False</td>
 </tr>
 </tbody>
 </table>
@@ -8428,94 +8609,94 @@ impluse is less than equal to 89.5
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_87623 th {
+#T_91375 th {
   text-align: left;
 }
-#T_87623 td {
+#T_91375 td {
   text-align: left;
 }
 </style>
-<table id="T_87623">
+<table id="T_91375">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_87623_level0_col0">age</th>
-<th class="col_heading level0 col1" id="T_87623_level0_col1">impluse</th>
-<th class="col_heading level0 col2" id="T_87623_level0_col2">pressurehight</th>
-<th class="col_heading level0 col3" id="T_87623_level0_col3">pressurelow</th>
-<th class="col_heading level0 col4" id="T_87623_level0_col4">glucose</th>
-<th class="col_heading level0 col5" id="T_87623_level0_col5">kcm</th>
-<th class="col_heading level0 col6" id="T_87623_level0_col6">troponin</th>
-<th class="col_heading level0 col7" id="T_87623_level0_col7">class</th>
-<th class="col_heading level0 col8" id="T_87623_level0_col8">gender_0</th>
-<th class="col_heading level0 col9" id="T_87623_level0_col9">gender_1</th>
+<th class="col_heading level0 col0" id="T_91375_level0_col0">age</th>
+<th class="col_heading level0 col1" id="T_91375_level0_col1">impluse</th>
+<th class="col_heading level0 col2" id="T_91375_level0_col2">pressurehight</th>
+<th class="col_heading level0 col3" id="T_91375_level0_col3">pressurelow</th>
+<th class="col_heading level0 col4" id="T_91375_level0_col4">glucose</th>
+<th class="col_heading level0 col5" id="T_91375_level0_col5">kcm</th>
+<th class="col_heading level0 col6" id="T_91375_level0_col6">troponin</th>
+<th class="col_heading level0 col7" id="T_91375_level0_col7">class</th>
+<th class="col_heading level0 col8" id="T_91375_level0_col8">gender_0</th>
+<th class="col_heading level0 col9" id="T_91375_level0_col9">gender_1</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_87623_level0_row0">0</th>
-<td class="data row0 col0" id="T_87623_row0_col0">55</td>
-<td class="data row0 col1" id="T_87623_row0_col1">64</td>
-<td class="data row0 col2" id="T_87623_row0_col2">160</td>
-<td class="data row0 col3" id="T_87623_row0_col3">77</td>
-<td class="data row0 col4" id="T_87623_row0_col4">270</td>
-<td class="data row0 col5" id="T_87623_row0_col5">1.990000</td>
-<td class="data row0 col6" id="T_87623_row0_col6">0.003000</td>
-<td class="data row0 col7" id="T_87623_row0_col7">NEGATIVE</td>
-<td class="data row0 col8" id="T_87623_row0_col8">False</td>
-<td class="data row0 col9" id="T_87623_row0_col9">True</td>
+<th class="row_heading level0 row0" id="T_91375_level0_row0">0</th>
+<td class="data row0 col0" id="T_91375_row0_col0">55</td>
+<td class="data row0 col1" id="T_91375_row0_col1">64</td>
+<td class="data row0 col2" id="T_91375_row0_col2">160</td>
+<td class="data row0 col3" id="T_91375_row0_col3">77</td>
+<td class="data row0 col4" id="T_91375_row0_col4">270</td>
+<td class="data row0 col5" id="T_91375_row0_col5">1.990000</td>
+<td class="data row0 col6" id="T_91375_row0_col6">0.003000</td>
+<td class="data row0 col7" id="T_91375_row0_col7">NEGATIVE</td>
+<td class="data row0 col8" id="T_91375_row0_col8">False</td>
+<td class="data row0 col9" id="T_91375_row0_col9">True</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_87623_level0_row1">1</th>
-<td class="data row1 col0" id="T_87623_row1_col0">55</td>
-<td class="data row1 col1" id="T_87623_row1_col1">64</td>
-<td class="data row1 col2" id="T_87623_row1_col2">112</td>
-<td class="data row1 col3" id="T_87623_row1_col3">65</td>
-<td class="data row1 col4" id="T_87623_row1_col4">300</td>
-<td class="data row1 col5" id="T_87623_row1_col5">1.080000</td>
-<td class="data row1 col6" id="T_87623_row1_col6">0.003000</td>
-<td class="data row1 col7" id="T_87623_row1_col7">NEGATIVE</td>
-<td class="data row1 col8" id="T_87623_row1_col8">False</td>
-<td class="data row1 col9" id="T_87623_row1_col9">True</td>
+<th class="row_heading level0 row1" id="T_91375_level0_row1">1</th>
+<td class="data row1 col0" id="T_91375_row1_col0">55</td>
+<td class="data row1 col1" id="T_91375_row1_col1">64</td>
+<td class="data row1 col2" id="T_91375_row1_col2">112</td>
+<td class="data row1 col3" id="T_91375_row1_col3">65</td>
+<td class="data row1 col4" id="T_91375_row1_col4">300</td>
+<td class="data row1 col5" id="T_91375_row1_col5">1.080000</td>
+<td class="data row1 col6" id="T_91375_row1_col6">0.003000</td>
+<td class="data row1 col7" id="T_91375_row1_col7">NEGATIVE</td>
+<td class="data row1 col8" id="T_91375_row1_col8">False</td>
+<td class="data row1 col9" id="T_91375_row1_col9">True</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_87623_level0_row2">2</th>
-<td class="data row2 col0" id="T_87623_row2_col0">58</td>
-<td class="data row2 col1" id="T_87623_row2_col1">61</td>
-<td class="data row2 col2" id="T_87623_row2_col2">112</td>
-<td class="data row2 col3" id="T_87623_row2_col3">58</td>
-<td class="data row2 col4" id="T_87623_row2_col4">87</td>
-<td class="data row2 col5" id="T_87623_row2_col5">1.830000</td>
-<td class="data row2 col6" id="T_87623_row2_col6">0.004000</td>
-<td class="data row2 col7" id="T_87623_row2_col7">NEGATIVE</td>
-<td class="data row2 col8" id="T_87623_row2_col8">True</td>
-<td class="data row2 col9" id="T_87623_row2_col9">False</td>
+<th class="row_heading level0 row2" id="T_91375_level0_row2">2</th>
+<td class="data row2 col0" id="T_91375_row2_col0">58</td>
+<td class="data row2 col1" id="T_91375_row2_col1">61</td>
+<td class="data row2 col2" id="T_91375_row2_col2">112</td>
+<td class="data row2 col3" id="T_91375_row2_col3">58</td>
+<td class="data row2 col4" id="T_91375_row2_col4">87</td>
+<td class="data row2 col5" id="T_91375_row2_col5">1.830000</td>
+<td class="data row2 col6" id="T_91375_row2_col6">0.004000</td>
+<td class="data row2 col7" id="T_91375_row2_col7">NEGATIVE</td>
+<td class="data row2 col8" id="T_91375_row2_col8">True</td>
+<td class="data row2 col9" id="T_91375_row2_col9">False</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_87623_level0_row3">3</th>
-<td class="data row3 col0" id="T_87623_row3_col0">32</td>
-<td class="data row3 col1" id="T_87623_row3_col1">40</td>
-<td class="data row3 col2" id="T_87623_row3_col2">179</td>
-<td class="data row3 col3" id="T_87623_row3_col3">68</td>
-<td class="data row3 col4" id="T_87623_row3_col4">102</td>
-<td class="data row3 col5" id="T_87623_row3_col5">0.710000</td>
-<td class="data row3 col6" id="T_87623_row3_col6">0.003000</td>
-<td class="data row3 col7" id="T_87623_row3_col7">NEGATIVE</td>
-<td class="data row3 col8" id="T_87623_row3_col8">True</td>
-<td class="data row3 col9" id="T_87623_row3_col9">False</td>
+<th class="row_heading level0 row3" id="T_91375_level0_row3">3</th>
+<td class="data row3 col0" id="T_91375_row3_col0">32</td>
+<td class="data row3 col1" id="T_91375_row3_col1">40</td>
+<td class="data row3 col2" id="T_91375_row3_col2">179</td>
+<td class="data row3 col3" id="T_91375_row3_col3">68</td>
+<td class="data row3 col4" id="T_91375_row3_col4">102</td>
+<td class="data row3 col5" id="T_91375_row3_col5">0.710000</td>
+<td class="data row3 col6" id="T_91375_row3_col6">0.003000</td>
+<td class="data row3 col7" id="T_91375_row3_col7">NEGATIVE</td>
+<td class="data row3 col8" id="T_91375_row3_col8">True</td>
+<td class="data row3 col9" id="T_91375_row3_col9">False</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_87623_level0_row4">4</th>
-<td class="data row4 col0" id="T_87623_row4_col0">44</td>
-<td class="data row4 col1" id="T_87623_row4_col1">60</td>
-<td class="data row4 col2" id="T_87623_row4_col2">154</td>
-<td class="data row4 col3" id="T_87623_row4_col3">81</td>
-<td class="data row4 col4" id="T_87623_row4_col4">135</td>
-<td class="data row4 col5" id="T_87623_row4_col5">2.350000</td>
-<td class="data row4 col6" id="T_87623_row4_col6">0.004000</td>
-<td class="data row4 col7" id="T_87623_row4_col7">NEGATIVE</td>
-<td class="data row4 col8" id="T_87623_row4_col8">True</td>
-<td class="data row4 col9" id="T_87623_row4_col9">False</td>
+<th class="row_heading level0 row4" id="T_91375_level0_row4">4</th>
+<td class="data row4 col0" id="T_91375_row4_col0">44</td>
+<td class="data row4 col1" id="T_91375_row4_col1">60</td>
+<td class="data row4 col2" id="T_91375_row4_col2">154</td>
+<td class="data row4 col3" id="T_91375_row4_col3">81</td>
+<td class="data row4 col4" id="T_91375_row4_col4">135</td>
+<td class="data row4 col5" id="T_91375_row4_col5">2.350000</td>
+<td class="data row4 col6" id="T_91375_row4_col6">0.004000</td>
+<td class="data row4 col7" id="T_91375_row4_col7">NEGATIVE</td>
+<td class="data row4 col8" id="T_91375_row4_col8">True</td>
+<td class="data row4 col9" id="T_91375_row4_col9">False</td>
 </tr>
 </tbody>
 </table>
