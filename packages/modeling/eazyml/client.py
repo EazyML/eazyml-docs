@@ -46,12 +46,19 @@ from .license.license import (
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col
+from pyspark.ml import PipelineModel
+
+import joblib
 
 from .globals import logger as log
 log.initlog()
 # make level for pyj4 log as critical
 log_inst = log.instance()
-log_inst.getLogger("pyj4").setLevel(log_inst.CRITICAL)
+log_inst.getLogger("pyj4").setLevel(log_inst.ERROR)
+log_inst.getLogger("org").setLevel(log_inst.ERROR)
+log_inst.getLogger("akka").setLevel(log_inst.ERROR)
+log_inst.getLogger("root").setLevel(log_inst.ERROR)
+
 
 def ez_init(access_key: str=None,
                 usage_share_consent: bool=None,
@@ -168,7 +175,7 @@ def ez_build_model(train_data, outcome, options={}):
                 if spark:
                     try:
                         spark_version = spark.version
-                        return {"success": False, "message": "This version currently does not support the spark module for building models."}
+                        #return {"success": False, "message": "This version currently does not support the spark module for building models."}
                     except:
                         return {"success": False, "message": tr_api.SPARK_SESSION}
                     train_data = spark_utils.get_df_spark(train_file_path, spark)
@@ -177,8 +184,17 @@ def ez_build_model(train_data, outcome, options={}):
 
             if train_data is None:
                 return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}         
-        elif not isinstance(train_data, (pd.DataFrame, DataFrame)):
-            return {"success": False, "message": tr_api.VALID_DATAOBJECT.replace("this", "train_data")}
+        if isinstance(train_data, pd.DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    return {"success": False, "message": "Please provide Spark Dataframe or file path for spark modelling"}             
+                except:
+                    pass
         elif isinstance(train_data, DataFrame):
             if "spark_session" in options:
                 spark = options["spark_session"]
@@ -189,7 +205,10 @@ def ez_build_model(train_data, outcome, options={}):
                     spark_version = spark.version
                 except:
                     return {"success": False, "message": tr_api.SPARK_SESSION}
-                return {"success": False, "message": "This version currently does not support the spark module for building models."}
+                #return {"success": False, "message": "This version currently does not support the spark module for building models."}
+        else:
+            return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}
+            
         if not isinstance(options, dict):
             return {"success": False, "message": tr_api.VALID_DATATYPE_DICT.replace("this", "options")}
         
@@ -279,7 +298,7 @@ def ez_build_model(train_data, outcome, options={}):
         extra_info["misc_data"]["is_imputation_required"] = False
 
         if spark:
-            return {"success": False, "message": "This version currently does not support the spark module for building models."}
+            #return {"success": False, "message": "This version currently does not support the spark module for building models."}
             extra_info["spark"] = spark
             dtypes_list = train_data.dtypes
             dtype_df = pd.DataFrame(dtypes_list, columns=[g.VARIABLE_NAME, g.DATA_TYPE])
@@ -316,7 +335,7 @@ def ez_build_model(train_data, outcome, options={}):
             extra_info["misc_data_model"][g.MIN_MAX] = None
             #no prefix suffix in spark end. processing done at client end.
             ps_df = None
-            n = train_data.select(outcome).distinct().rdd.flatMap(lambda x: x).collect()
+            n = list(train_data.select(outcome).toPandas()[outcome].value_counts().index)
             if len(n) <= min(config.CATEGORICAL_UPPER_THRESHOLD, g.CATEGORICAL_LOWER_THRESHOLD):
                 outcome_type = "categorical"
                 extra_info["misc_data"]["outcome_labels"] = n
@@ -608,8 +627,17 @@ def ez_predict(test_data, model_info, options={}):
                     test_data = upload_utils.get_df(test_file_path)
             if test_data is None:
                 return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "test_data")} 
-        elif not isinstance(test_data, (pd.DataFrame, DataFrame)):
-            return {"success": False, "message": tr_api.VALID_DATAOBJECT.replace("this", "test_data")}
+        if isinstance(test_data, pd.DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    return {"success": False, "message": "Please provide Spark Dataframe or file_path for spark modelling"}             
+                except:
+                    pass
         elif isinstance(test_data, DataFrame):
             if "spark_session" in options:
                 spark = options["spark_session"]
@@ -620,7 +648,9 @@ def ez_predict(test_data, model_info, options={}):
                     spark_version = spark.version
                 except:
                     return {"success": False, "message": tr_api.SPARK_SESSION}
-
+        else:
+            return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "test_data")}
+            
         if not isinstance(options, dict):
             return {"success": False, "message": tr_api.VALID_DATATYPE_DICT.replace("this", "options")}
 
@@ -631,7 +661,7 @@ def ez_predict(test_data, model_info, options={}):
             spark = None
 
         if spark: 
-            return {"success": False, "message": "This version currently does not support the spark module for building models."}
+            #return {"success": False, "message": "This version currently does not support the spark module for building models."}
             if isinstance(model_info,bytes):
                 try:
                     model_info = api_utils.decrypt_dict(model_info)
@@ -795,3 +825,39 @@ def ez_display_md(resp):
     Function to display formatted markdown
     """
     return display_md(resp)
+
+
+def ez_store_spark_response(build_response, output_dir):
+    """
+    Function to store ez_build spark response
+    """
+    build_response_keys = ['success', 'message', 'model_performance', 'global_importance', 'model_info']
+    for each_para in build_response.keys():
+        if each_para not in build_response_keys:
+            return {"success": False, "message": "Please provide valid response from the build module"}
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    spark_model = build_response["model_info"]["spark_module"]
+    for index, row in spark_model.iterrows():
+        # Extract the model pipeline from the 'Models' column
+        model_pipeline = row['Models']["model"]
+        # Define the model name from the 'Model' column
+        model_name = row['Model'].replace("Sklearn",'')
+        # Define a file path for saving the model (using model name as directory name)
+        model_path = os.path.join(output_dir, model_name)
+        # Save the model pipeline to the specified path
+        model_pipeline.write().overwrite().save(model_path)
+
+    info = {"success":build_response["success"],
+    "message":build_response["message"],
+    "model_performance":build_response["model_performance"],
+    "global_importance":build_response["global_importance"],
+    "model_info":build_response["model_info"]["spark_info"]}
+    
+    build_model_response_path = output_dir + 'model_response.joblib'
+    
+    joblib.dump(info, build_model_response_path)
+    return {"success":True, "message":"All the information required is saved in the provided directory", 
+           "output_filepath":output_dir}

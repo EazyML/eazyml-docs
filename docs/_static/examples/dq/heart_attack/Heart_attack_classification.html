@@ -7566,6 +7566,7 @@ a.anchor-link {
 <span class="kn">import</span> <span class="nn">gdown</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 <span class="n">load_dotenv</span><span class="p">()</span>
 </pre></div>
@@ -7592,7 +7593,18 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-Initialize-EazyML">1. Initialize EazyML<a class="anchor-link" href="#1.-Initialize-EazyML">¶</a></h2><p>The <code>ez_init</code> function uses the <code>EAZYML_ACCESS_KEY</code> environment variable for authentication. If the variable is not set, it defaults to a trial license.</p>
+<h2 id="1.-Initialize-EazyML">1. Initialize EazyML<a class="anchor-link" href="#1.-Initialize-EazyML">¶</a></h2>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=68ddaef4-bcd9-4d9f-8272-10f9f3d4b0b6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The <code>ez_init</code> function uses the <code>EAZYML_ACCESS_KEY</code> environment variable for authentication. If the variable is not set, it defaults to a trial license.</p>
 </div>
 </div>
 </div>
@@ -7657,12 +7669,182 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Names of the files that will be used by EazyML APIs</span>
-<span class="n">eazyml_train_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_traindata.csv"</span><span class="p">)</span>
-<span class="n">eazyml_test_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_testdata.csv"</span><span class="p">)</span>
+<span class="n">train_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_traindata.csv"</span><span class="p">)</span>
+<span class="n">test_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="s2">"Heart_Attack_testdata.csv"</span><span class="p">)</span>
 
 <span class="c1"># The column name for outcome of interest</span>
 <span class="n">outcome</span> <span class="o">=</span> <span class="s2">"class"</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=da16d68b-9fed-4070-9e89-ef6946533ccd">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="3.-Dataset-Information">3. Dataset Information<a class="anchor-link" href="#3.-Dataset-Information">¶</a></h2>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=60b7f833-84d3-4246-8e82-9ecab3c9c4ef">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The dataset used in this notebook is the <strong>Heart Attack Dataset</strong>, which is a well-known dataset in machine learning and statistics. It contains data about patients, with several features (such as age, gender, blood pressure levels, and heart-related measurements) to predict the likelihood of a heart attack.</p>
+<h3 id="Columns-in-the-Dataset:">Columns in the Dataset:<a class="anchor-link" href="#Columns-in-the-Dataset:">¶</a></h3><ul>
+<li><strong>age</strong>: The age of the patient, measured in years.</li>
+<li><strong>gender</strong>: The gender of the patient, represented as a categorical variable (e.g., 1 = male, 0 = female).</li>
+<li><strong>impulse</strong>: Refers to the patient's pulse rate, measured in beats per minute (bpm).</li>
+<li><strong>pressurehight</strong>: Refers to systolic blood pressure, the higher number in a blood pressure reading (e.g., 120/80 mmHg).</li>
+<li><strong>pressurelow</strong>: Refers to diastolic blood pressure, the lower number in a blood pressure reading (e.g., 120/80 mmHg).</li>
+<li><strong>glucose</strong>: A measurement related to the heart, likely referring to potassium (K) concentration.</li>
+<li><strong>kcm</strong>: This refer to a measurement related to the heart, related to potassium (K) concentration.</li>
+<li><strong>troponin</strong>: A protein found in the heart muscle, measured to assess heart damage (especially after a heart attack).</li>
+<li><strong>class</strong>: The target variable, indicating the presence or absence of a condition or disease (e.g., 1 = heart attack, 0 = no heart attack).</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=23fdb657-8c69-40d8-88fd-a2a912e1bff6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="3.1-Display-the-Dataset">3.1 Display the Dataset<a class="anchor-link" href="#3.1-Display-the-Dataset">¶</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6dcceead-705d-4109-8549-73f9e54c7281">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Below is a preview of the dataset:</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3d36760b-b27e-469c-9364-a5560522b4f6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Load the dataset from the provided file</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">)</span>
+
+<span class="c1"># Display the first few rows of the dataset</span>
+<span class="n">ez_display_df</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<style type="text/css">
+#T_091b2 th {
+  text-align: left;
+}
+#T_091b2 td {
+  text-align: left;
+}
+</style>
+<table id="T_091b2">
+<thead>
+<tr>
+<th class="blank level0"> </th>
+<th class="col_heading level0 col0" id="T_091b2_level0_col0">age</th>
+<th class="col_heading level0 col1" id="T_091b2_level0_col1">gender</th>
+<th class="col_heading level0 col2" id="T_091b2_level0_col2">impluse</th>
+<th class="col_heading level0 col3" id="T_091b2_level0_col3">pressurehight</th>
+<th class="col_heading level0 col4" id="T_091b2_level0_col4">pressurelow</th>
+<th class="col_heading level0 col5" id="T_091b2_level0_col5">glucose</th>
+<th class="col_heading level0 col6" id="T_091b2_level0_col6">kcm</th>
+<th class="col_heading level0 col7" id="T_091b2_level0_col7">troponin</th>
+<th class="col_heading level0 col8" id="T_091b2_level0_col8">class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="row_heading level0 row0" id="T_091b2_level0_row0">0</th>
+<td class="data row0 col0" id="T_091b2_row0_col0">64</td>
+<td class="data row0 col1" id="T_091b2_row0_col1">1</td>
+<td class="data row0 col2" id="T_091b2_row0_col2">66</td>
+<td class="data row0 col3" id="T_091b2_row0_col3">160</td>
+<td class="data row0 col4" id="T_091b2_row0_col4">83</td>
+<td class="data row0 col5" id="T_091b2_row0_col5">160.000000</td>
+<td class="data row0 col6" id="T_091b2_row0_col6">1.800000</td>
+<td class="data row0 col7" id="T_091b2_row0_col7">0.012000</td>
+<td class="data row0 col8" id="T_091b2_row0_col8">negative</td>
+</tr>
+<tr>
+<th class="row_heading level0 row1" id="T_091b2_level0_row1">1</th>
+<td class="data row1 col0" id="T_091b2_row1_col0">21</td>
+<td class="data row1 col1" id="T_091b2_row1_col1">1</td>
+<td class="data row1 col2" id="T_091b2_row1_col2">94</td>
+<td class="data row1 col3" id="T_091b2_row1_col3">98</td>
+<td class="data row1 col4" id="T_091b2_row1_col4">46</td>
+<td class="data row1 col5" id="T_091b2_row1_col5">296.000000</td>
+<td class="data row1 col6" id="T_091b2_row1_col6">6.750000</td>
+<td class="data row1 col7" id="T_091b2_row1_col7">1.060000</td>
+<td class="data row1 col8" id="T_091b2_row1_col8">positive</td>
+</tr>
+<tr>
+<th class="row_heading level0 row2" id="T_091b2_level0_row2">2</th>
+<td class="data row2 col0" id="T_091b2_row2_col0">55</td>
+<td class="data row2 col1" id="T_091b2_row2_col1">1</td>
+<td class="data row2 col2" id="T_091b2_row2_col2">64</td>
+<td class="data row2 col3" id="T_091b2_row2_col3">160</td>
+<td class="data row2 col4" id="T_091b2_row2_col4">77</td>
+<td class="data row2 col5" id="T_091b2_row2_col5">270.000000</td>
+<td class="data row2 col6" id="T_091b2_row2_col6">1.990000</td>
+<td class="data row2 col7" id="T_091b2_row2_col7">0.003000</td>
+<td class="data row2 col8" id="T_091b2_row2_col8">negative</td>
+</tr>
+<tr>
+<th class="row_heading level0 row3" id="T_091b2_level0_row3">3</th>
+<td class="data row3 col0" id="T_091b2_row3_col0">64</td>
+<td class="data row3 col1" id="T_091b2_row3_col1">1</td>
+<td class="data row3 col2" id="T_091b2_row3_col2">70</td>
+<td class="data row3 col3" id="T_091b2_row3_col3">120</td>
+<td class="data row3 col4" id="T_091b2_row3_col4">55</td>
+<td class="data row3 col5" id="T_091b2_row3_col5">270.000000</td>
+<td class="data row3 col6" id="T_091b2_row3_col6">13.870000</td>
+<td class="data row3 col7" id="T_091b2_row3_col7">0.122000</td>
+<td class="data row3 col8" id="T_091b2_row3_col8">positive</td>
+</tr>
+<tr>
+<th class="row_heading level0 row4" id="T_091b2_level0_row4">4</th>
+<td class="data row4 col0" id="T_091b2_row4_col0">55</td>
+<td class="data row4 col1" id="T_091b2_row4_col1">1</td>
+<td class="data row4 col2" id="T_091b2_row4_col2">64</td>
+<td class="data row4 col3" id="T_091b2_row4_col3">112</td>
+<td class="data row4 col4" id="T_091b2_row4_col4">65</td>
+<td class="data row4 col5" id="T_091b2_row4_col5">300.000000</td>
+<td class="data row4 col6" id="T_091b2_row4_col6">1.080000</td>
+<td class="data row4 col7" id="T_091b2_row4_col7">0.003000</td>
+<td class="data row4 col8" id="T_091b2_row4_col8">negative</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -7674,7 +7856,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-EazyML-Data-Quality-Assessment">3. EazyML Data Quality Assessment<a class="anchor-link" href="#3.-EazyML-Data-Quality-Assessment">¶</a></h2>
+<h2 id="4.-EazyML-Data-Quality-Assessment">4. EazyML Data Quality Assessment<a class="anchor-link" href="#4.-EazyML-Data-Quality-Assessment">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7685,7 +7867,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.1-Call-ez_data_quality-API,-Perform-All-Checks">3.1 Call ez_data_quality API, Perform All Checks<a class="anchor-link" href="#3.1-Call-ez_data_quality-API,-Perform-All-Checks">¶</a></h3>
+<h3 id="4.1-Call-ez_data_quality-API,-Perform-All-Checks">4.1 Call ez_data_quality API, Perform All Checks<a class="anchor-link" href="#4.1-Call-ez_data_quality-API,-Perform-All-Checks">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7694,7 +7876,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
@@ -7707,12 +7889,12 @@ a.anchor-link {
     <span class="s2">"outcome_correlation"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
     <span class="s2">"data_drift"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
     <span class="s2">"model_drift"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
-    <span class="s2">"prediction_data"</span><span class="p">:</span> <span class="n">eazyml_test_file</span><span class="p">,</span>
+    <span class="s2">"prediction_data"</span><span class="p">:</span> <span class="n">test_file_path</span><span class="p">,</span>
     <span class="s2">"data_completeness"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
     <span class="s2">"data_correctness"</span><span class="p">:</span> <span class="s2">"yes"</span>
 <span class="p">}</span>
 
-<span class="n">res</span> <span class="o">=</span> <span class="n">ez_data_quality</span><span class="p">(</span><span class="n">eazyml_train_file</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">ez_data_quality</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">,</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7725,7 +7907,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.2-Data-Quality-Assessment-Results">3.2 Data Quality Assessment Results<a class="anchor-link" href="#3.2-Data-Quality-Assessment-Results">¶</a></h3>
+<h3 id="4.2-Data-Quality-Assessment-Results">4.2 Data Quality Assessment Results<a class="anchor-link" href="#4.2-Data-Quality-Assessment-Results">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7736,7 +7918,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.1-Data-Quality-Alerts:-Check-if-Any-Alerts-Are-True">3.2.1 Data Quality Alerts: Check if Any Alerts Are True<a class="anchor-link" href="#3.2.1-Data-Quality-Alerts:-Check-if-Any-Alerts-Are-True">¶</a></h4>
+<h4 id="4.2.1-Data-Quality-Alerts:-Check-if-Any-Alerts-Are-True">4.2.1 Data Quality Alerts: Check if Any Alerts Are True<a class="anchor-link" href="#4.2.1-Data-Quality-Alerts:-Check-if-Any-Alerts-Are-True">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7745,7 +7927,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">alerts</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'data_bad_quality_alerts'</span><span class="p">]</span>
@@ -7784,7 +7966,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.2-Data-Completeness?">3.2.2 Data Completeness?<a class="anchor-link" href="#3.2.2-Data-Completeness?">¶</a></h4>
+<h4 id="4.2.2-Data-Completeness?">4.2.2 Data Completeness?<a class="anchor-link" href="#4.2.2-Data-Completeness?">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7793,7 +7975,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_completeness_quality'</span><span class="p">])</span>
@@ -7830,7 +8012,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.3-Data-Balanced?">3.2.3 Data Balanced?<a class="anchor-link" href="#3.2.3-Data-Balanced?">¶</a></h4>
+<h4 id="4.2.3-Data-Balanced?">4.2.3 Data Balanced?<a class="anchor-link" href="#4.2.3-Data-Balanced?">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7839,7 +8021,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_balance_quality'</span><span class="p">])</span>
@@ -7884,7 +8066,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.4-Data-Correctness?">3.2.4 Data Correctness?<a class="anchor-link" href="#3.2.4-Data-Correctness?">¶</a></h4>
+<h4 id="4.2.4-Data-Correctness?">4.2.4 Data Correctness?<a class="anchor-link" href="#4.2.4-Data-Correctness?">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7893,7 +8075,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_correctness_quality'</span><span class="p">])</span>
@@ -7929,7 +8111,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.5-Data-Correlations?-Look-for-Strongly-Correlated-Features">3.2.5 Data Correlations? Look for Strongly Correlated Features<a class="anchor-link" href="#3.2.5-Data-Correlations?-Look-for-Strongly-Correlated-Features">¶</a></h4>
+<h4 id="4.2.5-Data-Correlations?-Look-for-Strongly-Correlated-Features">4.2.5 Data Correlations? Look for Strongly Correlated Features<a class="anchor-link" href="#4.2.5-Data-Correlations?-Look-for-Strongly-Correlated-Features">¶</a></h4>
 </div>
 </div>
 </div>
@@ -7938,7 +8120,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">feat_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_correlation_quality'</span><span class="p">][</span><span class="s1">'data_correlation'</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -7966,7 +8148,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">corr_dict</span><span class="p">)</span>
@@ -8002,7 +8184,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.6-Data-Emptiness?">3.2.6 Data Emptiness?<a class="anchor-link" href="#3.2.6-Data-Emptiness?">¶</a></h4>
+<h4 id="4.2.6-Data-Emptiness?">4.2.6 Data Emptiness?<a class="anchor-link" href="#4.2.6-Data-Emptiness?">¶</a></h4>
 </div>
 </div>
 </div>
@@ -8011,7 +8193,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_emptiness_quality'</span><span class="p">])</span>
@@ -8042,7 +8224,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.7-Data-Dimension?-Is-it-Adequate?">3.2.7 Data Dimension? Is it Adequate?<a class="anchor-link" href="#3.2.7-Data-Dimension?-Is-it-Adequate?">¶</a></h4>
+<h4 id="4.2.7-Data-Dimension?-Is-it-Adequate?">4.2.7 Data Dimension? Is it Adequate?<a class="anchor-link" href="#4.2.7-Data-Dimension?-Is-it-Adequate?">¶</a></h4>
 </div>
 </div>
 </div>
@@ -8051,7 +8233,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'data_shape_quality'</span><span class="p">])</span>
@@ -8083,7 +8265,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.8-Data-Outliers?">3.2.8 Data Outliers?<a class="anchor-link" href="#3.2.8-Data-Outliers?">¶</a></h4>
+<h4 id="4.2.8-Data-Outliers?">4.2.8 Data Outliers?<a class="anchor-link" href="#4.2.8-Data-Outliers?">¶</a></h4>
 </div>
 </div>
 </div>
@@ -8092,7 +8274,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span>
@@ -8115,88 +8297,88 @@ a.anchor-link {
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
 <style type="text/css">
-#T_62ccc th {
+#T_bf609 th {
   text-align: left;
 }
-#T_62ccc td {
+#T_bf609 td {
   text-align: left;
 }
 </style>
-<table id="T_62ccc">
+<table id="T_bf609">
 <thead>
 <tr>
 <th class="blank level0"> </th>
-<th class="col_heading level0 col0" id="T_62ccc_level0_col0">age</th>
-<th class="col_heading level0 col1" id="T_62ccc_level0_col1">gender</th>
-<th class="col_heading level0 col2" id="T_62ccc_level0_col2">impluse</th>
-<th class="col_heading level0 col3" id="T_62ccc_level0_col3">pressurehight</th>
-<th class="col_heading level0 col4" id="T_62ccc_level0_col4">pressurelow</th>
-<th class="col_heading level0 col5" id="T_62ccc_level0_col5">glucose</th>
-<th class="col_heading level0 col6" id="T_62ccc_level0_col6">kcm</th>
-<th class="col_heading level0 col7" id="T_62ccc_level0_col7">troponin</th>
-<th class="col_heading level0 col8" id="T_62ccc_level0_col8">class</th>
+<th class="col_heading level0 col0" id="T_bf609_level0_col0">age</th>
+<th class="col_heading level0 col1" id="T_bf609_level0_col1">gender</th>
+<th class="col_heading level0 col2" id="T_bf609_level0_col2">impluse</th>
+<th class="col_heading level0 col3" id="T_bf609_level0_col3">pressurehight</th>
+<th class="col_heading level0 col4" id="T_bf609_level0_col4">pressurelow</th>
+<th class="col_heading level0 col5" id="T_bf609_level0_col5">glucose</th>
+<th class="col_heading level0 col6" id="T_bf609_level0_col6">kcm</th>
+<th class="col_heading level0 col7" id="T_bf609_level0_col7">troponin</th>
+<th class="col_heading level0 col8" id="T_bf609_level0_col8">class</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="row_heading level0 row0" id="T_62ccc_level0_row0">1028</th>
-<td class="data row0 col0" id="T_62ccc_row0_col0">68</td>
-<td class="data row0 col1" id="T_62ccc_row0_col1">1</td>
-<td class="data row0 col2" id="T_62ccc_row0_col2">89</td>
-<td class="data row0 col3" id="T_62ccc_row0_col3">145</td>
-<td class="data row0 col4" id="T_62ccc_row0_col4">68</td>
-<td class="data row0 col5" id="T_62ccc_row0_col5">134.0</td>
-<td class="data row0 col6" id="T_62ccc_row0_col6">0.706</td>
-<td class="data row0 col7" id="T_62ccc_row0_col7">10.0</td>
-<td class="data row0 col8" id="T_62ccc_row0_col8">positive</td>
+<th class="row_heading level0 row0" id="T_bf609_level0_row0">1028</th>
+<td class="data row0 col0" id="T_bf609_row0_col0">68</td>
+<td class="data row0 col1" id="T_bf609_row0_col1">1</td>
+<td class="data row0 col2" id="T_bf609_row0_col2">89</td>
+<td class="data row0 col3" id="T_bf609_row0_col3">145</td>
+<td class="data row0 col4" id="T_bf609_row0_col4">68</td>
+<td class="data row0 col5" id="T_bf609_row0_col5">134.0</td>
+<td class="data row0 col6" id="T_bf609_row0_col6">0.706</td>
+<td class="data row0 col7" id="T_bf609_row0_col7">10.0</td>
+<td class="data row0 col8" id="T_bf609_row0_col8">positive</td>
 </tr>
 <tr>
-<th class="row_heading level0 row1" id="T_62ccc_level0_row1">7</th>
-<td class="data row1 col0" id="T_62ccc_row1_col0">63</td>
-<td class="data row1 col1" id="T_62ccc_row1_col1">1</td>
-<td class="data row1 col2" id="T_62ccc_row1_col2">60</td>
-<td class="data row1 col3" id="T_62ccc_row1_col3">214</td>
-<td class="data row1 col4" id="T_62ccc_row1_col4">82</td>
-<td class="data row1 col5" id="T_62ccc_row1_col5">87.0</td>
-<td class="data row1 col6" id="T_62ccc_row1_col6">300.0</td>
-<td class="data row1 col7" id="T_62ccc_row1_col7">2.37</td>
-<td class="data row1 col8" id="T_62ccc_row1_col8">positive</td>
+<th class="row_heading level0 row1" id="T_bf609_level0_row1">7</th>
+<td class="data row1 col0" id="T_bf609_row1_col0">63</td>
+<td class="data row1 col1" id="T_bf609_row1_col1">1</td>
+<td class="data row1 col2" id="T_bf609_row1_col2">60</td>
+<td class="data row1 col3" id="T_bf609_row1_col3">214</td>
+<td class="data row1 col4" id="T_bf609_row1_col4">82</td>
+<td class="data row1 col5" id="T_bf609_row1_col5">87.0</td>
+<td class="data row1 col6" id="T_bf609_row1_col6">300.0</td>
+<td class="data row1 col7" id="T_bf609_row1_col7">2.37</td>
+<td class="data row1 col8" id="T_bf609_row1_col8">positive</td>
 </tr>
 <tr>
-<th class="row_heading level0 row2" id="T_62ccc_level0_row2">12</th>
-<td class="data row2 col0" id="T_62ccc_row2_col0">64</td>
-<td class="data row2 col1" id="T_62ccc_row2_col1">1</td>
-<td class="data row2 col2" id="T_62ccc_row2_col2">60</td>
-<td class="data row2 col3" id="T_62ccc_row2_col3">199</td>
-<td class="data row2 col4" id="T_62ccc_row2_col4">99</td>
-<td class="data row2 col5" id="T_62ccc_row2_col5">92.0</td>
-<td class="data row2 col6" id="T_62ccc_row2_col6">3.43</td>
-<td class="data row2 col7" id="T_62ccc_row2_col7">5.37</td>
-<td class="data row2 col8" id="T_62ccc_row2_col8">positive</td>
+<th class="row_heading level0 row2" id="T_bf609_level0_row2">12</th>
+<td class="data row2 col0" id="T_bf609_row2_col0">64</td>
+<td class="data row2 col1" id="T_bf609_row2_col1">1</td>
+<td class="data row2 col2" id="T_bf609_row2_col2">60</td>
+<td class="data row2 col3" id="T_bf609_row2_col3">199</td>
+<td class="data row2 col4" id="T_bf609_row2_col4">99</td>
+<td class="data row2 col5" id="T_bf609_row2_col5">92.0</td>
+<td class="data row2 col6" id="T_bf609_row2_col6">3.43</td>
+<td class="data row2 col7" id="T_bf609_row2_col7">5.37</td>
+<td class="data row2 col8" id="T_bf609_row2_col8">positive</td>
 </tr>
 <tr>
-<th class="row_heading level0 row3" id="T_62ccc_level0_row3">530</th>
-<td class="data row3 col0" id="T_62ccc_row3_col0">31</td>
-<td class="data row3 col1" id="T_62ccc_row3_col1">0</td>
-<td class="data row3 col2" id="T_62ccc_row3_col2">64</td>
-<td class="data row3 col3" id="T_62ccc_row3_col3">130</td>
-<td class="data row3 col4" id="T_62ccc_row3_col4">70</td>
-<td class="data row3 col5" id="T_62ccc_row3_col5">263.0</td>
-<td class="data row3 col6" id="T_62ccc_row3_col6">142.6</td>
-<td class="data row3 col7" id="T_62ccc_row3_col7">0.003</td>
-<td class="data row3 col8" id="T_62ccc_row3_col8">positive</td>
+<th class="row_heading level0 row3" id="T_bf609_level0_row3">530</th>
+<td class="data row3 col0" id="T_bf609_row3_col0">31</td>
+<td class="data row3 col1" id="T_bf609_row3_col1">0</td>
+<td class="data row3 col2" id="T_bf609_row3_col2">64</td>
+<td class="data row3 col3" id="T_bf609_row3_col3">130</td>
+<td class="data row3 col4" id="T_bf609_row3_col4">70</td>
+<td class="data row3 col5" id="T_bf609_row3_col5">263.0</td>
+<td class="data row3 col6" id="T_bf609_row3_col6">142.6</td>
+<td class="data row3 col7" id="T_bf609_row3_col7">0.003</td>
+<td class="data row3 col8" id="T_bf609_row3_col8">positive</td>
 </tr>
 <tr>
-<th class="row_heading level0 row4" id="T_62ccc_level0_row4">1047</th>
-<td class="data row4 col0" id="T_62ccc_row4_col0">55</td>
-<td class="data row4 col1" id="T_62ccc_row4_col1">0</td>
-<td class="data row4 col2" id="T_62ccc_row4_col2">96</td>
-<td class="data row4 col3" id="T_62ccc_row4_col3">105</td>
-<td class="data row4 col4" id="T_62ccc_row4_col4">70</td>
-<td class="data row4 col5" id="T_62ccc_row4_col5">66.0</td>
-<td class="data row4 col6" id="T_62ccc_row4_col6">300.0</td>
-<td class="data row4 col7" id="T_62ccc_row4_col7">0.003</td>
-<td class="data row4 col8" id="T_62ccc_row4_col8">positive</td>
+<th class="row_heading level0 row4" id="T_bf609_level0_row4">1047</th>
+<td class="data row4 col0" id="T_bf609_row4_col0">55</td>
+<td class="data row4 col1" id="T_bf609_row4_col1">0</td>
+<td class="data row4 col2" id="T_bf609_row4_col2">96</td>
+<td class="data row4 col3" id="T_bf609_row4_col3">105</td>
+<td class="data row4 col4" id="T_bf609_row4_col4">70</td>
+<td class="data row4 col5" id="T_bf609_row4_col5">66.0</td>
+<td class="data row4 col6" id="T_bf609_row4_col6">300.0</td>
+<td class="data row4 col7" id="T_bf609_row4_col7">0.003</td>
+<td class="data row4 col8" id="T_bf609_row4_col8">positive</td>
 </tr>
 </tbody>
 </table>
@@ -8211,7 +8393,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.9-Data-Drift-(Between-Train-and-Test-Datasets)">3.2.9 Data Drift (Between Train and Test Datasets)<a class="anchor-link" href="#3.2.9-Data-Drift-(Between-Train-and-Test-Datasets)">¶</a></h4>
+<h4 id="4.2.9-Data-Drift-(Between-Train-and-Test-Datasets)">4.2.9 Data Drift (Between Train and Test Datasets)<a class="anchor-link" href="#4.2.9-Data-Drift-(Between-Train-and-Test-Datasets)">¶</a></h4>
 </div>
 </div>
 </div>
@@ -8220,7 +8402,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'data_drift_analysis'</span><span class="p">])</span>
@@ -8257,7 +8439,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ks_drift</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'data_drift_analysis'</span><span class="p">][</span><span class="s1">'ks_data_drift_analysis'</span><span class="p">][</span><span class="s1">'feature : p_value'</span><span class="p">]</span>
@@ -8291,7 +8473,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="3.2.10-Model-Drift-(Between-Train-and-Test-Datasets)">3.2.10 Model Drift (Between Train and Test Datasets)<a class="anchor-link" href="#3.2.10-Model-Drift-(Between-Train-and-Test-Datasets)">¶</a></h4>
+<h4 id="4.2.10-Model-Drift-(Between-Train-and-Test-Datasets)">4.2.10 Model Drift (Between Train and Test Datasets)<a class="anchor-link" href="#4.2.10-Model-Drift-(Between-Train-and-Test-Datasets)">¶</a></h4>
 </div>
 </div>
 </div>
@@ -8300,7 +8482,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ez_display_json</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'model_drift_analysis'</span><span class="p">])</span>
@@ -8352,7 +8534,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">interval_drift</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'drift_quality'</span><span class="p">][</span><span class="s1">'model_drift_analysis'</span><span class="p">][</span><span class="s1">'interval_model_drift_analysis'</span><span class="p">][</span><span class="s1">'feature : OF_I'</span><span class="p">]</span>
