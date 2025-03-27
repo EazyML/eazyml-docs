@@ -45,7 +45,7 @@ os.environ["READTHEDOCS_VERSION_NAME"] = "0.1.0"
 # Mock missing modules or dependencies
 autodoc_mock_imports = [
     'flask', 'pandas', 'numpy', 'numpy.linalg', 'matplotlib', 'pyspark',
-    'pyspark.sql', 'pyspark.sql.functions', 'pyspark.ml',
+    'pyspark.sql', 'pyspark.sql.functions', 'pyspark.ml', 'joblib',
     'eazyml_insight.src',
     'eazyml_insight.ez_init',
     'eazyml_insight.ez_insight',
