@@ -13,9 +13,6 @@ from ..vector_embedder.huggingface_embedder import (
 )
 from sklearn.feature_extraction.text import TfidfVectorizer
 from .vector_db import VectorDB, VectorDBType
-from ...license import (
-        validate_license
-)
 
 class QdrantDB(VectorDB):
     """
@@ -125,6 +122,40 @@ class QdrantDB(VectorDB):
                         documents,
                         **kwargs
                         ):
+        """Indexes a list of documents into a specified vector collection.
+
+        This method takes a list of dictionaries, where each dictionary represents a document,
+        and inserts their vector embeddings and metadata into the vector database collection
+        specified by `collection_name`. It handles different document types ('text', 'image', 'table')
+        and generates corresponding text and/or image embeddings. It also creates a sparse
+        vector representation of the text content using TF-IDF.
+
+        Args:
+            collection_name (str): The name of the vector database collection to index the documents into.
+            documents (list[dict]): A list of document dictionaries. Each dictionary is expected to have at least:
+                - 'content' (str, optional): The textual content of the document.
+                - 'title' (str, optional): The title of the document.
+                - 'type' (str): The type of the document ('text', 'image', or 'table').
+                - 'path' (str, optional): The file path to the document (e.g., for images).
+            **kwargs: Additional keyword arguments that will be passed to the `create_collection` method
+                when creating the collection if it doesn't already exist.
+
+        Returns:
+            dict: The response from the vector database's upsert operation.
+
+        Raises:
+            Exception: If an unexpected document type is encountered.
+
+        Note:
+            - For 'text' type documents, both title and content are embedded into dense vectors.
+            - For 'image' type documents, the content is embedded as text, and the image at the provided path
+              is embedded into an image vector.
+            - For 'table' type documents, the content is embedded as text, and the image at the provided path
+              is embedded into an image vector.
+            - If a document doesn't have an image embedding, a zero vector of the expected image embedding size is used.
+            - A sparse vector representation of the combined title and content (or just content if no title)
+              is also generated using TF-IDF.
+        """
         vectorizer = TfidfVectorizer()
         vectorizer.fit_transform([f"{document['content']} {document['title']}"
                                                  if (document['content'] and document['title'])
@@ -169,7 +200,7 @@ class QdrantDB(VectorDB):
                             indices=col_indices,
                             values=values
                         )
-            self.client.upsert(
+            return self.client.upsert(
                     collection_name=collection_name,
                     points=[models.PointStruct(
                                 id=idx,
@@ -178,13 +209,43 @@ class QdrantDB(VectorDB):
                             )
                     ]
                 )
-        print("indexed successfully")
 
     def retrieve_documents(self,
                            collection_name,
                            question,
                            top_k=10,
                            document_type='text'):
+        """Retrieves documents from a vector collection that are most relevant to a given query.
+
+        This function performs both dense and sparse vector search on the specified collection
+        to find documents that match the provided question.  It combines the results from both
+        search methods, eliminating duplicates, and returns a ranked list of the top-k most relevant documents.
+
+        Args:
+            collection_name (str): The name of the vector database collection to query.
+            question (str): The query string used to find relevant documents.
+            top_k (int, optional): The maximum number of documents to retrieve. Defaults to 10.
+            document_type (str, optional): The type of documents to retrieve ('text' or 'table').
+                This parameter is used to filter the search. Defaults to 'text'.
+
+        Returns:
+            list[dict]: A list of dictionaries, where each dictionary represents a retrieved document.
+                      Each dictionary contains the document's payload and relevance score.
+                      Returns an empty list if no matching documents are found.
+
+        Note:
+            - The function performs two searches: one using dense vector embeddings of the question,
+              and another using a sparse vector representation (TF-IDF) of the question.
+            - The `document_type` parameter filters the search to return only documents of the
+              specified type.
+            -  The results from the dense and sparse searches are combined, with duplicate documents
+               removed.
+            -  The function uses a pre-trained text embedding model
+              (HuggingfaceEmbedderModel.ALL_MINILM_L6_V2) for generating dense vector representations
+              of the query.
+            -  The function uses the `self.vectorizer` (trained during indexing) to generate the sparse
+               vector representation of the query.
+        """
         total_hits = []
         # For dense vector search, we need to use the text embedding
         if document_type=='table':

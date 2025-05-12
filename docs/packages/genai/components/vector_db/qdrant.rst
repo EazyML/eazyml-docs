@@ -6,5 +6,5 @@ Qdrant
    :undoc-members:
    :noindex:
    :show-inheritance: False
-   :exclude-members:
+   :exclude-members: delete_collection, list_collection_names, create_collection, 
    :member-order: bysource

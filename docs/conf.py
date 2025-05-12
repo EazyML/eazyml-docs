@@ -49,6 +49,7 @@ autodoc_mock_imports = [
     'pyspark.sql', 'pyspark.sql.functions', 'pyspark.ml', 'joblib',
     'openai','google.generativeai', 'google.generativeai.types',
     'google.genai', 'sklearn', 'sklearn.feature_extraction',
+    'sklearn.preprocessing', 'sklearn.ensemble', 'sklearn.tree',
     'sklearn.feature_extraction.text', 'PIL', 'tqdm',
     'google', 'qdrant_client', 'vertexai', 'pinecone',
     'pinecone.grpc', 'pinecone.enums', 'doclayout_yolo',
@@ -95,10 +96,22 @@ autodoc_mock_imports = [
     'eazyml.globals', 
     'eazyml.license',
     'eazyml.license.license',
-    'components.document_loaders.pdf_loader',
     'eazyml_genai.license', 'eazyml_genai.core',
     'eazyml_genai.globals',
-    'eazyml_genai.globals.settings'
+    'eazyml_genai.globals.settings',
+    # 'eazyml_genai.components.vector_embedder.openai_embedder',
+    # 'eazyml_genai.components.vector_embedder.huggingface_embedder',
+    # 'eazyml_genai.components.vector_embedder.google_embedder',
+    # 'components.vector_db.qdrant_db',
+    # 'components.vector_db.pinecone_db',
+    # 'components.generative_model.openai',
+    # 'components.generative_model.google',
+    # 'components.document_loaders.pdf_loader',
+    # 'eazyml_genai.components.document_loaders.pdf_loader',
+    # 'eazyml_genai.components.vector_db.qdrant_db',
+    # 'eazyml_genai.components.vector_db.pinecone_db',
+    # 'eazyml_genai.components.generative_model.google',
+    # 'eazyml_genai.components.generative_model.openai'
 ]
 
 sys.modules.update((mod_name, MagicMock()) for mod_name in autodoc_mock_imports)
