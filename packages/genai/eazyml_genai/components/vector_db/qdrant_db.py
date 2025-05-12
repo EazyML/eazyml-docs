@@ -131,14 +131,15 @@ class QdrantDB(VectorDB):
         vector representation of the text content using TF-IDF.
 
         Args:
-            collection_name (str): The name of the vector database collection to index the documents into.
-            documents (list[dict]): A list of document dictionaries. Each dictionary is expected to have at least:
+            **collection_name** (`str`): The name of the vector database collection to index the documents into.
+            **documents** (`list[dict]`): A list of document dictionaries. Each dictionary is expected to have at least:
+                
                 - 'content' (str, optional): The textual content of the document.
                 - 'title' (str, optional): The title of the document.
                 - 'type' (str): The type of the document ('text', 'image', or 'table').
                 - 'path' (str, optional): The file path to the document (e.g., for images).
-            **kwargs: Additional keyword arguments that will be passed to the `create_collection` method
-                when creating the collection if it doesn't already exist.
+            
+            **kwargs**: Additional keyword arguments that will be passed to the `create_collection` method when creating the collection if it doesn't already exist.
 
         Returns:
             dict: The response from the vector database's upsert operation.
@@ -222,29 +223,28 @@ class QdrantDB(VectorDB):
         search methods, eliminating duplicates, and returns a ranked list of the top-k most relevant documents.
 
         Args:
-            collection_name (str): The name of the vector database collection to query.
-            question (str): The query string used to find relevant documents.
-            top_k (int, optional): The maximum number of documents to retrieve. Defaults to 10.
-            document_type (str, optional): The type of documents to retrieve ('text' or 'table').
-                This parameter is used to filter the search. Defaults to 'text'.
+            **collection_name** (`str`): The name of the vector database collection to query.
+            **question** (`str`): The query string used to find relevant documents.
+            **top_k** (`int`, `optional`): The maximum number of documents to retrieve. Defaults to 10.
+            **document_type** (`str`, `optional`): The type of documents to retrieve ('text' or 'table'). This parameter is used to filter the search. Defaults to 'text'.
 
         Returns:
             list[dict]: A list of dictionaries, where each dictionary represents a retrieved document.
-                      Each dictionary contains the document's payload and relevance score.
-                      Returns an empty list if no matching documents are found.
+                        Each dictionary contains the document's payload and relevance score.
+                        Returns an empty list if no matching documents are found.
 
         Note:
             - The function performs two searches: one using dense vector embeddings of the question,
-              and another using a sparse vector representation (TF-IDF) of the question.
+                and another using a sparse vector representation (TF-IDF) of the question.
             - The `document_type` parameter filters the search to return only documents of the
-              specified type.
+                specified type.
             -  The results from the dense and sparse searches are combined, with duplicate documents
-               removed.
-            -  The function uses a pre-trained text embedding model
-              (HuggingfaceEmbedderModel.ALL_MINILM_L6_V2) for generating dense vector representations
-              of the query.
+                removed.
+            -  The function uses a pre-trained text embedding model (HuggingfaceEmbedderModel.ALL_MINILM_L6_V2)
+                for generating dense vector representations of the query.
             -  The function uses the `self.vectorizer` (trained during indexing) to generate the sparse
-               vector representation of the query.
+                vector representation of the query.
+
         """
         total_hits = []
         # For dense vector search, we need to use the text embedding

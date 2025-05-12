@@ -218,32 +218,22 @@ class PineconeDB(VectorDB):
         vectors and one for sparse vectors).
 
         Args:
-            collection_name (str): The base name for the dense and sparse vector
+            **collection_name** (`str`): The base name for the dense and sparse vector
                 collections that will be created or used. The actual collection names
                 will be derived from this base name (e.g., 'my_collection_dense',
                 'my_collection_sparse').
-            documents (list[dict]): A list of dictionaries, where each dictionary
+            **documents** (`list[dict]`): A list of dictionaries, where each dictionary
                 represents a document. Each document should have a 'content' key
                 containing the text to be indexed. Optionally, a 'title' key can also
                 be present and will be included in the text used for generating
                 embeddings and sparse vectors. Any other key-value pairs in the
                 document dictionary will be stored as metadata.
-            namespace (str, optional): An optional namespace to apply when indexing
+            **namespace** (`str`, `optional`): An optional namespace to apply when indexing
                 the documents into the collections. Defaults to "".
-            **kwargs: Additional keyword arguments that will be passed to the
+            **kwargs**: Additional keyword arguments that will be passed to the
                 `create_collection` method. This can include parameters like the
                 dimension of the dense embeddings.
 
-        Returns:
-            None
-
-        Example:
-            documents_to_index = [
-                {"title": "First Document", "content": "This is the content of the first document."},
-                {"content": "Second document has only content."},
-                {"title": "Third Doc", "content": "Content for the third document here."},
-            ]
-            index_documents("my_documents", documents_to_index)
         """
         # initialize tfidf vectorizer for sparse vector embedding
         vectorizer = TfidfVectorizer()
@@ -369,32 +359,24 @@ class PineconeDB(VectorDB):
                            document_types=['text', 'table', 'image'],
                            namespace=""):
         """Retrieves documents relevant to a given question from both dense and sparse vector collections.
-
         This function performs a hybrid search, combining results from both dense and sparse
         vector retrieval methods to provide a more comprehensive set of relevant documents.
         It prevents duplicate documents from being returned.  It also transforms the metadata.
 
         Args:
-            question (str): The query question used to retrieve relevant documents.
-            collection_name (str, optional): The base name of the collections to query
-                (both dense and sparse). If None, the default collection name
-                (`self.collection_name`) is used. Defaults to None.
-            top_k (int, optional): The number of top-ranking documents to retrieve from
-                each collection (dense and sparse). Defaults to 5.
-            document_types (list[str], optional): A list of document types to filter
-                the retrieval results.  Defaults to ['text', 'table', 'image'].
-            namespace (str, optional): The namespace to use when querying the collections.
-                Defaults to "".
+            **question** (`str`): The query question used to retrieve relevant documents.
+            **collection_name** (`str`, `optional`): The base name of the collections to query (both dense and sparse). If None, the default collection name (`self.collection_name`) is used. Defaults to None.
+            **top_k** (`int`, `optional`): The number of top-ranking documents to retrieve from each collection (dense and sparse). Defaults to 5.
+            **document_types** (`list[str]`, `optional`): A list of document types to filter the retrieval results.  Defaults to ['text', 'table', 'image'].
+            **namespace** (`str`, `optional`): The namespace to use when querying the collections. Defaults to "".
 
         Returns:
             list[dict]: A list of retrieved documents. Each document is a dictionary
-            containing the following keys:
+                        containing the following keys:
+
                 - 'id' (str): The unique identifier of the document.
                 - 'score' (float): The relevance score of the document to the query.
-                - 'metadata' (dict): A dictionary containing the document's metadata,
-                including 'type', 'title', 'content', 'path' (converted from string
-                representation), and 'meta' (converted from string representation).
-                Empty strings are used if values are None.
+                - 'metadata' (dict): A dictionary containing the document's metadata, including 'type', 'title', 'content', 'path' (converted from string representation), and 'meta' (converted from string representation). Empty strings are used if values are None.
         """
         if not collection_name:
             collection_name = self.collection_name

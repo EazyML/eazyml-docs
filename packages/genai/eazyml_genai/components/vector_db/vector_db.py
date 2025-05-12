@@ -1,4 +1,4 @@
-from ...core import Component
+from abc import ABC
 from typing import Dict, Any
 from enum import Enum
 
@@ -9,7 +9,7 @@ class VectorDBType(Enum):
     QDRANT = "qdrant"
 
 
-class VectorDB(Component):
+class VectorDB(ABC):
 
     def __init__(self, type: VectorDBType, **kwargs: Dict[str, Any]):
         self.__type = type
