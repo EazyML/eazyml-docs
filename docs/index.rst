@@ -19,12 +19,12 @@ and integration capabilities with existing workflows.
 
 
 .. toctree::
-   :numbered:
    :caption: PACKAGES
-   :maxdepth: 2
+   :maxdepth: 1
    :hidden:
 
    Modeling <packages/eazyml_model.rst>
+   Generative AI <packages/genai.rst>
    Explainable AI <packages/eazyml_xai.rst>
    Augmented Intelligence <packages/eazyml_insight.rst>
    Counterfactual <packages/eazyml_cf.rst>
@@ -34,7 +34,7 @@ and integration capabilities with existing workflows.
 
 .. toctree::
    :caption: NOTEBOOKS
-   :maxdepth: 2
+   :maxdepth: 1
    :hidden:
    
    EazyML Examples <notebooks/eazyml_notebook.rst>

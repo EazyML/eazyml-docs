@@ -17,6 +17,7 @@ sample apps, and resources for testing out EazyML apis.
    :maxdepth: 2
    
    Modeling <modeling.rst>
+   Generative AI <genai.rst>
    Explainable AI <xai.rst>
    Augmented Intelligence <insight.rst>
    Counterfactual <counterfactual.rst>

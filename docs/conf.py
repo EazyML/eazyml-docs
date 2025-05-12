@@ -22,6 +22,7 @@ sys.path.append(os.path.abspath('../packages/xai'))
 sys.path.append(os.path.abspath('../packages/xai_image'))
 sys.path.append(os.path.abspath('../packages/cf'))
 sys.path.append(os.path.abspath('../packages/dq'))
+sys.path.append(os.path.abspath('../packages/genai'))
 sys.path.append(os.path.abspath('../packages/modeling'))
 
 
@@ -46,6 +47,17 @@ os.environ["READTHEDOCS_VERSION_NAME"] = "0.1.0"
 autodoc_mock_imports = [
     'flask', 'pandas', 'numpy', 'numpy.linalg', 'matplotlib', 'pyspark',
     'pyspark.sql', 'pyspark.sql.functions', 'pyspark.ml', 'joblib',
+    'openai','google.generativeai', 'google.generativeai.types',
+    'google.genai', 'sklearn', 'sklearn.feature_extraction',
+    'sklearn.feature_extraction.text',
+    'google', 'qdrant_client', 'vertexai', 'pinecone',
+    'pinecone.grpc', 'pinecone.enums', 'doclayout_yolo',
+    'weaviate', 'anthropic', 'weaviate.classes',
+    'weaviate.classes.init', 'sentence_transformers',
+    'torch', 'fitz', 'torchvision', 'torchvision.ops',
+    'transformers', 'transformers.models',
+    'transformers.models.detr', 'nltk', 'nltk.tokenize',
+    'vertexai.generative_models', 'huggingface_hub',
     'eazyml_insight.src',
     'eazyml_insight.ez_init',
     'eazyml_insight.ez_insight',
@@ -82,7 +94,11 @@ autodoc_mock_imports = [
     'eazyml.src.utils',
     'eazyml.globals', 
     'eazyml.license',
-    'eazyml.license.license'
+    'eazyml.license.license',
+    'components.document_loaders.pdf_loader',
+    'eazyml_genai.license', 'eazyml_genai.core',
+    'eazyml_genai.globals',
+    'eazyml_genai.globals.settings'
 ]
 
 sys.modules.update((mod_name, MagicMock()) for mod_name in autodoc_mock_imports)
@@ -125,6 +141,9 @@ intersphinx_mapping = {
     "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
 }
 intersphinx_disabled_domains = ["std"]
+
+# This will tell Sphinx not to prefix class/function names with the full module path.
+add_module_names = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

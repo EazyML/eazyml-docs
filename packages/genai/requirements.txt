@@ -1,0 +1,15 @@
+google-generativeai
+google-cloud-aiplatform
+anthropic
+openai
+pinecone
+weaviate-client
+google-genai
+brotli
+pyarrow
+pandas
+sentence-transformers
+torch
+torchvision
+torchaudio
+nltk

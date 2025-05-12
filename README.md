@@ -25,6 +25,13 @@ jupyter nbconvert --to html path_to_notebook.ipynb
 2. Remove `@validate_license` decorator from all the client.py file.
 3. update html and ipynb examples in `docs_eazyml\docs\_static` directory.
 
+## Generate documentation using sphinx auto doc.
+Enter below command in the base directory to get restructured text for specific module in docs directory.
+```bash
+sphinx-apidoc -o docs .\packages\augi\eazyml_insight\
+```
+
+
 ## Generate html pages once every files are configured
     1. Go to `docs` directory
     2. Run below command to clean earlier `_build` directory
