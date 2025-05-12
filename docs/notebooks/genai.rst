@@ -8,8 +8,8 @@ The following notebooks are available:
 
 1. Yolo
 
-  - `RAG using qdrant vector database and google Generative Model <../_static/examples/genai/yolo/qdrant_google_rag.html>`_ :download:`Download <../_static/notebooks/genai/yolo/qdrant_google_rag.ipynb>`
-  - `RAG using pinecone vector database and google Generative Model <../_static/examples/genai/yolo/pinecone_google_rag.html>`_ :download:`Download <../_static/notebooks/genai/yolo/pinecone_google_rag.ipynb>`
+  - `RAG using qdrant vector database and google Generative Model <../_static/examples/genai/yolo/rag_qdrant_google.html>`_ :download:`Download <../_static/notebooks/genai/yolo/rag_qdrant_google.ipynb>`
+  - `RAG using pinecone vector database and google Generative Model <../_static/examples/genai/yolo/rag_pinecone_google.html>`_ :download:`Download <../_static/notebooks/genai/yolo/rag_pinecone_google.ipynb>`
 
 Try on Colab :
 
