@@ -49,7 +49,7 @@ autodoc_mock_imports = [
     'pyspark.sql', 'pyspark.sql.functions', 'pyspark.ml', 'joblib',
     'openai','google.generativeai', 'google.generativeai.types',
     'google.genai', 'sklearn', 'sklearn.feature_extraction',
-    'sklearn.feature_extraction.text', 'PIL',
+    'sklearn.feature_extraction.text', 'PIL', 'tqdm',
     'google', 'qdrant_client', 'vertexai', 'pinecone',
     'pinecone.grpc', 'pinecone.enums', 'doclayout_yolo',
     'weaviate', 'anthropic', 'weaviate.classes',
