@@ -52,7 +52,7 @@ autodoc_mock_imports = [
     'sklearn.feature_extraction.text', 'PIL', 'tqdm',
     'google', 'qdrant_client', 'vertexai', 'pinecone',
     'pinecone.grpc', 'pinecone.enums', 'doclayout_yolo',
-    'weaviate', 'anthropic', 'weaviate.classes',
+    'weaviate', 'anthropic', 'weaviate.classes', 'nest_asyncio',
     'weaviate.classes.init', 'sentence_transformers',
     'torch', 'fitz', 'torchvision', 'torchvision.ops',
     'transformers', 'transformers.models',
