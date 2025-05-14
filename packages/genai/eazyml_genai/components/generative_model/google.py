@@ -80,8 +80,16 @@ class GoogleGM(GenerativeModel):
 
     Args:
         **model_name** (`str`, `optional`): The name of the Gemini model to use. Defaults to "gemini-2.0-flash".
+        
         **api_key** (`str`, `optional`): Google API key for authentication. If not provided, it falls back to the 'GEMINI_API_KEY' environment variable.
+        
         **kwargs**: Optional parameters for custom safety settings and generation configuration.
+                    
+                    - **show_token_details** (`bool`, `optional`): Whether to display input and output token counts. Defaults to False.
+                    - **temperature** (`float`, `optional`): Controls the randomness of the output. Lower values (e.g., 0) make the output more deterministic. Defaults to 0.
+                    - **top_k** (`int`, `optional`): Considers the top 'k' most likely tokens for the next token selection. Defaults to 40.
+                    - **top_p** (`float, `optional`): Nucleus sampling parameter. Considers the smallest set of tokens whose cumulative probability exceeds 'p'. Defaults to 1.0.
+                    - **candidate_count** (`int`, `optional`): The number of candidate responses to generate. Defaults to 1.
     
     Example:
         .. code-block:: python

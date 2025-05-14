@@ -2,10 +2,10 @@ import re
 import os
 import numpy as np
 from .globals import transparency_api as tr_api
-from .xai import exai
+from .xai import  exai, exai_spark_utils
 import traceback
 import pandas as pd
-
+from pyspark.sql.functions import regexp_replace, col, when
 from .license.license import (
         validate_license,
         init_eazyml
@@ -218,29 +218,81 @@ def ez_explain(train_data, outcome, test_data, model_info,
                     "success": False,
                     "message": "train_file_path does not exist."
                 }
-            train_data, _ = exai.get_df(train_data, data_source=data_source)
-            # print(train_data.columns)
+            else:
+                train_file_path = train_data
+                if "spark_session" in options:
+                    spark = options["spark_session"]
+                else:
+                    spark = None
+                if spark:
+                    try:
+                        spark_version = spark.version
+                        train_data = exai_spark_utils.get_df_spark(train_file_path, spark)
+                        print("train_data from spark: ", train_data.show(4))
+                        #return {"success": False, "message": "This version currently does not support the spark module for building models."}
+                    except:
+                        return {"success": False, "message": tr_api.SPARK_SESSION}
+                    
+                else:
+                #     train_data = upload_utils.get_df(train_file_path)
+                    train_data, _ = exai.get_df(train_file_path, data_source=data_source)
+            print("train_data columns after getting df: ", train_data.columns)
         elif isinstance(train_data, pd.DataFrame):
-            train_data = train_data.replace(r'^\s*$', np.nan, regex=True)
-            # print(train_data.columns)
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    train_data = spark.createDataFrame(train_data)
+                    print("train_data before: ", train_data.show())
+                    train_data = train_data.select([when(col(c) == "", None)  # Replace empty strings
+                        .otherwise(regexp_replace(col(c), r'^\s*$', None))  # Replace whitespace-only strings
+                        .alias(c) for c in train_data.columns]
+                            )
+                    print("train_data after", train_data.show())
+                except:
+                    return {"success": False, "message": tr_api.SPARK_SESSION}
+                #return {"success": False, "message": "This version currently does not support the spark module for building models."}
+            else:    
+                train_data = train_data.replace(r'^\s*$', np.nan, regex=True)
+            print("if trainData is a dataframe",train_data.columns)
 
         else:
             return {
                 "success": False,
                 "message": 'train_data should be of either string or DataFrame'
             }
-
+        # if spark:
+        #     null_counts = train_data.select([sum(when(col(c).isNull(), 1).otherwise(0)).alias(c) for c in train_data.columns])
+        #     print(null_counts.show())
         train_data = train_data.fillna("Null")
+        print("after train.fillna()")
+        # null_counts = train_data.select([sum(when(col(c).isNull(), 1).otherwise(0)).alias(c) for c in train_data.columns])
+        if "spark_session" in options:
+            spark = options["spark_session"]
+            log.log_db(f"Spark Session has been provided {spark}")
+        else: 
+            spark = None
+            log.log_db(f"Standard Explainable AI process")
 
-        mode, data_type_dict, selected_features_list = exai.get_mode_data_type_selected_features(train_data, outcome)
-        type_df = pd.DataFrame(data_type_dict.items(), columns=["Variable Name", "Data Type"])
+        if spark:
+            print("before getting mode_data_type_selecteD_feats : ", type(train_data), outcome)
+            mode, data_type_dict, selected_features_list = exai_spark_utils.get_mode_data_type_selected_features(train_data, outcome)
+            data_list = list(data_type_dict.items())  # [(key1, value1), (key2, value2), ...]
+            # Create a PySpark DataFrame
+            type_df = spark.createDataFrame(data_list, ["Variable Name", "Data Type"])
+            print("mode, type_df , data_type_dict, selected_fetures_list: ", mode, type_df.show(), data_type_dict, selected_features_list)
+        else:        
+            mode, data_type_dict, selected_features_list = exai.get_mode_data_type_selected_features(train_data, outcome)
+            type_df = pd.DataFrame(data_type_dict.items(), columns=["Variable Name", "Data Type"])
         if type(model_info) == bytes:
             try:
                 dic = exai.decrypt_dict(model_info)
                 selected_features_list = dic["model_data"]["features_selected"]
                 selected_features_list.append(outcome)
-                type_dict = {item['Variable Name']: item['Data Type'] for item in dic["misc_data"]["Data Type"]}
-                data_type_dict = {k: v for k, v in type_dict.items() if v in ['categorical', 'numeric']}
+
                 if "model_name" in options:
                     model_name = options["model_name"]
                     list_model = [d["Model"] for d in dic["model_data"]["Consolidated Metrics"]]
@@ -295,13 +347,7 @@ def ez_explain(train_data, outcome, test_data, model_info,
                  selected_features_list = options["selected_features"]
             else:
                 selected_features_list = selected_features_list
-
-
-
             # model, scaler = exai.get_model_info(train_data, outcome, model_info, type_df, selected_features_list)
-
-
-
 
         if not isinstance(data_type_dict, dict):
             return {
@@ -328,17 +374,44 @@ def ez_explain(train_data, outcome, test_data, model_info,
                     "success": False,
                     "message": "test_file_path does not exist."
                 }
-            test_data, _ = exai.get_df(test_data, data_source=data_source)
+            else:
+                test_file_path = test_data
+                if "spark_session" in options:
+                    spark = options["spark_session"]
+                else:
+                    spark = None
+                if spark:
+                    try:
+                        spark_version = spark.version
+                    except:
+                        return {"success": False, "message": tr_api.SPARK_SESSION}
+                    
+                    test_data = exai_spark_utils.get_df_spark(test_file_path, spark)
+                    print("test_data show from exai_spark_utils: ", test_data.show(3))
+                else:
+                    test_data, _ = exai.get_df(test_file_path, data_source=data_source)
+            if test_data is None:
+                return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "test_data")} 
         elif isinstance(test_data, pd.DataFrame):
-            test_data = test_data
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    test_data = spark.createDataFrame(test_data)
+                except:
+                    return {"success": False, "message": tr_api.SPARK_SESSION}
+            else:
+                test_data = test_data
         else:
             return {
                 "success": False,
                 "message": 'test_data should be of either string or DataFrame'
             }
         test_data = test_data.fillna("Null")
-
-
+        print("after test_data.fillna()")
         for col in data_type_dict.keys():
             if col not in train_data.columns:
                 return {
@@ -360,20 +433,37 @@ def ez_explain(train_data, outcome, test_data, model_info,
                     "success": False,
                     "message": "Please provide valid mode.('classification'/'regression')"
                     }
-        if mode == 'regression' and (train_data[
-            outcome].dtype == 'object' or test_data[
-            outcome].dtype == 'object'):
-            return {
-                    "success": False,
-                    "message": "The type of the outcome column is a string, so the mode should be classification."
-                    }
-        if mode == 'classification' and (pd.api.types.is_float_dtype(
-            train_data[outcome]) or pd.api.types.is_float_dtype(
-            test_data[outcome])):
-            return {
-                    "success": False,
-                    "message": "The type of the outcome column is a float, so the mode should be regression."
-                    }
+        if spark:
+            if mode == 'regression' and (dict(train_data.dtypes)[
+                outcome] == 'string' or (outcome in test_data.columns and dict(test_data.dtypes)[
+                    outcome] == 'string')):
+                return {
+                        "success": False,
+                        "message": "The type of the outcome column is a string, so the mode should be classification."
+                        }
+            if mode == 'classification' and (dict(train_data.dtypes)[outcome
+                        ] == 'double') or (outcome in test_data.columns and dict(test_data.dtypes)[
+                        outcome] == 'double'):
+                return {
+                        "success": False,
+                        "message": "The type of the outcome column is a float, so the mode should be regression."
+                        }
+        else:    
+            if mode == 'regression' and (train_data[
+                outcome].dtype == 'object' or test_data[
+                outcome].dtype == 'object'):
+                return {
+                        "success": False,
+                        "message": "The type of the outcome column is a string, so the mode should be classification."
+                        }
+            if mode == 'classification' and (pd.api.types.is_float_dtype(
+                train_data[outcome]) or pd.api.types.is_float_dtype(
+                test_data[outcome])):
+                return {
+                        "success": False,
+                        "message": "The type of the outcome column is a float, so the mode should be regression."
+                        }
+        print("after mode and outcome checks are done !!!...")
         if not isinstance(options, dict):
             return {
                     "success": False,
@@ -443,7 +533,10 @@ def ez_explain(train_data, outcome, test_data, model_info,
                 record_number = [str(record_number)]
             else:
                 record_number = [record_number]
-            test_data_rows_count = test_data.shape[0]
+            if spark:
+                test_data_rows_count = test_data.count()
+            else:
+                test_data_rows_count = test_data.shape[0]
             for rec_number in record_number:
                 if int(rec_number) > test_data_rows_count:
                     return {
@@ -452,32 +545,61 @@ def ez_explain(train_data, outcome, test_data, model_info,
                             }
         else:
             record_number = [1]
+        print("All record number checks are done!!!!!.......")
         if "preprocessor" in options and options["preprocessor"]:
-            try:
-                train_data, test_data, rule_lime_dict, cat_list =\
-                    exai.preprocessor_steps(
-                    options['preprocessor'], train_data, test_data,
-                    data_type_dict, outcome)
-            except Exception as e:
-                return {
-                        "success": False,
-                        "message": "Please provide a valid trained preprocessor."
-                       }
-        else:
-            train_data, test_data, global_info_dict, cat_list =\
-                exai.preprocessing_steps(
-                train_data, test_data, data_type_dict, outcome, selected_features_list)
-            for col in selected_features_list:
-                if col not in train_data.columns.tolist():
+            if spark:
+                try:
+                    train_data, test_data, rule_lime_dict, cat_list = \
+                        exai_spark_utils.preprocessor_steps(
+                        options['preprocessor'], train_data, test_data,
+                        data_type_dict, outcome, spark)
+                    print("train_data, test_data, rule_lime_dict, cat_list after preprocessor steps ", train_data.show(2), test_data.show(2), rule_lime_dict, cat_list)
+                except Exception as e:
                     return {
                             "success": False,
-                            "message": "Test dataset is not consistent with the training dataset"
-                            }
-
-            train_data, test_data, rule_lime_dict = exai.processing_steps(
-                train_data, test_data, global_info_dict, selected_features_list)
-
-
+                            "message": "Please provide a valid trained preprocessor."
+                        }
+            else:    
+                try:
+                    train_data, test_data, rule_lime_dict, cat_list =\
+                        exai.preprocessor_steps(
+                        options['preprocessor'], train_data, test_data,
+                        data_type_dict, outcome)
+                except Exception as e:
+                    return {
+                            "success": False,
+                            "message": "Please provide a valid trained preprocessor."
+                        }
+        else:
+            if spark:
+                train_data, test_data, global_info_dict, cat_list =\
+                    exai_spark_utils.preprocessing_steps(
+                    train_data, test_data, data_type_dict, outcome, selected_features_list)
+                print("global_info_dict, cat_list from preprocessing steps: ",global_info_dict, cat_list )
+                for col in selected_features_list:
+                    if col not in train_data.columns:
+                        return {
+                                "success": False,
+                                "message": "Test dataset is not consistent with the training dataset"
+                                }            
+            else:
+                train_data, test_data, global_info_dict, cat_list =\
+                    exai.preprocessing_steps(
+                    train_data, test_data, data_type_dict, outcome, selected_features_list)
+                for col in selected_features_list:
+                    if col not in train_data.columns.tolist():
+                        return {
+                                "success": False,
+                                "message": "Test dataset is not consistent with the training dataset"
+                                }
+            if spark:
+                train_data, test_data, rule_lime_dict = exai_spark_utils.processing_steps(
+                    train_data, test_data, global_info_dict, selected_features_list)
+                print("after final processing, rule_lime_dict: ", rule_lime_dict)
+            else:
+                train_data, test_data, rule_lime_dict = exai.processing_steps(
+                    train_data, test_data, global_info_dict, selected_features_list)
+        
         body = dict(
                 train_data = train_data,
                 test_data = test_data,
@@ -489,7 +611,22 @@ def ez_explain(train_data, outcome, test_data, model_info,
                 cat_list = cat_list,
                 record_numbers = record_number
             )
-        results = exai.get_explainable_ai(body)
+        if spark:
+            body = dict(
+                train_data = train_data,
+                test_data = test_data,
+                outcome = outcome,
+                criterion = mode,
+                scaler = scaler,
+                model = model,
+                rule_lime_dict = rule_lime_dict,
+                cat_list = cat_list,
+                record_numbers = record_number,
+                spark_sess = spark
+            )
+            results = exai_spark_utils.get_explainable_ai(body)
+        else:
+            results = exai.get_explainable_ai(body)
 
         if results == 'model is not correct':
             return {
