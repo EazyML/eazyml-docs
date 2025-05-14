@@ -94,6 +94,7 @@ class OpenAIGM(GenerativeModel):
 
     Args:
         **model** (`str`, `optional`): The name of the OpenAI model to use. Defaults to 'gpt-4o'.
+        
         **api_key** (`str`, `optional`): OpenAI API key. If not provided, will attempt to read from the 'OPENAI_API_KEY' environment variable.
 
     Raises:
@@ -194,8 +195,8 @@ class OpenAIGM(GenerativeModel):
 
         Args:
             **messages** (`list`): A list of message dicts as per OpenAI's chat format (role/content pairs).
+            
             **kwargs** (`dict`):
-
                     - tools (`list` or `dict`, `optional`): Tool definitions for function calling. Can be a single tool (as dict) or a list of tools.
 
         Returns:
@@ -269,13 +270,10 @@ class OpenAIGM(GenerativeModel):
         Extracts the text content from the first candidate and part of the response.
 
         Args:
-            **response**: The response object, assumed to have a structure containing
-                candidates, content, and parts.  The exact type of 'response'
-                is not specified, but it should behave like a nested list/object
-                as shown in the return description.
-
+            **response** (`openai.types.chat.ChatCompletion`):
+                    The response object, assumed to have a structure containing candidates, content, and parts.  The exact type of 'response' is not specified, but it should behave like a nested list/object as shown in the return description.
+            
         Returns:
-            `str`: The text content located at response.candidates[0].content.parts[0].text.
-                Returns the extracted text as a string.
+            `str`: The text content located at response.candidates[0].content.parts[0].text. Returns the extracted text as a string.
         """
         return response.choices[0].message.content

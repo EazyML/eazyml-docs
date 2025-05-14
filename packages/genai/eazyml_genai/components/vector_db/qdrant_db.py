@@ -24,6 +24,20 @@ class QdrantDB(VectorDB):
     Attributes:
         client (QdrantClient): An instance of QdrantClient used for performing operations on the Qdrant database.
 
+    Args:
+        **kwargs** (`dict`): Arbitrary keyword arguments used to configure the Qdrant client. These may include:
+            
+            - **location** (`str`, `optional`): Path to the local Qdrant instance.
+            - **url** (`str`, `optional`): URL of the remote Qdrant instance.
+            - **port** (`int`, `optional`): Port for HTTP communication.
+            - **grpc_port** (`int`, `optional`): Port for gRPC communication.
+            - **https** (`bool`, `optional`): Whether to use HTTPS.
+            - **api_key** (`str`): API key for secure access.
+            - **prefix** (`str`, `optional`): API prefix path.
+            - **timeout** (`float` or `tuple`, `optional`): Request timeout setting.
+            - **host** (`str`, `optional`): Host address (legacy compatibility).
+            - **path** (`str`, `optional`): Path to Qdrant data (legacy compatibility).
+            
     Raises:
         ValueError: If required connection parameters are missing or incorrect.
     """
@@ -31,19 +45,7 @@ class QdrantDB(VectorDB):
         """
         Initializes a QdrantDB instance with the provided configuration.
 
-        Args:
-            - api_key (str): API key for secure access.
-            - kwargs: Arbitrary keyword arguments used to configure the Qdrant client. These may include:
-                - location (str, optional): Path to the local Qdrant instance.
-                - url (str, optional): URL of the remote Qdrant instance.
-                - port (int, optional): Port for HTTP communication.
-                - grpc_port (int, optional): Port for gRPC communication.
-                - https (bool, optional): Whether to use HTTPS.
-                - api_key 
-                - prefix (str, optional): API prefix path.
-                - timeout (float or tuple, optional): Request timeout setting.
-                - host (str, optional): Host address (legacy compatibility).
-                - path (str, optional): Path to Qdrant data (legacy compatibility).
+        
         """
         super().__init__(type=VectorDBType.QDRANT,
                          **kwargs)
@@ -148,6 +150,7 @@ class QdrantDB(VectorDB):
 
         Args:
             **collection_name** (`str`): The name of the vector database collection to index the documents into.
+            
             **documents** (`list[dict]`): A list of document dictionaries. Each dictionary is expected to have at least:
                 
                 - 'content' (str, optional): The textual content of the document.
@@ -242,26 +245,22 @@ class QdrantDB(VectorDB):
 
         Args:
             **collection_name** (`str`): The name of the vector database collection to query.
+            
             **question** (`str`): The query string used to find relevant documents.
+            
             **top_k** (`int`, `optional`): The maximum number of documents to retrieve. Defaults to 10.
+            
             **document_type** (`str`, `optional`): The type of documents to retrieve ('text' or 'table'). This parameter is used to filter the search. Defaults to 'text'.
 
         Returns:
-            list[dict]: A list of dictionaries, where each dictionary represents a retrieved document.
-                        Each dictionary contains the document's payload and relevance score.
-                        Returns an empty list if no matching documents are found.
+            list[dict]: A list of dictionaries, where each dictionary represents a retrieved document. Each dictionary contains the document's payload and relevance score. Returns an empty list if no matching documents are found.
 
         Note:
-            - The function performs two searches: one using dense vector embeddings of the question,
-                and another using a sparse vector representation (TF-IDF) of the question.
-            - The `document_type` parameter filters the search to return only documents of the
-                specified type.
-            -  The results from the dense and sparse searches are combined, with duplicate documents
-                removed.
-            -  The function uses a pre-trained text embedding model (HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)
-                for generating dense vector representations of the query.
-            -  The function uses the `self.vectorizer` (trained during indexing) to generate the sparse
-                vector representation of the query.
+            - The function performs two searches: one using dense vector embeddings of the question, and another using a sparse vector representation (TF-IDF) of the question.
+            - The `document_type` parameter filters the search to return only documents of the specified type.
+            - The results from the dense and sparse searches are combined, with duplicate documents removed.
+            - The function uses a pre-trained text embedding model (HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2) for generating dense vector representations of the query.
+            - The function uses the `self.vectorizer` (trained during indexing) to generate the sparse vector representation of the query.
 
         """
         total_hits = []

@@ -79,9 +79,9 @@ class GoogleGM(GenerativeModel):
     handling model configuration, prompt generation, token counting, and output parsing.
 
     Args:
-        - **model_name** (`str`, `optional`): The name of the Gemini model to use. Defaults to "gemini-2.0-flash".
-        - **api_key** (`str`, `optional`): Google API key for authentication. If not provided, it falls back to the 'GEMINI_API_KEY' environment variable.
-        - **kwargs**: Optional parameters for custom safety settings and generation configuration.
+        **model_name** (`str`, `optional`): The name of the Gemini model to use. Defaults to "gemini-2.0-flash".
+        **api_key** (`str`, `optional`): Google API key for authentication. If not provided, it falls back to the 'GEMINI_API_KEY' environment variable.
+        **kwargs**: Optional parameters for custom safety settings and generation configuration.
     """
 
     def __init__(self, model="gemini-2.0-flash-lite", api_key=None, **kwargs):
