@@ -15,5 +15,5 @@ Try on Colab :
 
 1. Yolo
 
-  - `RAG using qdrant vector database and google Generative Model Colab <https://drive.google.com/file/d/13ofI3qWjFnv19fCOvxWqJUFHxnrUpolY/view?usp=drive_link>`_
-  - `RAG using pinecone vector database and google Generative Model Colab <https://drive.google.com/file/d/1PSYd_v9wFQvp2xK7VDiFhtb3kiAbnK3e/view?usp=drive_link>`_
+  - `RAG using qdrant vector database and google Generative Model Colab <https://drive.google.com/file/d/1B4IOiPlS7oJkgG8-pz3w7vMwbSpQe8bp/view?usp=drive_link>`_
+  - `RAG using pinecone vector database and google Generative Model Colab <https://drive.google.com/file/d/1_BQqDeYk1sB-IQmFo6DZMHSTanSuZnK9/view?usp=drive_link>`_
