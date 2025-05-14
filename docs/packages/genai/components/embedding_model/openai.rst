@@ -1,7 +1,7 @@
 OpenAI Embedding Model
----------------------------
+----------------------
 
-.. automodule:: eazyml_genai.components.vector_embedder.openai_embedder
+.. automodule:: eazyml_genai.components.embedding_model.openai
    :members:
    :undoc-members:
    :noindex:

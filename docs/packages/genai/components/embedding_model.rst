@@ -1,4 +1,4 @@
-Vector Embedder
+Embedding Model
 ---------------
 It is used to converts text, images, or other types of data into
 high-dimensional numerical vectors. These embeddings capture the
@@ -11,8 +11,8 @@ machine learning and AI applications.
    :maxdepth: 1
    :caption: Types:
    
-   Huggingface Embedder <vector_embedder/huggingface_embedder.rst>
-   Google Embedder <vector_embedder/google_embedder.rst>
-   OpenAI Embedder <vector_embedder/openai_embedder.rst>
+   Huggingface Embedding Model <embedding_model/huggingface.rst>
+   Google Embedding Model <embedding_model/google.rst>
+   OpenAI Embedding Model <embedding_model/openai.rst>
 
 

@@ -1,7 +1,7 @@
 Google Embedding Model
----------------------------
+----------------------
 
-.. automodule:: eazyml_genai.components.vector_embedder.google_embedder
+.. automodule:: eazyml_genai.components.embedding_model.google
    :members:
    :undoc-members:
    :noindex:

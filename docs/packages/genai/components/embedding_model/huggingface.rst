@@ -1,7 +1,7 @@
 Huggingface Embedding Model
 ---------------------------
 
-.. automodule:: eazyml_genai.components.vector_embedder.huggingface_embedder
+.. automodule:: eazyml_genai.components.embedding_model.huggingface
    :members:
    :undoc-members:
    :noindex:

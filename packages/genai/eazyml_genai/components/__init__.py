@@ -4,14 +4,11 @@ from .generative_model import (
     AnthropicGM
 )
 from .vector_db import QdrantDB, PineconeDB
-from .vector_embedder import (
-    OpenAIEmbedder,
-    OpenAIEmbedderModel,
-    GoogleEmbedder,
-    GoogleEmbedderModel,
-    HuggingfaceEmbedder,
-    HuggingfaceEmbedderModel,
-    VectorEmbedderType
+from .embedding_model import (
+    HuggingfaceEmbeddingModel,
+    HuggingfaceEmbeddingProcessor,
+    OpenAIEmbeddingModel,
+    GoogleEmbeddingModel
 )
 
 from .document_loaders import PDFLoader

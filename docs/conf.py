@@ -102,7 +102,11 @@ autodoc_mock_imports = [
     'eazyml_genai.components.document_loaders.block',
     'eazyml_genai.components.document_cleaner',
     'eazyml_genai.components.document_cleaner.pdf_cleaner',
-    'eazyml_genai.components.document_loaders.document_loader'
+    'eazyml_genai.components.vector_embedder',
+    'eazyml_genai.components.vector_embedder.google_embedder',
+    'eazyml_genai.components.vector_embedder.openai_embedder',
+    'eazyml_genai.components.vector_embedder.huggingface_embedder'
+    
 ]
 
 sys.modules.update((mod_name, MagicMock()) for mod_name in autodoc_mock_imports)

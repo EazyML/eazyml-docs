@@ -28,6 +28,6 @@ Components
    
    
    Document Loader <genai/components/document_loaders.rst>
-   Vector Embedder <genai/components/vector_embedder.rst>
+   Embedding Model <genai/components/embedding_model.rst>
    Vector Database <genai/components/vector_db.rst>
    Generative Model <genai/components/generative_model.rst>
