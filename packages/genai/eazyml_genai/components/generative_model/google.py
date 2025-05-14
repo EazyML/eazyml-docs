@@ -111,10 +111,10 @@ class GoogleGM(GenerativeModel):
             get_image_response_fd = kwargs.get('image_fd')
             # Configure function calling mode
             tools = types.Tool(function_declarations=[get_table_response_fd, get_image_response_fd])
+            # if mode is "ANY", then allowed_function_names =["get_table_response", "get_image_response"]
             tool_config = types.ToolConfig(
                 function_calling_config=types.FunctionCallingConfig(
-                    mode="ANY", allowed_function_names=["get_table_response",
-                                                        "get_image_response"]
+                    mode="AUTO"
                 )
             )
             # Create the generation config
@@ -215,6 +215,7 @@ class GoogleGM(GenerativeModel):
         prompts.append(
             f"""
             Answer the below question using documents below. Just use those document where you find the answer and don't miss any information.
+            Don't answer in dictionary/json format.
 
             Question:
             {question}

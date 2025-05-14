@@ -239,7 +239,8 @@ def ez_explain(train_data, outcome, test_data, model_info,
                 dic = exai.decrypt_dict(model_info)
                 selected_features_list = dic["model_data"]["features_selected"]
                 selected_features_list.append(outcome)
-
+                type_dict = {item['Variable Name']: item['Data Type'] for item in dic["misc_data"]["Data Type"]}
+                data_type_dict = {k: v for k, v in type_dict.items() if v in ['categorical', 'numeric']}
                 if "model_name" in options:
                     model_name = options["model_name"]
                     list_model = [d["Model"] for d in dic["model_data"]["Consolidated Metrics"]]

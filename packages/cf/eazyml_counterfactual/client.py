@@ -17,7 +17,7 @@ from .license.license import (
         init_eazyml,
 )
 
-from .src.utils import BaseEstimator
+from .src.utils import BaseEstimator, cf_transition_plot
 
 from .globals import (
     logger as log,
@@ -260,3 +260,9 @@ def validate_input(test_record_df, outcome, selected_features, model_info, optio
         return tr_api.MISSING_VARIANTS_IN_SELECTED_FEATURES
 
     return None  # If all validations pass
+
+def ez_cf_utils(test_data, outcome, selected_features, 
+                model_info, options):
+
+    cf_transition_plot(test_data, outcome, selected_features, model_info, options)
+    return

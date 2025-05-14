@@ -5,8 +5,12 @@ import os, sys
 import json
 import traceback
 import pandas as pd
+import numpy as np
 from functools import partial
-
+from sklearn.metrics import (
+    confusion_matrix, accuracy_score,
+    mean_absolute_error, mean_squared_error, r2_score
+)
 from .globals import (
     global_var as g,
     transparency as tr,
@@ -46,12 +50,19 @@ from .license.license import (
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col
+from pyspark.ml import PipelineModel
+
+import joblib
 
 from .globals import logger as log
 log.initlog()
 # make level for pyj4 log as critical
 log_inst = log.instance()
-log_inst.getLogger("pyj4").setLevel(log_inst.CRITICAL)
+log_inst.getLogger("pyj4").setLevel(log_inst.ERROR)
+log_inst.getLogger("org").setLevel(log_inst.ERROR)
+log_inst.getLogger("akka").setLevel(log_inst.ERROR)
+log_inst.getLogger("root").setLevel(log_inst.ERROR)
+
 
 def ez_init(access_key: str=None,
                 usage_share_consent: bool=None,
@@ -89,7 +100,6 @@ def ez_init(access_key: str=None,
                                 usage_delete=usage_delete)
     return init_resp
 
-
 def ez_build_model(train_data, outcome, options={}):
     """
     Initialize and build a predictive model based on the provided dataset and options.
@@ -112,6 +122,7 @@ def ez_build_model(train_data, outcome, options={}):
             
             - **model_performance** (`DataFrame`): A DataFrame providing the performance metrics of the trained model(s).
             - **global_importance** (`DataFrame`): A DataFrame containing the feature importance scores.
+            - **features_selected** (`DataFrame`): A DataFrame containing the features selected.
             - **model_info** (`Bytes`): Encrypted model information that will be used by `ez_predict` for making predictions on test data.
 
     Note:
@@ -141,7 +152,7 @@ def ez_build_model(train_data, outcome, options={}):
 
             # build_response is a dictionary object with following keys.
             # print(build_response.keys())
-            # dict_keys(['success', 'message', 'model_performance', 'global_importance', 'model_info'])
+            # dict_keys(['success', 'message', 'model_performance', 'global_importance', 'features_selected', 'model_info'])
 
             # Save the response for later use (e.g., for predictions with ez_predict)
             build_model_response_path = 'model_response.joblib'
@@ -169,7 +180,7 @@ def ez_build_model(train_data, outcome, options={}):
                 if spark:
                     try:
                         spark_version = spark.version
-                        return {"success": False, "message": "This version currently does not support the spark module for building models."}
+                        #return {"success": False, "message": "This version currently does not support the spark module for building models."}
                     except:
                         return {"success": False, "message": tr_api.SPARK_SESSION}
                     train_data = spark_utils.get_df_spark(train_file_path, spark)
@@ -178,8 +189,17 @@ def ez_build_model(train_data, outcome, options={}):
 
             if train_data is None:
                 return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}         
-        elif not isinstance(train_data, (pd.DataFrame, DataFrame)):
-            return {"success": False, "message": tr_api.VALID_DATAOBJECT.replace("this", "train_data")}
+        if isinstance(train_data, pd.DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    #return {"success": False, "message": "Please provide Spark Dataframe or file path for spark modelling"}             
+                except:
+                    pass
         elif isinstance(train_data, DataFrame):
             if "spark_session" in options:
                 spark = options["spark_session"]
@@ -190,7 +210,10 @@ def ez_build_model(train_data, outcome, options={}):
                     spark_version = spark.version
                 except:
                     return {"success": False, "message": tr_api.SPARK_SESSION}
-                return {"success": False, "message": "This version currently does not support the spark module for building models."}
+                #return {"success": False, "message": "This version currently does not support the spark module for building models."}
+        else:
+            return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}
+            
         if not isinstance(options, dict):
             return {"success": False, "message": tr_api.VALID_DATATYPE_DICT.replace("this", "options")}
         
@@ -278,9 +301,15 @@ def ez_build_model(train_data, outcome, options={}):
         extra_info["g_did_mid"] = g
         extra_info["outcome"] = outcome
         extra_info["misc_data"]["is_imputation_required"] = False
-
+        
+        
+        if "dtypes" in options:
+            extra_info["misc_data"]["ez_dtypes"] = options["dtypes"]
+        else:
+            pass
+            
         if spark:
-            return {"success": False, "message": "This version currently does not support the spark module for building models."}
+            #return {"success": False, "message": "This version currently does not support the spark module for building models."}
             extra_info["spark"] = spark
             dtypes_list = train_data.dtypes
             dtype_df = pd.DataFrame(dtypes_list, columns=[g.VARIABLE_NAME, g.DATA_TYPE])
@@ -317,7 +346,7 @@ def ez_build_model(train_data, outcome, options={}):
             extra_info["misc_data_model"][g.MIN_MAX] = None
             #no prefix suffix in spark end. processing done at client end.
             ps_df = None
-            n = train_data.select(outcome).distinct().rdd.flatMap(lambda x: x).collect()
+            n = list(train_data.select(outcome).toPandas()[outcome].value_counts().index)
             if len(n) <= min(config.CATEGORICAL_UPPER_THRESHOLD, g.CATEGORICAL_LOWER_THRESHOLD):
                 outcome_type = "categorical"
                 extra_info["misc_data"]["outcome_labels"] = n
@@ -330,6 +359,7 @@ def ez_build_model(train_data, outcome, options={}):
                 unique_values = train_data.select(column).distinct().rdd.flatMap(lambda x: x).collect()
                 pdata_cat_cols_unique_list[column] = unique_values
         else:
+            train_data.reset_index(drop=True, inplace=True)
             if outcome not in list(train_data.columns):
                 return {"success": False, "message": tr_api.VALID_BUILD_OUTCOME.replace("this", "outcome")}
             if train_data.isnull().values.any():
@@ -461,7 +491,7 @@ def ez_build_model(train_data, outcome, options={}):
                 log.log_db(f"Modelling Initialized") 
 
                 if not g.API_FLEXIBILITY:
-                    performance_dict = build_model_helper.build_model_show_core_predictors(train_data, display=False, 
+                    performance_dict = build_model_helper.build_model_show_core_predictors(train_data.copy(), display=False, 
                                                                                            extra_info=extra_info)
                     try:
                         performance_dict = json.loads(performance_dict.get_data())
@@ -480,6 +510,7 @@ def ez_build_model(train_data, outcome, options={}):
                 global_importance_dict_to_be_returned["columns"] = global_importance_df.columns.tolist()
                 global_importance = pd.DataFrame(columns=global_importance_dict_to_be_returned['columns'], 
                                                     data=global_importance_dict_to_be_returned['data'])
+
                 log.log_db(f"Extra Info derivation and encription")
                 #Return Model scores and global importance values
                 output_data = api_utils.output_extra_info(extra_info)
@@ -489,7 +520,8 @@ def ez_build_model(train_data, outcome, options={}):
                 pred_performance_df = pd.DataFrame(columns=performance['columns'], data=performance['data'])
                 return {"success": True, "message": tr_api.MODEL_BUILT, 
                         "model_performance": pred_performance_df, \
-                        "global_importance": global_importance, "model_info": output_data}
+                        "global_importance": global_importance,
+                        "model_info": output_data}
         elif spark:
             log.log_db(f"Spark Modelling Initialized")
 
@@ -527,7 +559,6 @@ def ez_build_model(train_data, outcome, options={}):
         log.log_db(("Exception in ez_model", e))
         log.log_db(traceback.print_exc())
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
-
 
 def ez_predict(test_data, model_info, options={}):
     """
@@ -610,8 +641,17 @@ def ez_predict(test_data, model_info, options={}):
                     test_data = upload_utils.get_df(test_file_path)
             if test_data is None:
                 return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "test_data")} 
-        elif not isinstance(test_data, (pd.DataFrame, DataFrame)):
-            return {"success": False, "message": tr_api.VALID_DATAOBJECT.replace("this", "test_data")}
+        if isinstance(test_data, pd.DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    return {"success": False, "message": "Please provide Spark Dataframe or file_path for spark modelling"}             
+                except:
+                    pass
         elif isinstance(test_data, DataFrame):
             if "spark_session" in options:
                 spark = options["spark_session"]
@@ -622,7 +662,9 @@ def ez_predict(test_data, model_info, options={}):
                     spark_version = spark.version
                 except:
                     return {"success": False, "message": tr_api.SPARK_SESSION}
-
+        else:
+            return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "test_data")}
+            
         if not isinstance(options, dict):
             return {"success": False, "message": tr_api.VALID_DATATYPE_DICT.replace("this", "options")}
 
@@ -633,7 +675,7 @@ def ez_predict(test_data, model_info, options={}):
             spark = None
 
         if spark: 
-            return {"success": False, "message": "This version currently does not support the spark module for building models."}
+            #return {"success": False, "message": "This version currently does not support the spark module for building models."}
             if isinstance(model_info,bytes):
                 try:
                     model_info = api_utils.decrypt_dict(model_info)
@@ -777,7 +819,564 @@ def ez_predict(test_data, model_info, options={}):
         log.log_db(traceback.print_exc())
         return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
 
+def ez_select_features(train_data, outcome, options={}):
+    
+    
+    """
+    Perform Feature seelction on the provided training data.
 
+    Args:
+        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the dataset for feature selection. Alternatively, you can provide the file path of the dataset (as a string).
+        - **outcome** (`str`): The target variable for the model.
+        - **options** (`dict`, optional): A dictionary of options to configure the feature selection process. If not provided, the function will use default settings. Supported keys include:
+            
+            - **dtypes** (`dict`, optional): Specifies the type of data columns provided. Can only be either numeric or categorical.
+
+    Returns:
+        A dictionary containing the results of the model building process with the following fields:
+            
+            - **success** (`bool`): Indicates whether the feature selection was successfully determined.
+            - **message** (`str`): A message describing the success or failure of the operation.
+
+            **On Success**:
+   
+            - **scores** (`dict`): A dictionary providing the selected features metrics for the data provided.
+    
+    Example:
+        .. code-block:: python
+
+            import pandas as pd
+            import joblib
+            from eazyml import ez_select_features
+
+            # Load test data.
+            train_file_path = "path_to_your_test_data.csv"
+            train_data = pd.read_csv(train_file_path)
+            
+            # Define the outcome (target variable) for the model
+            outcome = "target"  # Replace with your actual target variable name
+
+            # options = {"dtypes": {"column1":'numeric', "column2":'categorical'}}
+
+            # Call the eazyml function for feature selection
+            feat_response = ez_select_features(train_data, outcome, options=options)
+
+            # select features response is a dictionary object with following keys.
+            # print(feat_response.keys())
+            # dict_keys(['success', 'message', 'scores'])
+    """
+    
+    try:
+           
+        if isinstance(train_data, str):
+            if not os.path.exists(train_data):
+                return {"success": False,
+                        "message": "train_data provided path does not exist."}
+            else:
+                train_file_path = train_data
+                if "spark_session" in options:
+                    spark = options["spark_session"]
+                else:
+                    spark = None
+                if spark:
+                    try:
+                        spark_version = spark.version
+                        return {"success": False, "message": "This version currently does not support the spark module for building models."}
+                    except:
+                        return {"success": False, "message": tr_api.SPARK_SESSION}
+                    train_data = spark_utils.get_df_spark(train_file_path, spark)
+                else:
+                    train_data = upload_utils.get_df(train_file_path)
+
+            if train_data is None:
+                return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}         
+        if isinstance(train_data, pd.DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    return {"success": False, "message": "Please provide Spark Dataframe or file path for spark modelling"}             
+                except:
+                    pass
+        elif isinstance(train_data, DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                except:
+                    return {"success": False, "message": tr_api.SPARK_SESSION}
+                return {"success": False, "message": "This version currently does not support the spark module for building models."}
+        else:
+            return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}
+            
+        if not isinstance(options, dict):
+            return {"success": False, "message": tr_api.VALID_DATATYPE_DICT.replace("this", "options")}
+        
+        for key in options:
+            if key not in tr_api.EZ_SELECT_FEATURES_OPTIONS_KEYS_LIST:
+                return {"success": False, "message": tr_api.INVALID_KEY % (key)}
+         
+        extra_info = {}
+        extra_info["misc_data"] = {}
+        extra_info["misc_data_model"] = {}
+        extra_info["model_data"] = {}
+        extra_info["g_did_mid"] = g
+        extra_info["outcome"] = outcome
+        extra_info["misc_data"]["is_imputation_required"] = False
+        
+        if "dtypes" in options:
+            extra_info["misc_data"]["ez_dtypes"] = options["dtypes"]
+        else:
+            pass
+
+        dtype_df, ps_df = utility.get_smart_datatypes(train_data, extra_info)
+
+        date_types = dtype_df.loc[dtype_df[g.DATA_TYPE]
+                                    == g.DT_DATETIME][g.VARIABLE_NAME].tolist()
+        cat_types = dtype_df.loc[dtype_df[g.DATA_TYPE]
+                                   == g.DT_CATEGORICAL][g.VARIABLE_NAME].tolist()
+        text_types = dtype_df.loc[dtype_df[g.DATA_TYPE]
+                                    == g.DT_TEXT][g.VARIABLE_NAME].tolist()
+        num_types = dtype_df.loc[dtype_df[g.DATA_TYPE]
+                                   == g.DT_NUMERIC][g.VARIABLE_NAME].tolist()
+           
+        log.log_db(f"Data Type process has been finished -- select feature")
+        
+       
+        pdata_cat_cols_unique_list = dict()
+        
+        train_data.reset_index(drop=True, inplace=True)
+        if outcome not in list(train_data.columns):
+            return {"success": False, "message": tr_api.VALID_BUILD_OUTCOME.replace("this", "outcome")}
+        if train_data.isnull().values.any():
+            return {"success": False, "message": tr_api.VALID_DATANULLOBJECT.replace("this", "train_data")}
+        # Called in inform statistics
+        train_data = utility.convert_data_types(train_data, cat_types, num_types, date_types)
+        num_df = utility.get_statistics(train_data[num_types], g.DT_NUMERIC)
+        cat_df = utility.get_statistics(train_data[cat_types], g.DT_CATEGORICAL)
+        dt_df = utility.get_statistics(train_data[date_types], g.DT_DATETIME)
+        text_df = utility.get_statistics(train_data[text_types], g.DT_TEXT)
+        res_stats = pd.concat([num_df, cat_df, text_df, dt_df], axis=0, ignore_index=True)
+
+        outcome_type = dtype_df.loc[dtype_df[g.VARIABLE_NAME] == outcome][g.DATA_TYPE].tolist()[0]
+        pdata_cat_cols_unique_list = dict()
+        for column in cat_types:
+            pdata_cat_cols_unique_list[column] = train_data[column].unique().tolist()
+                                 
+        
+        if outcome_type == "categorical":
+            extra_info["misc_data"]["model_type"] = "CL"
+            #extra_info["model_type"] = "CL"
+            # Calculate the total number of unique classes
+            if not spark:
+                total_classes = train_data[outcome].nunique()
+
+                # Get the value counts for each class
+                value_counts = train_data[outcome].value_counts()
+
+                # Check if any class has fewer data points than the total number of classes
+                insufficient_classes = value_counts[value_counts < total_classes*config.CLASSIFICATION_CLASS_FACTOR]
+
+                insufficient_classes_minpoints = value_counts[value_counts < config.CATEGORICAL_CLASS_MINPOINTS]
+
+                if len(insufficient_classes)!=0 and len(insufficient_classes_minpoints)!=0:
+                    return {"success": False, "message": "The Train_data does not have enough values in each class to build a model."}
+        else:
+            extra_info["misc_data"]["model_type"] = "PR"
+        
+        extra_info["model_type"] = extra_info["misc_data"]["model_type"]
+        model_type = extra_info["model_type"]
+        
+        log.log_db(f"Data Statisitcs and Model type identification process has been finished -- select features")        
+         
+        extra_info["misc_data"][g.STAT] = res_stats
+        extra_info["misc_data"][g.PRESUF_DF] = ps_df
+        extra_info["misc_data"][g.PDATA_CAT_COLS_UNIQUE_LIST] = pdata_cat_cols_unique_list
+        extra_info["misc_data"]["Data Type"] = dtype_df
+        misc_data = extra_info["misc_data"]
+        model_data = extra_info["model_data"]
+
+        if misc_data[g.IMPUTATION_REQUIRED]:
+            if not g.IS_IMPUTATION_DONE in misc_data:
+                return {"success": False, "message": tr_api.DATA_HAS_MISSING_VALUES}
+        if model_type == "TS":
+                return {'success': False, 'message': tr_api.MODEL_BUILD_NOT_POSSIBLE}               
+
+        vif_threshold = 50
+        derived_predictors_threshold = 50
+
+
+        ret_dict = build_model_helper.inform_removal_of_dependent_predictors(train_data, cmd="2", 
+                                                                             display=False, extra_info=extra_info)
+
+        #Saving the user"s options for numeric derived predictors if numeric columns are present
+        if build_model_helper.datatype_col_present(train_data, extra_info=extra_info):
+            
+            ret_dict = build_model_helper.ask_for_derived_predictors(train_data, cmd="2", 
+                                                                     display=False, extra_info=extra_info)
+                #return ret_dict, extra_info
+        else:
+            ret_dict = build_model_helper.ask_for_derived_predictors(train_data, cmd="2", 
+                                                                     display=False, extra_info=extra_info)                
+        log.log_db(f"Feature Selection and extraction from select features")        
+        #Feature extraction
+        is_feature_selection_possible, selected_features_list, \
+        selected_score_list, extra_info = build_model_helper.feature_extraction_for_api(train_data, 
+                                                                                        extra_info=extra_info)
+
+        if not is_feature_selection_possible:
+            return {'success': False, 
+                    'message': 'Feature selection is not possible as there is no numeric columns left after encoding.'}
+        else:
+            return {"success": True, "message": "feature selection is done.", 
+                    "scores":{"scores":selected_score_list}}
+
+    except Exception as e:
+        log.log_db(traceback.print_exc())
+        log.log_db(f"Exception in ez_feature_selection - {e}")
+        return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
+
+def ez_types(train_data, options={}):
+    """EazyML Type Inference API.
+        Returns the type inferred by EazyML on the dataset provided.
+
+        Accepts dataset_id.
+
+    Args:
+        - **train_data** (`DataFrame` or `str`): A pandas DataFrame containing the dataset for determining datatypes. Alternatively, you can provide the file path of the dataset (as a string).
+        - **options** (`dict`, optional): A dictionary of options to configure the ez_types process. If not provided, the function will use default settings. Supported keys include:
+            
+            - **dtypes** (`dict`, optional): Specifies the type of data columns provided. Can only be either numeric or categorical.
+
+    Returns:
+        A dictionary containing the results of the model building process with the following fields:
+            
+            - **success** (`bool`): Indicates whether the types of data was successfully determined.
+            - **message** (`str`): A message describing the success or failure of the operation.
+
+            **On Success**:
+   
+            - **ez_dtypes** (`dict`): A dictionary providing the ez_dtypes for the data provided.
+    Example:
+        .. code-block:: python
+
+            import pandas as pd
+            import joblib
+            from eazyml import ez_types
+
+            # Load test data.
+            train_file_path = "path_to_your_test_data.csv"
+            train_data = pd.read_csv(train_file_path)
+            
+            # options = {"dtypes": {"column1":'numeric', "column2":'categorical'}}
+
+            # Call the eazyml function for feature selection
+            dtypes_response = ez_types(train_data, options=options)
+
+            # dtypes response is a dictionary object with following keys.
+            # print(dtypes_response.keys())
+            # dict_keys(['success', 'message', 'ez_dtypes'])
+    """
+    try:
+        if isinstance(train_data, str):
+            if not os.path.exists(train_data):
+                return {"success": False,
+                        "message": "train_data provided path does not exist."}
+            else:
+                train_file_path = train_data
+                if "spark_session" in options:
+                    spark = options["spark_session"]
+                else:
+                    spark = None
+                if spark:
+                    try:
+                        spark_version = spark.version
+                        return {"success": False, "message": "This version currently does not support the spark module for building models."}
+                    except:
+                        return {"success": False, "message": tr_api.SPARK_SESSION}
+                    train_data = spark_utils.get_df_spark(train_file_path, spark)
+                else:
+                    train_data = upload_utils.get_df(train_file_path)
+
+            if train_data is None:
+                return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}         
+        if isinstance(train_data, pd.DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                    return {"success": False, "message": "Please provide Spark Dataframe or file path for spark modelling"}             
+                except:
+                    pass
+        elif isinstance(train_data, DataFrame):
+            if "spark_session" in options:
+                spark = options["spark_session"]
+            else:
+                spark = None
+            if spark:
+                try:
+                    spark_version = spark.version
+                except:
+                    return {"success": False, "message": tr_api.SPARK_SESSION}
+                return {"success": False, "message": "This version currently does not support the spark module for building models."}
+        else:
+            return {"success": False, "message": tr_api.VALID_DATAFILEPATH.replace("this", "train_data")}
+            
+        ## Cache misc_data in extra_info
+        extra_info =dict()
+        extra_info["misc_data"] = {}
+        extra_info["g_did_mid"] = g
+        #extra_info["outcome"] = outcome
+        #Check for valid keys in the options dict
+        for key in options:
+            if key not in tr_api.EZ_TYPES_OPTIONS_KEYS_LIST:
+                return {"success": False, "message": tr_api.INVALID_KEY % (key)}
+        
+        if "dtypes" in options:
+            extra_info["misc_data"]["ez_dtypes"] = options["dtypes"]
+        else:
+            pass
+        #ez_types = upload_utils.get_ez_types(uid, did, extra_info=extra_info)
+        dtype_df, ps_df = utility.get_smart_datatypes(train_data, extra_info)
+
+        if len(dtype_df) == 0:
+            return{"success": False,"message": tr_api.UNAUTHORIZED_ACCESS}
+        
+        output_dict = {'columns': dtype_df.columns.tolist(),'data': dtype_df.values.tolist()}
+        return {"success": True, "message":tr_api.DATATYPES_MESSAGE_API, "ez_dtypes": output_dict}
+            
+    except Exception as e:
+        log.log_db(traceback.print_exc())
+        log.log_db(f"Exception in ez_types {e}")
+        return {"success": False, "message": tr_api.INTERNAL_SERVER_ERROR}
+                
+    
+
+    
+def ez_store_spark_response(build_response, output_dir):
+    """
+    Function to store ez_build spark response
+    
+    Args:
+        - **build_response** (`dict`): Response object from ez_build for spark.
+        - **output_dir** (`str`): Path to the directory to store the output of the response.
+       
+    Returns:
+        A dictionary containing the results of the model building process with the following fields:
+            
+            - **success** (`bool`): Indicates whether the object was successfully saved.
+            - **message** (`str`): A message describing the success or failure of the operation.
+
+            **On Success**:
+   
+            - **output_filepath** (`str`): The path where the response is stored.
+    Example:
+        .. code-block:: python
+
+            import pandas as pd
+            from pyspark.sql import SparkSession
+            from eazyml import ez_store_spark_response
+            
+            #create new spark session
+            spark_sess = SparkSession.builder.appName("EazyMLSparkModeling").getOrCreate()
+            
+            # Load the training data (make sure the file path is correct).
+            train_file_path = "path_to_your_training_data.csv"  # Replace with the correct file path
+            train_data = pd.read_csv(train_file_path)
+
+            # Define the outcome (target variable) for the model
+            outcome = "target"  # Replace with your actual target variable name
+            
+            #build model options for spark.
+            build_options = {"model_type": "predictive", "spark_session":spark_sess}
+
+            # Call the eazyml function to build the model
+            build_response = ez_build_model(train_data, outcome, options=build_options)
+            
+            
+            #store the build_response in a Directory.
+            output_dir = "output_directory_path"
+            response = ez.ez_store_spark_response(build_response, output_dir)
+
+            # response is a dictionary object with following keys.
+            # print(response.keys())
+            # dict_keys(['success', 'message', 'output_filepath'])
+    """
+    build_response_keys = ['success', 'message', 'model_performance', 'global_importance', 'model_info']
+    for each_para in build_response.keys():
+        if each_para not in build_response_keys:
+            return {"success": False, "message": "Please provide valid response from the build module"}
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    spark_model = build_response["model_info"]["spark_module"]
+    for index, row in spark_model.iterrows():
+        # Extract the model pipeline from the 'Models' column
+        model_pipeline = row['Models']["model"]
+        # Define the model name from the 'Model' column
+        model_name = row['Model'].replace("Sklearn",'')
+        # Define a file path for saving the model (using model name as directory name)
+        model_path = os.path.join(output_dir, model_name)
+        # Save the model pipeline to the specified path
+        model_pipeline.write().overwrite().save(model_path)
+
+    info = {"success":build_response["success"],
+    "message":build_response["message"],
+    "model_performance":build_response["model_performance"],
+    "global_importance":build_response["global_importance"],
+    "model_info":build_response["model_info"]["spark_info"]}
+    
+    build_model_response_path = output_dir + 'model_response.joblib'
+    
+    joblib.dump(info, build_model_response_path)
+    return {"success":True, "message":"All the information required is saved in the provided directory", 
+           "output_filepath":output_dir}
+
+def ez_error_metrics(y_true, y_pred, classification_labels=None, regression=False, n_features=None):
+    """
+    Compute classification or regression metrics.
+    
+    Args::
+        - **y_true** (`Series`): Ground truth labels or values
+        - **y_pred** (`Series`): Predicted labels or values
+        - **regression** (`Bool`): if True compute regression metrics
+        - **classification_labels** (`list`): List of class labels in order (only used for classification)
+        - **n_features** (`int`): Number of features used in model (for adjusted R², optional)
+
+    Returns:
+        A dictionary containing the results of the model error metrics with the following fields:
+            
+            - **success** (`bool`): Indicates whether the object was successfully saved.
+            - **message** (`str`): A message describing the success or failure of the operation.
+
+            **On Success**:
+   
+            - **error_metrics** (`str`): Error Metrics for the data provided 
+            
+    Example:
+        .. code-block:: python
+
+            import pandas as pd
+            from eazyml import ez_error_metrics
+
+            # prediction response is a dictionary object with following keys from ez_predict.
+            # print(pred_response.keys())
+            # dict_keys(['success', 'message', 'pred_df'])
+            
+            p_df = pred_response["pred_df"]
+            
+            y_true = p_df[outcome] 
+            y_pred = p_df[f"Predicted {outcome}"], 
+            classification_labels=list(p_df[outcome].value_counts().index)
+            
+            # Call the eazyml function for error metrics
+            metrics_response = error_metrics(y_true, y_pred, classification_labels)
+
+            # dtypes response is a dictionary object with following keys.
+            # print(metrics_response.keys())
+            # dict_keys(['success', 'message', 'error_metrics'])
+    """
+    
+    if regression:
+        # Compute regression metrics
+        mae = mean_absolute_error(y_true, y_pred)
+        mse = mean_squared_error(y_true, y_pred)
+        rmse = np.sqrt(mse)
+        r2 = r2_score(y_true, y_pred)
+        n = len(y_true)
+        
+        if n_features is not None and n_features < n:
+            adj_r2 = 1 - (1 - r2) * (n - 1) / (n - n_features - 1)
+        else:
+            adj_r2 = None
+
+        results = {
+            'MAE': round(mae, 4),
+            'MSE': round(mse, 4),
+            'RMSE': round(rmse, 4),
+            'R2': round(r2, 4),
+        }
+
+        if adj_r2 is not None:
+            results['Adjusted R2'] = round(adj_r2, 4)
+
+    else:
+        if not regression:
+            if not classification_labels:
+                {"success":False, "message":"Please provide classification labels of the outcome."}
+        cm = confusion_matrix(y_true, y_pred, labels=classification_labels)
+        n_classes = len(classification_labels)
+
+        results = {}
+        precision_list, recall_list, f1_list = [], [], []
+        total_TP = total_FP = total_FN = total_support = 0
+
+        for i, label in enumerate(classification_labels):
+            TP = cm[i, i]
+            FP = cm[:, i].sum() - TP
+            FN = cm[i, :].sum() - TP
+            TN = cm.sum() - (TP + FP + FN)
+            support = cm[i, :].sum()
+
+            precision = TP / (TP + FP) if (TP + FP) > 0 else 0.0
+            recall    = TP / (TP + FN) if (TP + FN) > 0 else 0.0
+            f1_score  = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+
+            results[label] = {
+                'TP': int(TP), 'FP': int(FP), 'FN': int(FN), 'TN': int(TN),
+                'Support': int(support),
+                'Precision': float(round(precision, 4)),
+                'Recall': float(round(recall, 4)),
+                'F1-Score': float(round(f1_score, 4))
+            }
+
+            precision_list.append(precision)
+            recall_list.append(recall)
+            f1_list.append(f1_score)
+
+            total_TP += TP
+            total_FP += FP
+            total_FN += FN
+            total_support += support
+
+        # Overall metrics
+        accuracy = accuracy_score(y_true, y_pred)
+        macro_precision = np.mean(precision_list)
+        macro_recall = np.mean(recall_list)
+        macro_f1 = np.mean(f1_list)
+
+        micro_precision = total_TP / (total_TP + total_FP) if (total_TP + total_FP) > 0 else 0.0
+        micro_recall    = total_TP / (total_TP + total_FN) if (total_TP + total_FN) > 0 else 0.0
+        micro_f1        = 2 * micro_precision * micro_recall / (micro_precision + micro_recall) if (micro_precision + micro_recall) > 0 else 0.0
+
+        results['OVERALL_METRICS'] = {
+            'Accuracy': float(round(accuracy, 4)),
+            'Macro Avg': {
+                'Precision': float(round(macro_precision, 4)),
+                'Recall': float(round(macro_recall, 4)),
+                'F1-Score': float(round(macro_f1, 4)),
+            },
+            'Micro Avg': {
+                'Precision': float(round(micro_precision, 4)),
+                'Recall': float(round(micro_recall, 4)),
+                'F1-Score': float(round(micro_f1, 4)),
+            }
+        }
+
+    return {"success":True, "message":"Error metrics calculated.",
+            "error_metrics":results}
+
+    
 def ez_display_json(resp):
     """
     Function to display formatted json
@@ -797,3 +1396,7 @@ def ez_display_md(resp):
     Function to display formatted markdown
     """
     return display_md(resp)
+
+
+
+

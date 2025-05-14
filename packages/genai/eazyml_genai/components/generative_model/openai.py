@@ -206,8 +206,8 @@ class OpenAIGM(GenerativeModel):
         prompts = []
         prompts.append(
             f"""
-            Answer the below question using documents below. Just use those document where you find the answer.
-            Also give reason for your answer.
+            Answer the below question using documents below. Just use those document where you find the answer and don't miss any information.
+            Don't answer in dictionary/json format.
 
             Question:
             {question}
