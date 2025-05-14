@@ -1,20 +1,17 @@
-
+"""
+Pdf Loader
+"""
 import fitz
-from ...license import (
-        validate_license
-)
+
 from tqdm import tqdm
 from typing import Union, List
 from .block import Block, BlockSpan, BlockType
 from ..document_cleaner.pdf_cleaner import PDFCleaner
-from .document_loader import (
-    DocumentLoader,
-    DocumentType
-)
+
 import nest_asyncio
 nest_asyncio.apply()
 
-class PDFLoader(DocumentLoader):
+class PDFLoader():
     """
     A class to load and process PDF documents.
 
