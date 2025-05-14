@@ -1,17 +1,20 @@
-"""
-Pdf Loader
-"""
-import fitz
 
+import fitz
+from ...license import (
+        validate_license
+)
 from tqdm import tqdm
 from typing import Union, List
 from .block import Block, BlockSpan, BlockType
 from ..document_cleaner.pdf_cleaner import PDFCleaner
-
+from .document_loader import (
+    DocumentLoader,
+    DocumentType
+)
 import nest_asyncio
 nest_asyncio.apply()
 
-class PDFLoader():
+class PDFLoader(DocumentLoader):
     """
     A class to load and process PDF documents.
 
@@ -97,7 +100,7 @@ class PDFLoader():
             
         block_objs = pdf_cleaner.clean_block_objs(layout_infos, block_objs)
         return block_objs
-          
+
     def load(self, file_path: str, pages: Union[int, list, str, None] = None):
         """
         Loads content from a PDF file, optionally for a specific page, cleans it, chunks it, and converts it into a list of document dictionaries.

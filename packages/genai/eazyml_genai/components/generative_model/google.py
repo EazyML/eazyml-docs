@@ -179,8 +179,7 @@ class GoogleGM(GenerativeModel):
                 for ques, info in extra_tasks]
         )
         return results
-        
-    @validate_license
+
     def predict(self, question, payloads, **kwargs):
         """
         Generates a response from the Gemini model based on the provided prompt.

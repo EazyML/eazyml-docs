@@ -12,9 +12,19 @@ from pinecone import (
         ServerlessSpec
 )
 from ..vector_embedder.huggingface_embedder import (
-            HuggingfaceEmbedder,
-            HuggingfaceEmbedderModel,
-            HuggingfaceEmbedderProcessor
+            HuggingfaceEmbedder
+)
+from ..vector_embedder.google_embedder import (
+            GoogleEmbedder
+)
+from ..vector_embedder.openai_embedder import (
+            OpenAIEmbedder
+)
+from ..embedding_model import (
+    OpenAIEmbeddingModel,
+    GoogleEmbeddingModel,
+    HuggingfaceEmbeddingModel,
+    HuggingfaceEmbeddingProcessor
 )
 from sklearn.feature_extraction.text import TfidfVectorizer
 from .vector_db import VectorDB, VectorDBType

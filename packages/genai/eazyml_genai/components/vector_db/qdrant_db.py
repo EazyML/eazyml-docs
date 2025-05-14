@@ -6,11 +6,12 @@ configuration parameters. It extends the `VectorDB` base class and sets the type
 to `QDRANT`.
 """
 from qdrant_client import QdrantClient, models
+
 from ..embedding_model import (
-            HuggingfaceEmbeddingModel,
-            HuggingfaceEmbeddingProcessor,
+            GoogleEmbeddingModel,
             OpenAIEmbeddingModel,
-            GoogleEmbeddingModel
+            HuggingfaceEmbeddingModel,
+            HuggingfaceEmbeddingProcessor
 )
 from ..vector_embedder.google_embedder import GoogleEmbedder
 from ..vector_embedder.openai_embedder import OpenAIEmbedder

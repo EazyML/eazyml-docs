@@ -105,8 +105,10 @@ autodoc_mock_imports = [
     'eazyml_genai.components.vector_embedder',
     'eazyml_genai.components.vector_embedder.google_embedder',
     'eazyml_genai.components.vector_embedder.openai_embedder',
-    'eazyml_genai.components.vector_embedder.huggingface_embedder'
-    
+    'eazyml_genai.components.vector_embedder.huggingface_embedder',
+    'eazyml_genai.components.generative_model.vertexai',
+    'eazyml_genai.components.generative_model.anthropic',
+    'eazyml_genai.components.generative_model.azure_openai',
 ]
 
 sys.modules.update((mod_name, MagicMock()) for mod_name in autodoc_mock_imports)
