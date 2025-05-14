@@ -50,6 +50,7 @@ autodoc_mock_imports = [
     'openai','google.generativeai', 'google.generativeai.types',
     'google.genai', 'sklearn', 'sklearn.feature_extraction',
     'sklearn.preprocessing', 'sklearn.ensemble', 'sklearn.tree',
+    'sklearn.metrics',
     'sklearn.feature_extraction.text', 'PIL', 'tqdm',
     'google', 'qdrant_client', 'vertexai', 'pinecone',
     'pinecone.grpc', 'pinecone.enums', 'doclayout_yolo',
