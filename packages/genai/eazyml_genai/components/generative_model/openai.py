@@ -188,6 +188,7 @@ class OpenAIGM(GenerativeModel):
         )
         return results
     
+    @validate_license
     def predict(self, question, payloads, show_token_details=False):
         """
         Sends a chat completion request to the OpenAI API using the provided messages.

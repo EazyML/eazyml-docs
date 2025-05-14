@@ -180,6 +180,7 @@ class GoogleGM(GenerativeModel):
         )
         return results
         
+    @validate_license
     def predict(self, question, payloads, **kwargs):
         """
         Generates a response from the Gemini model based on the provided prompt.

@@ -79,16 +79,27 @@ class QdrantDB(VectorDB):
         if kwargs.get('override', False):
             self.delete_collection(collection_name=collection_name)
         if collection_name not in self.list_collection_names():
-            text_embedding_model = kwargs.get('text_embedding_model', HuggingfaceEmbedderModel.ALL_MINILM_L6_V2)
-            image_embedding_model = kwargs.get('image_embedding_model', HuggingfaceEmbedderModel.CLIP_VIT_BASE_PATCH32)
-            image_embedding_processor = kwargs.get('image_embedding_processor', HuggingfaceEmbedderProcessor.CLIP_VIT_BASE_PATCH32)
+            text_embedding_model = kwargs.get('text_embedding_model', HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)
+            image_embedding_model = kwargs.get('image_embedding_model', HuggingfaceEmbeddingModel.CLIP_VIT_BASE_PATCH32)
+            image_embedding_processor = kwargs.get('image_embedding_processor', HuggingfaceEmbeddingProcessor.CLIP_VIT_BASE_PATCH32)
             shard_number = kwargs.get('shard_number', 1)
             replication_factor = kwargs.get('replication_factor', 1)
-            text_embed_client = HuggingfaceEmbedder(model=text_embedding_model)
-            image_embed_client = HuggingfaceEmbedder(model=image_embedding_model,
-                                                processor=image_embedding_processor)
+            
+            # create client based on text embedding model
+            if isinstance(text_embedding_model, HuggingfaceEmbeddingModel):
+                text_embed_client = HuggingfaceEmbedder(model=text_embedding_model)
+            elif isinstance(text_embedding_model, OpenAIEmbeddingModel):
+                text_embed_client = OpenAIEmbedder(model=text_embedding_model)
+            elif isinstance(text_embedding_model, GoogleEmbeddingModel):
+                text_embed_client = GoogleEmbedder(text_embedding_model)
             self.text_embed_client = text_embed_client
+            
+            # client based image embedding model, right now we don't have support for
+            # image embedding from other provider
+            image_embed_client = HuggingfaceEmbedder(model=image_embedding_model,
+                                                        processor=image_embedding_processor)
             self.image_embed_client = image_embed_client
+                
             self.client.create_collection(
                 collection_name=collection_name,
                 vectors_config={
@@ -165,51 +176,53 @@ class QdrantDB(VectorDB):
         self.create_collection(collection_name,
                                **kwargs
                             )
+        points = []
         for idx, doc in enumerate(documents):
             vector_dict = {}
             if doc['type'] == 'text' and len(doc['path']) > 0:
                 vector_dict['text'] = [
-                    self.text_embed_client.generate_text_embedding(text=str(doc["title"])).tolist(),
-                    self.text_embed_client.generate_text_embedding(text=str(doc["content"])).tolist()
+                    self.text_embed_client.generate_text_embedding(text=str(doc["title"])),
+                    self.text_embed_client.generate_text_embedding(text=str(doc["content"]))
                 ]
-                vector_dict['image'] = self.image_embed_client.generate_image_embedding(image_path=doc['path']).tolist()
+                vector_dict['image'] = self.image_embed_client.generate_image_embedding(image_path=doc['path'])
             elif doc['type'] == 'text' and len(doc['path']) == 0:
                 vector_dict['text'] = [
-                    self.text_embed_client.generate_text_embedding(text=str(doc["title"])).tolist(),
-                    self.text_embed_client.generate_text_embedding(text=str(doc["content"])).tolist()
+                    self.text_embed_client.generate_text_embedding(text=str(doc["title"])),
+                    self.text_embed_client.generate_text_embedding(text=str(doc["content"]))
                 ]
             elif doc['type'] == 'image' and len(doc['path']) > 0:
                 vector_dict['text'] = [
-                    self.text_embed_client.generate_text_embedding(text=str(doc["content"])).tolist()
+                    self.text_embed_client.generate_text_embedding(text=str(doc["content"]))
                 ]
-                vector_dict['image'] = self.image_embed_client.generate_image_embedding(image_path=doc['path']).tolist()
+                vector_dict['image'] = self.image_embed_client.generate_image_embedding(image_path=doc['path'])
             elif doc['type'] == 'table'and len(doc['path']) > 0 :
                 vector_dict['text'] = [
-                    self.text_embed_client.generate_text_embedding(text=str(doc["content"])).tolist()
+                    self.text_embed_client.generate_text_embedding(text=str(doc["content"]))
                 ]
-                vector_dict['image'] = self.image_embed_client.generate_image_embedding(image_path=doc['path']).tolist()
-            else :
-                print('doc', doc)
+                vector_dict['image'] = self.image_embed_client.generate_image_embedding(image_path=doc['path'])
             if 'image' not in vector_dict:
-                vector_dict['image'] = [[0]*self.image_embed_client.embedding_size(model=HuggingfaceEmbedderModel.CLIP_VIT_BASE_PATCH32)]
+                vector_dict['image'] = [[0]*self.image_embed_client.embedding_size(model=HuggingfaceEmbeddingModel.CLIP_VIT_BASE_PATCH32)]
             
             # get sparse vector indices and values
             sparse_matrix = vectorizer.transform([f"{doc['content']} {doc['title']}" if (doc['content'] and doc['title']) else f"{doc['content']}"])
-            row_indices, col_indices = sparse_matrix.nonzero()
+            # get non-zeros row and column indices
+            _, col_indices = sparse_matrix.nonzero()
             values = sparse_matrix.data
             vector_dict['text-sparse'] = models.SparseVector(
                             indices=col_indices,
                             values=values
                         )
-            return self.client.upsert(
-                    collection_name=collection_name,
-                    points=[models.PointStruct(
-                                id=idx,
-                                vector=vector_dict,
-                                payload=doc
-                            )
-                    ]
-                )
+            points.append(
+                        models.PointStruct(
+                            id=idx,
+                            vector=vector_dict,
+                            payload=doc
+                        )
+                    )
+        return self.client.upsert(
+                collection_name=collection_name,
+                points=points
+            )
 
     def retrieve_documents(self,
                            collection_name,
@@ -240,7 +253,7 @@ class QdrantDB(VectorDB):
                 specified type.
             -  The results from the dense and sparse searches are combined, with duplicate documents
                 removed.
-            -  The function uses a pre-trained text embedding model (HuggingfaceEmbedderModel.ALL_MINILM_L6_V2)
+            -  The function uses a pre-trained text embedding model (HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)
                 for generating dense vector representations of the query.
             -  The function uses the `self.vectorizer` (trained during indexing) to generate the sparse
                 vector representation of the query.
@@ -251,7 +264,7 @@ class QdrantDB(VectorDB):
         if document_type=='table':
             hits = self.client.query_points(
                         collection_name=collection_name,
-                        query=[self.text_embed_client.generate_text_embedding(text=question, model=HuggingfaceEmbedderModel.ALL_MINILM_L6_V2).tolist()],
+                        query=[self.text_embed_client.generate_text_embedding(text=question, model=HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2).tolist()],
                         using='text',
                         query_filter=models.Filter(
                                 must=[
@@ -270,7 +283,7 @@ class QdrantDB(VectorDB):
         else :
             hits = self.client.query_points(
                         collection_name=collection_name,
-                        query=[self.text_embed_client.generate_text_embedding(text=question, model=HuggingfaceEmbedderModel.ALL_MINILM_L6_V2).tolist()],
+                        query=[self.text_embed_client.generate_text_embedding(text=question, model=HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)],
                         using='text',
                         limit=top_k,
                         with_vectors=False,

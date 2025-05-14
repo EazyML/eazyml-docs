@@ -17,16 +17,28 @@ class PDFLoader():
 
     Inherits from `DocumentLoader` and specializes in handling PDF files.
     It extracts text blocks from PDF pages, cleans them, and chunks them into smaller segments.
+    
+    Args:
+        **max_chunk_words** (`int`, `optional`): The maximum number of words per text chunk. Defaults to 500.
+    
+    Example:
+        .. code-block:: python
+
+            from eazyml_genai.components import PDFLoader
+
+            
+            # Initialize the PDFLoader and mention max_chunk_words
+            pdf_loader = PDFLoader(max_chunk_words=800)
+            
+            # Loads pdf as json document which has keys such as title,
+            # content, path for images of formula, table and pictures
+            # from pdf and meta information such as page number,
+            # paragraph and bounding boxes information.
+            documents = pdf_loader.load(file_path='YOUR FILE PATH')
     """
     
     
     def __init__(self, max_chunk_words:int=500):
-        """
-        Initializes the PDFLoader.
-
-        Args:
-            max_chunk_words (int, optional): The maximum number of words per text chunk. Defaults to 500.
-        """
         super().__init__(type=DocumentType.PDF_DOCUMENT, max_chunk_words=max_chunk_words)
     
     
@@ -86,6 +98,7 @@ class PDFLoader():
         block_objs = pdf_cleaner.clean_block_objs(layout_infos, block_objs)
         return block_objs
           
+    @validate_license     
     def load(self, file_path: str, pages: Union[int, list, str, None] = None):
         """
         Loads content from a PDF file, optionally for a specific page, cleans it, chunks it, and converts it into a list of document dictionaries.
@@ -128,6 +141,8 @@ class PDFLoader():
                                 str(e))        
         else :
             selected_pages = list(range(1, len(doc)+1))
+            
+        pdf_cleaner = PDFCleaner(file_path=self.file_path)
         for page_no in tqdm(selected_pages, desc="Reading pages", unit="page"):
             self.page_no = page_no
             page = doc[page_no - 1]

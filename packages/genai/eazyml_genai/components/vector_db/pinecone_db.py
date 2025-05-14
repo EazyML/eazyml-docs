@@ -75,7 +75,7 @@ class PineconeDB(VectorDB):
         return collection_names
     
     # get dense sparse collection names for given collection name
-    def get_ds_collection_names(collection_name):
+    def get_ds_collection_names(self, collection_name):
         # create sparse collection
         sparse_collection_name = f"sparse-{collection_name}"
         # create dense collection
@@ -89,7 +89,7 @@ class PineconeDB(VectorDB):
         if dense_collection_name not in self.list_collection_names():
             self.delete_collection(dense_collection_name)
             metric = kwargs.get("metric", Metric.DOTPRODUCT)
-            dimension = kwargs.get("dimension", self.text_embed_client.embedding_size(HuggingfaceEmbedderModel.ALL_MPNET_BASE_V2))
+            dimension = kwargs.get("dimension", self.text_embed_client.embedding_size(self.text_embedding_model))
             spec = kwargs.get("spec", ServerlessSpec(cloud="aws", region="us-east-1"))
             deletion_protection = kwargs.get("deletion_protection", "disabled")
             tags=kwargs.get("tags", {"environment": "development"})
@@ -134,8 +134,15 @@ class PineconeDB(VectorDB):
     def create_collection(self, collection_name, **kwargs):
         
         # set text embedding model and text embedding client
-        text_embedding_model = kwargs.get('text_embedding_model', HuggingfaceEmbedderModel.ALL_MINILM_L6_V2)
-        text_embed_client = HuggingfaceEmbedder(model=text_embedding_model)
+        text_embedding_model = kwargs.get('text_embedding_model', HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)
+        self.text_embedding_model = text_embedding_model
+        # create client based on text embedding model
+        if isinstance(text_embedding_model, HuggingfaceEmbeddingModel):
+            text_embed_client = HuggingfaceEmbedder(model=text_embedding_model)
+        elif isinstance(text_embedding_model, OpenAIEmbeddingModel):
+            text_embed_client = OpenAIEmbedder(model=text_embedding_model)
+        elif isinstance(text_embedding_model, GoogleEmbeddingModel):
+            text_embed_client = GoogleEmbedder(text_embedding_model)
         self.text_embed_client = text_embed_client
         
         # get values for keyword argument using kwargs
@@ -157,21 +164,27 @@ class PineconeDB(VectorDB):
         
         
         # finally create index with specified parameters
-        # create sparse collection
+        
         self.collection_name = collection_name
-        dense_collection_name, sparse_collection_name = self.get_ds_collection_names(collection_name=collection_name)
+        dense_collection_name, sparse_collection_name = self.get_ds_collection_names(collection_name)
+        
+        # create sparse collection
         sparse_collection = self.create_sparse_collection(sparse_collection_name,
                                       metric=Metric.DOTPRODUCT,
                                       spec=spec,
                                       deletion_protection="disabled",
-                                      tags=tags)
+                                      tags=tags,
+                                      **kwargs
+                                      )
         # create dense collection
         dense_collection = self.create_dense_collection(dense_collection_name,
                                       metric=Metric.COSINE,
                                       dimension=self.text_embed_client.embedding_size(text_embedding_model),
                                       spec=spec,
                                       deletion_protection="disabled",
-                                      tags=tags)
+                                      tags=tags,
+                                      **kwargs
+                                      )
         return dense_collection, sparse_collection
 
 
@@ -257,7 +270,7 @@ class PineconeDB(VectorDB):
             ids.append(str(id))
             dense_vectors.append(self.text_embed_client.generate_text_embedding(text=f"{doc['content']} {doc['title']}"
                                                 if (doc['content'] and doc['title'])
-                                                else f"{doc['content']}").tolist())
+                                                else f"{doc['content']}"))
             # upsert sparse vectors
             sparse_matrix = vectorizer.transform([f"{doc['content']} {doc['title']}"
                                                 if (doc['content'] and doc['title'])
@@ -318,7 +331,7 @@ class PineconeDB(VectorDB):
             filter={
                 "type": {"$in": document_types}
             },
-            vector=self.text_embed_client.generate_text_embedding(question).tolist(),
+            vector=self.text_embed_client.generate_text_embedding(question),
             include_values=False,
             include_metadata=True
         )
