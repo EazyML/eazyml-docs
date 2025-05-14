@@ -19,6 +19,11 @@ from ..vector_embedder.huggingface_embedder import HuggingfaceEmbedder
 from sklearn.feature_extraction.text import TfidfVectorizer
 from .vector_db import VectorDB, VectorDBType
 
+from ...license import (
+        validate_license
+)
+
+
 class QdrantDB(VectorDB):
     """
     Attributes:

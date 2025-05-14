@@ -105,6 +105,7 @@ class GoogleGM(GenerativeModel):
                 client = genai.Client(api_key=api_key)
             )
     
+
     async def extract_image_data(self, question, extra_info, **kwargs):
         try:
             get_table_response_fd = kwargs.get('table_fd')
@@ -291,6 +292,4 @@ class GoogleGM(GenerativeModel):
         response = self.model.count_tokens(prompt)
         return response
         
-
-
 

@@ -32,6 +32,10 @@ from pinecone.enums import (
     Metric
 )
 
+from ...license import (
+        validate_license
+)
+
 class PineconeDB(VectorDB):
     
     def __init__(self, **kwargs):
@@ -381,7 +385,7 @@ class PineconeDB(VectorDB):
             include_metadata=True
         )
         return query_response
-    
+
     def retrieve_documents(self,
                            question,
                            collection_name=None,

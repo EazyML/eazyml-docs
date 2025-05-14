@@ -264,7 +264,6 @@ class OpenAIGM(GenerativeModel):
         else :
             return response
 
-
     def parse(self, response):
         """
         Extracts the text content from the first candidate and part of the response.
