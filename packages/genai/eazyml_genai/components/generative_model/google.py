@@ -82,6 +82,22 @@ class GoogleGM(GenerativeModel):
         **model_name** (`str`, `optional`): The name of the Gemini model to use. Defaults to "gemini-2.0-flash".
         **api_key** (`str`, `optional`): Google API key for authentication. If not provided, it falls back to the 'GEMINI_API_KEY' environment variable.
         **kwargs**: Optional parameters for custom safety settings and generation configuration.
+    
+    Example:
+        .. code-block:: python
+
+            # initialize google generative model
+            google_gm = GoogleGM(model="gemini-2.0-flash",
+                     api_key=os.getenv('GEMINI_API_KEY'))
+        
+            # response from generative model given question and retrieved documents
+            response, input_tokens, output_tokens = google_gm.predict(question=question,
+                                        payloads=payloads,
+                                        show_token_details=True
+                                        )
+            
+            # parse google response to simple text format
+            parsed_response = google_gm.parse(response=response)
     """
 
     def __init__(self, model="gemini-2.0-flash-lite", api_key=None, **kwargs):

@@ -99,6 +99,22 @@ class OpenAIGM(GenerativeModel):
 
     Raises:
         Exception: If no API key is provided and the environment variable is not set.
+    
+    Example:
+        .. code-block:: python
+
+            # initialize openai generative model
+            openai_gm = OpenAIGM(model="gpt-4o",
+                     api_key=os.getenv('OPENAI_API_KEY'))
+        
+            # response from generative model given question and retrieved documents
+            response, input_tokens, output_tokens = openai_gm.predict(question=question,
+                                        payloads=payloads,
+                                        show_token_details=True
+                                        )
+            
+            # parse openai response to simple text format
+            parsed_response = openai_gm.parse(response=response)
     """
 
     def __init__(self, model = 'gpt-4.1', api_key=None):

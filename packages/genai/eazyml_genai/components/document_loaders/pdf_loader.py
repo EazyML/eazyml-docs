@@ -107,7 +107,7 @@ class PDFLoader(DocumentLoader):
 
         Args:
             - **file_path** (`str`): The path to the PDF file to load.
-            - **pages** (`int`, `list`): The specific page number to load.
+            - **pages** (`int`, `list`): The specific page number to load. If not mentioned, By Default it will load all the pages.
 
         Returns:
             (`List[dict]`): A list of dictionaries, where each dictionary represents a chunk of text from the PDF. Each dictionary will typically contain keys like 'content', 'metadata' (including page number, file path, etc.).

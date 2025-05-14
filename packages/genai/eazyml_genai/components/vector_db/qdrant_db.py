@@ -45,6 +45,22 @@ class QdrantDB(VectorDB):
             
     Raises:
         ValueError: If required connection parameters are missing or incorrect.
+    
+    Example:
+        .. code-block:: python
+
+            # initialize qdrant vector database
+            qdrant_db = QdrantDB(location=':memory:')
+            
+            # index document, mention collection name and documents
+            # Give supported text embedding model from Hugginface, Google and OpenAI.
+            qdrant_db.index_documents(collection_name="USER DEFINED COLLECTION NAME",
+                                    documents="JSON DOCUMENTS USING PDF LOADER",
+                                    text_embedding_model=GoogleEmbeddingModel.TEXT_EMBEDDING_004,
+                                    )
+            
+            # retrieve relevant document for given question.
+            total_hits = qdrant_db.retrieve_documents("COLLECTION NAME", "YOUR QUESTION", top_k=5)
     """
     def __init__(self, api_key: str=None, **kwargs):
         """

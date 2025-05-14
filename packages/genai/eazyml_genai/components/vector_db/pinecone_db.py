@@ -37,15 +37,30 @@ from ...license import (
 )
 
 class PineconeDB(VectorDB):
+    """
+    Initializes the PineconeDB instance.
+
+    Args:
+        - **kwargs**: Dictionary of connection parameters like `url` and `api_key`.
+        
+    Example:
+        .. code-block:: python
+
+            # initialize pinecone vector database
+            pinecone_db = PineconeDB(api_key=os.getenv("PINECONE_API_KEY"))
+            
+            # index document, mention collection name and documents
+            # Give supported text embedding model from Hugginface, Google and OpenAI.
+            indexed_documents = pinecone_db.index_documents(collection_name="USER DEFINED COLLECTION NAME",
+                                    documents="JSON DOCUMENTS USING PDF LOADER",
+                                    text_embedding_model=GoogleEmbeddingModel.TEXT_EMBEDDING_004,
+                                    )
+            
+            # retrieve relevant document for given question.
+            total_hits = pinecone_db.retrieve_documents("YOUR QUESTION", collection_name="YOUR COLLECTION NAME", top_k=5)
+    """
     
     def __init__(self, **kwargs):
-        """
-        Initializes the PineconeDB instance.
-
-        Args:
-            - **api_key** (`str`): API key for authenticating the client with Pinecone cloud.
-            - **kwargs**: Dictionary of connection parameters like `url` and `api_key`.
-        """
         super().__init__(type=VectorDBType.PINECONE,
                          **kwargs)
         api_key = kwargs.get('api_key')
