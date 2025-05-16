@@ -5,7 +5,11 @@ This class initializes a connection to a Qdrant vector database using the provid
 configuration parameters. It extends the `VectorDB` base class and sets the type
 to `QDRANT`.
 """
+import joblib
+from typing import Any, Union
 from qdrant_client import QdrantClient, models
+
+from ...globals.settings import Settings
 
 from ..embedding_model import (
             GoogleEmbeddingModel,
@@ -62,6 +66,7 @@ class QdrantDB(VectorDB):
             # retrieve relevant document for given question.
             total_hits = qdrant_db.retrieve_documents("COLLECTION NAME", "YOUR QUESTION", top_k=5)
     """
+    
     def __init__(self, api_key: str=None, **kwargs):
         """
         Initializes a QdrantDB instance with the provided configuration.
@@ -101,38 +106,19 @@ class QdrantDB(VectorDB):
     def list_collection_names(self):
         collection_names = [collection.name for collection in self.client.get_collections().collections]
         return collection_names
-
         
     def create_collection(self, collection_name: str, **kwargs):
+        shard_number = kwargs.get('shard_number', 1)
+        replication_factor = kwargs.get('replication_factor', 1)
         if kwargs.get('override', False):
             self.delete_collection(collection_name=collection_name)
         if collection_name not in self.list_collection_names():
-            text_embedding_model = kwargs.get('text_embedding_model', HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)
-            image_embedding_model = kwargs.get('image_embedding_model', HuggingfaceEmbeddingModel.CLIP_VIT_BASE_PATCH32)
-            image_embedding_processor = kwargs.get('image_embedding_processor', HuggingfaceEmbeddingProcessor.CLIP_VIT_BASE_PATCH32)
-            shard_number = kwargs.get('shard_number', 1)
-            replication_factor = kwargs.get('replication_factor', 1)
-            
-            # create client based on text embedding model
-            if isinstance(text_embedding_model, HuggingfaceEmbeddingModel):
-                text_embed_client = HuggingfaceEmbedder(model=text_embedding_model)
-            elif isinstance(text_embedding_model, OpenAIEmbeddingModel):
-                text_embed_client = OpenAIEmbedder(model=text_embedding_model)
-            elif isinstance(text_embedding_model, GoogleEmbeddingModel):
-                text_embed_client = GoogleEmbedder(text_embedding_model)
-            self.text_embed_client = text_embed_client
-            
-            # client based image embedding model, right now we don't have support for
-            # image embedding from other provider
-            image_embed_client = HuggingfaceEmbedder(model=image_embedding_model,
-                                                        processor=image_embedding_processor)
-            self.image_embed_client = image_embed_client
-                
+            self.init_embedding_models(**kwargs)
             self.client.create_collection(
                 collection_name=collection_name,
                 vectors_config={
                     "text": models.VectorParams(
-                                size=text_embed_client.embedding_size(model=text_embedding_model),  # Vector size is defined by used model
+                                size=self.text_embed_client.embedding_size(model=self.text_embedding_model),  # Vector size is defined by used model
                                 distance=models.Distance.COSINE,
                                 datatype=models.Datatype.FLOAT16,
                                 multivector_config=models.MultiVectorConfig(
@@ -140,7 +126,7 @@ class QdrantDB(VectorDB):
                                     ),
                             ),
                     "image": models.VectorParams(
-                                size=image_embed_client.embedding_size(model=image_embedding_model),  # Vector size is defined by used model
+                                size=self.image_embed_client.embedding_size(model=self.image_embedding_model),  # Vector size is defined by used model
                                 distance=models.Distance.COSINE,
                                 datatype=models.Datatype.FLOAT16,
                                 multivector_config=models.MultiVectorConfig(
@@ -201,7 +187,8 @@ class QdrantDB(VectorDB):
         vectorizer.fit_transform([f"{document['content']} {document['title']}"
                                                  if (document['content'] and document['title'])
                                                  else f"{document['content']}" for document in documents])
-        self.vectorizer = vectorizer
+        vectorizer_path = Settings.get_tfidfvectorizer_path(collection_name=collection_name)
+        joblib.dump(vectorizer, vectorizer_path)
         self.create_collection(collection_name,
                                **kwargs
                             )
@@ -229,7 +216,7 @@ class QdrantDB(VectorDB):
                     self.text_embed_client.generate_text_embedding(text=str(doc["content"]))
                 ]
                 vector_dict['image'] = self.image_embed_client.generate_image_embedding(image_path=doc['path'])
-            if 'image' not in vector_dict:
+            if 'image' not in vector_dict or vector_dict['image'] == None:
                 vector_dict['image'] = [[0]*self.image_embed_client.embedding_size(model=HuggingfaceEmbeddingModel.CLIP_VIT_BASE_PATCH32)]
             
             # get sparse vector indices and values
@@ -257,7 +244,8 @@ class QdrantDB(VectorDB):
                            collection_name,
                            question,
                            top_k=10,
-                           document_type='text'):
+                           document_type='text',
+                           **kwargs):
         """Retrieves documents from a vector collection that are most relevant to a given query.
 
         This function performs both dense and sparse vector search on the specified collection
@@ -284,12 +272,15 @@ class QdrantDB(VectorDB):
             - The function uses the `self.vectorizer` (trained during indexing) to generate the sparse vector representation of the query.
 
         """
+        self.init_embedding_models(**kwargs)
+        vectorizer_path = Settings.get_tfidfvectorizer_path(collection_name=collection_name)
+        vectorizer = joblib.load(vectorizer_path)
         total_hits = []
         # For dense vector search, we need to use the text embedding
         if document_type=='table':
             hits = self.client.query_points(
                         collection_name=collection_name,
-                        query=[self.text_embed_client.generate_text_embedding(text=question, model=HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2).tolist()],
+                        query=[self.text_embed_client.generate_text_embedding(text=question, model=HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)],
                         using='text',
                         query_filter=models.Filter(
                                 must=[
@@ -321,7 +312,7 @@ class QdrantDB(VectorDB):
                 total_hits.append(hit)
 
         # For sparse vector search, we need to use the indices and values from the sparse matrix
-        sparse_matrix = self.vectorizer.transform([question])
+        sparse_matrix = vectorizer.transform([question])
         _, col_indices = sparse_matrix.nonzero() # get row indices and column indices
         values = sparse_matrix.data
         if document_type=='table':

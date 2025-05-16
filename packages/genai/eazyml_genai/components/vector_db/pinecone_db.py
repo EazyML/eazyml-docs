@@ -6,11 +6,14 @@ by extending the generic VectorDB class. It sets the vector DB type and initiali
 a Pinecone client using the provided API key.
 """
 import ast
+import joblib
 from pinecone.grpc import PineconeGRPC, GRPCClientConfig
 from pinecone import (
         Pinecone,
         ServerlessSpec
 )
+
+from ...globals.settings import Settings
 from ..vector_embedder.huggingface_embedder import (
             HuggingfaceEmbedder
 )
@@ -161,18 +164,7 @@ class PineconeDB(VectorDB):
         
 
     def create_collection(self, collection_name, **kwargs):
-        
-        # set text embedding model and text embedding client
-        text_embedding_model = kwargs.get('text_embedding_model', HuggingfaceEmbeddingModel.ALL_MINILM_L6_V2)
-        self.text_embedding_model = text_embedding_model
-        # create client based on text embedding model
-        if isinstance(text_embedding_model, HuggingfaceEmbeddingModel):
-            text_embed_client = HuggingfaceEmbedder(model=text_embedding_model)
-        elif isinstance(text_embedding_model, OpenAIEmbeddingModel):
-            text_embed_client = OpenAIEmbedder(model=text_embedding_model)
-        elif isinstance(text_embedding_model, GoogleEmbeddingModel):
-            text_embed_client = GoogleEmbedder(text_embedding_model)
-        self.text_embed_client = text_embed_client
+        self.init_embedding_models(**kwargs)
         
         # get values for keyword argument using kwargs
         if 'spec' not in kwargs:
@@ -208,7 +200,7 @@ class PineconeDB(VectorDB):
         # create dense collection
         dense_collection = self.create_dense_collection(dense_collection_name,
                                       metric=Metric.COSINE,
-                                      dimension=self.text_embed_client.embedding_size(text_embedding_model),
+                                      dimension=self.text_embed_client.embedding_size(self.text_embedding_model),
                                       spec=spec,
                                       deletion_protection="disabled",
                                       tags=tags,
@@ -289,7 +281,8 @@ class PineconeDB(VectorDB):
         vectorizer.fit_transform([f"{document['content']} {document['title']}"
                                             if (document['content'] and document['title'])
                                             else f"{document['content']}" for document in documents])
-        self.vectorizer = vectorizer
+        vectorizer_path = Settings.get_tfidfvectorizer_path(collection_name=collection_name)
+        joblib.dump(vectorizer, vectorizer_path)
         
         # create seperate collection for dense and sparse collection
         dense_collection, sparse_collection = self.create_collection(
@@ -376,6 +369,7 @@ class PineconeDB(VectorDB):
     def retrieve_sparse_documents(
         self,
         sparse_collection_name,
+        vectorizer,
         question,
         top_k=5,
         document_types=['text', 'table', 'image'],
@@ -386,7 +380,7 @@ class PineconeDB(VectorDB):
         index = self.client.Index(host=index_host, grpc_config=GRPCClientConfig(secure=False))
         
         # retrieve results matching with title
-        sparse_matrix = self.vectorizer.transform([f"{question}"])
+        sparse_matrix = vectorizer.transform([f"{question}"])
         _, col_indices = sparse_matrix.nonzero()
         values = sparse_matrix.data
         query_response = index.query(
@@ -402,11 +396,12 @@ class PineconeDB(VectorDB):
         return query_response
 
     def retrieve_documents(self,
+                           collection_name,
                            question,
-                           collection_name=None,
                            top_k=5,
                            document_types=['text', 'table', 'image'],
-                           namespace=""):
+                           namespace="",
+                           **kwargs):
         """Retrieves documents relevant to a given question from both dense and sparse vector collections.
         This function performs a hybrid search, combining results from both dense and sparse
         vector retrieval methods to provide a more comprehensive set of relevant documents.
@@ -430,6 +425,10 @@ class PineconeDB(VectorDB):
                 - 'score' (float): The relevance score of the document to the query.
                 - 'metadata' (dict): A dictionary containing the document's metadata, including 'type', 'title', 'content', 'path' (converted from string representation), and 'meta' (converted from string representation). Empty strings are used if values are None.
         """
+        self.init_embedding_models(**kwargs)
+        vectorizer_path = Settings.get_tfidfvectorizer_path(collection_name=collection_name)
+        vectorizer = joblib.load(vectorizer_path)
+        
         if not collection_name:
             collection_name = self.collection_name
         dense_collection_name, sparse_collection_name = self.get_ds_collection_names(
@@ -440,6 +439,7 @@ class PineconeDB(VectorDB):
         documents_ids = []
         sparse_documents = self.retrieve_sparse_documents(
             sparse_collection_name=sparse_collection_name,
+            vectorizer=vectorizer,
             question=question,
             top_k=top_k,
             document_types=document_types,
