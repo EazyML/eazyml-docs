@@ -103,6 +103,7 @@ class OpenAIGM(GenerativeModel):
     Example:
         .. code-block:: python
 
+            from eazyml_genai.components import OpenAIGM
             # initialize openai generative model
             openai_gm = OpenAIGM(model="gpt-4o",
                      api_key=os.getenv('OPENAI_API_KEY'))

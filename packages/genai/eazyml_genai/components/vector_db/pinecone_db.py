@@ -49,6 +49,7 @@ class PineconeDB(VectorDB):
     Example using API_KEY :
         .. code-block:: python
 
+            from eazyml_genai.components import PineconeDB
             # initialize pinecone vector database
             pinecone_db = PineconeDB(api_key=os.getenv("PINECONE_API_KEY"))
             
@@ -81,8 +82,9 @@ class PineconeDB(VectorDB):
         
         .. code-block:: python
 
+            from eazyml_genai.components import PineconeDB
             # initialize pinecone vector database
-            pinecone_db = PineconeGRPC(api_key='any_api_key', host="http://localhost:5080")
+            pinecone_db = PineconeDB(api_key='any_api_key', host="http://localhost:5080")
             
             # index document, mention collection name and documents
             # Give supported text embedding model from Hugginface, Google and OpenAI.

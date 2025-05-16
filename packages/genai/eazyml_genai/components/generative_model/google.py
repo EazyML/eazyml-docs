@@ -94,6 +94,7 @@ class GoogleGM(GenerativeModel):
     Example:
         .. code-block:: python
 
+            from eazyml_genai.components import GoogleGM
             # initialize google generative model
             google_gm = GoogleGM(model="gemini-2.0-flash",
                      api_key=os.getenv('GEMINI_API_KEY'))

@@ -53,6 +53,7 @@ class QdrantDB(VectorDB):
     Example:
         .. code-block:: python
 
+            from eazyml_genai.components import QdrantDB
             # initialize qdrant vector database
             qdrant_db = QdrantDB(location=':memory:')
             
