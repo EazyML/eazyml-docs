@@ -46,11 +46,44 @@ class PineconeDB(VectorDB):
     Args:
         - **kwargs**: Dictionary of connection parameters like `url` and `api_key`.
         
-    Example:
+    Example using API_KEY :
         .. code-block:: python
 
             # initialize pinecone vector database
             pinecone_db = PineconeDB(api_key=os.getenv("PINECONE_API_KEY"))
+            
+            # index document, mention collection name and documents
+            # Give supported text embedding model from Hugginface, Google and OpenAI.
+            indexed_documents = pinecone_db.index_documents(collection_name="USER DEFINED COLLECTION NAME",
+                                    documents="JSON DOCUMENTS USING PDF LOADER",
+                                    text_embedding_model=GoogleEmbeddingModel.TEXT_EMBEDDING_004,
+                                    )
+            
+            # retrieve relevant document for given question.
+            total_hits = pinecone_db.retrieve_documents("YOUR QUESTION", collection_name="YOUR COLLECTION NAME", top_k=5)
+    
+    Example using Docker Compose :
+        
+        The provided docker-compose.yml file can be utilized to create and run a Pinecone-supported Docker image.
+        
+        .. code-block:: yaml
+            
+            services:
+                pinecone:
+                    image: ghcr.io/pinecone-io/pinecone-local:latest
+                    environment: 
+                    PORT: 5080
+                    PINECONE_HOST: localhost
+                    ports: 
+                    - "5080-5090:5080-5090"
+                    platform: linux/amd64
+        
+        Presented below is a Python script for utilizing Pinecone with Docker
+        
+        .. code-block:: python
+
+            # initialize pinecone vector database
+            pinecone_db = PineconeGRPC(api_key='any_api_key', host="http://localhost:5080")
             
             # index document, mention collection name and documents
             # Give supported text embedding model from Hugginface, Google and OpenAI.
