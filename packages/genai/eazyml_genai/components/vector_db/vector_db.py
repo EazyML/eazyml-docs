@@ -2,8 +2,6 @@ from abc import ABC
 from typing import Dict, Any, Union
 from enum import Enum
 
-from sympy import N
-
 from ..embedding_model.google import GoogleEmbeddingModel
 from ..embedding_model.huggingface import HuggingfaceEmbeddingModel, HuggingfaceEmbeddingProcessor
 from ..embedding_model.openai import OpenAIEmbeddingModel
