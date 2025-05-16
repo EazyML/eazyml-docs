@@ -63,7 +63,6 @@ class PineconeDB(VectorDB):
             total_hits = pinecone_db.retrieve_documents("YOUR QUESTION", collection_name="YOUR COLLECTION NAME", top_k=5)
     
     Example using Docker Compose :
-        
         The provided docker-compose.yml file can be utilized to create and run a Pinecone-supported Docker image.
         
         .. code-block:: yaml
